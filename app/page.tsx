@@ -35,7 +35,7 @@ export default function LinkUpLanding() {
   });
 
 
-  const addToCalendar = (event: (typeof mockEvents)[0]) => {
+  const addToCalendar = (event: Event) => {
     const start_date = new Date(`${event.start_date} ${event.time}`).toISOString().replace(/[-:]/g, "").split(".")[0] + "Z"
     const endDate =
       new Date(new Date(`${event.start_date} ${event.endDate} ${event.time}`).getTime() + 2 * 60 * 60 * 1000)

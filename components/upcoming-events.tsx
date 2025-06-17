@@ -1,25 +1,10 @@
 import React from 'react'
 import EventsGrid from './events-grid'
-
-interface MockEvent {
-  id: number;
-  time: string;
-  title: string;
-  type: "Online" | "In-person" | "In-person & Online";
-  description: string;
-  location: string;
-  start_date: string;
-  publish_status: string;
-  category: string;
-  price?: string | undefined;
-  endDate?: string | undefined;
-  price_amount?: string | undefined;
-
-}
+import { Event } from '@/lib/validations/event'
 
 interface UpcomingEventsProp {
-  upcomingEvents: MockEvent[],
-  addToCalendar: (event: MockEvent) => void
+  upcomingEvents: Event[],
+  addToCalendar: (event: Event) => void
 }
 
 export default function UpcomingEvents({ addToCalendar, upcomingEvents }: UpcomingEventsProp) {

@@ -1,10 +1,10 @@
 import { Badge } from "@/components/ui/badge"
 
-interface Eventpublish_statusCellProps {
+interface EventStatusCellProps {
   value: string
 }
 
-export function Eventpublish_statusCell({ value }: Eventpublish_statusCellProps) {
+export function EventStatusCell({ value }: EventStatusCellProps) {
   return (
     <Badge
       variant={value === "Published" ? "default" : "outline"}

@@ -9,12 +9,12 @@ import { Search, UserPlus } from "lucide-react"
 import { AdminsTable } from "@/components/admin/admins-table"
 import { AdminsCardView } from "@/components/admin/admins-card-view"
 import { useIsMobile } from "@/hooks/use-mobile"
-import { AdminUpdate, parsedAdmins } from "@/lib/validations/admin"
+import { parsedAdmins, UpdateAdmin } from "@/lib/validations/admin"
 
 export default function AdminsPage() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
-  const [editingAdmin, setEditingAdmin] = useState<AdminUpdate | null>(null)
+  const [editingAdmin, setEditingAdmin] = useState<UpdateAdmin | null>(null)
   const isMobile = useIsMobile()
 
   const filteredAdmins = parsedAdmins.filter(
@@ -28,7 +28,7 @@ export default function AdminsPage() {
     setIsDrawerOpen(true)
   }
 
-  const handleEditAdmin = (admin: AdminUpdate) => {
+  const handleEditAdmin = (admin: UpdateAdmin) => {
     setEditingAdmin(admin)
     setIsDrawerOpen(true)
   }

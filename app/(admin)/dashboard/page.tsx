@@ -13,7 +13,7 @@ import { DashboardHeader } from "@/components/dashboard/dashboard-header"
 export default function AdminDashboard() {
   // Calculate dashboard stats
   const totalEvents = mockEvents.length
-  const publishedEvents = mockEvents.filter((event) => event.publish_status === "Published").length
+  const publishedEvents = mockEvents.filter((event) => event.publish_status === "published").length
   const onlineEvents = mockEvents.filter((event) => event.type === "Online").length
   const inPersonEvents = mockEvents.filter((event) => event.type === "In-person").length
 
@@ -39,7 +39,7 @@ export default function AdminDashboard() {
             <Clock className="w-4 h-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{publishedEvents}</div>
+            <div className="text-2xl font-bold capitalize">{publishedEvents}</div>
             <p className="text-xs text-muted-foreground">Live events</p>
           </CardContent>
         </Card>

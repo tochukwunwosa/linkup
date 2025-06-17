@@ -15,11 +15,11 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import { Admin, AdminUpdate } from "@/lib/validations/admin"
+import { Admin, UpdateAdmin } from "@/lib/validations/admin"
 
 interface AdminsCardViewProps {
   admins: Admin[]
-  onEdit: (admin: AdminUpdate) => void
+  onEdit: (admin: UpdateAdmin) => void
   onDelete: (id: number) => void
 }
 

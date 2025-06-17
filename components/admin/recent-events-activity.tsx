@@ -16,7 +16,7 @@ export function RecentEventsActivity() {
       {recentEvents.map((event) => (
         <div key={event.id} className="flex items-center gap-4 p-3 border rounded-lg">
           <div
-            className={`w-2 h-10 rounded-full ${event.publish_status === "Published" ? "bg-green-500" : "bg-amber-500"}`}
+            className={`w-2 h-10 rounded-full ${event.publish_status === "published" ? "bg-green-500" : "bg-amber-500"}`}
           ></div>
           <div className="flex-1">
             <h3 className="font-medium">{event.title}</h3>

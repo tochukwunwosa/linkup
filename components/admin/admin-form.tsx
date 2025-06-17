@@ -7,10 +7,10 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { AdminUpdate } from "@/lib/validations/admin"
+import { UpdateAdmin } from "@/lib/validations/admin"
 
 interface AdminFormProps {
-  initialData?: AdminUpdate | null
+  initialData?: UpdateAdmin | null
   onSubmit: () => void
   onCancel: () => void
 }

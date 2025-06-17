@@ -14,9 +14,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Event } from "@/lib/validations/event"
-import { Eventpublish_statusCell } from "@/components/event/event-publish_status-cell"
 import { EventTypeCell } from "@/components/event/event-type-cell"
 import { formatDateRange } from "@/lib/utils"
+import { EventStatusCell } from "@/components/event/event-status-cell"
 
 export function getEventColumns(onEdit: (event: Event) => void, onDelete: (id: number) => void): ColumnDef<Event>[] {
   return [
@@ -78,7 +78,7 @@ export function getEventColumns(onEdit: (event: Event) => void, onDelete: (id: n
     {
       accessorKey: "publish_status",
       header: "publish_status",
-      cell: ({ row }) => <Eventpublish_statusCell value={row.getValue("publish_status")} />,
+      cell: ({ row }) => <EventStatusCell value={row.getValue("publish_status")} />,
       filterFn: (row, id, value) => {
         return value.includes(row.getValue(id))
       },

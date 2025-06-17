@@ -58,10 +58,10 @@ export function TableCellViewer({ item }: { item: z.infer<typeof eventSchema> })
                 </Select>
               </div>
               <div className="flex flex-col gap-3">
-                <Label htmlFor="publish_status">publish_status</Label>
+                <Label htmlFor="publish_status">Publish Status</Label>
                 <Select defaultValue={item.publish_status}>
                   <SelectTrigger id="publish_status" className="w-full">
-                    <SelectValue placeholder="Select a publish_status" />
+                    <SelectValue placeholder="Select status" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="Published">Published</SelectItem>
