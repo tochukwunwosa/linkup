@@ -1,0 +1,107 @@
+import { Event } from "@/lib/validations/event"
+
+// Mock events data
+export const mockEvents: Event[] = [
+  {
+    id: 1,
+    title: "AI Hack Lagos 2025",
+    start_date: "June 16, 2025",
+    // endDate: "June 21, 2025",
+    time: "2:00 PM",
+    location: "Lagos, Nigeria",
+    type: "In-person",
+    category: "AI",
+    price: "Free",
+    description:
+      "48-hour AI hackathon bringing together developers, designers, and entrepreneurs.",
+    publish_status: "published",
+  },
+  {
+    id: 2,
+    title: "React Native Conference",
+    start_date: "June 25, 2025",
+    endDate: "June 26, 2025",
+    time: "9:15 PM",
+    location: "San Francisco, CA",
+    type: "In-person",
+    category: "Mobile",
+    price: "Paid",
+    price_amount: "$299",
+    description:
+      "The premier React Native conference featuring talks from core team members.",
+    publish_status: "published",
+  },
+  {
+    id: 3,
+    title: "Web3 Developer Meetup",
+    start_date: "June 18, 2025",
+    endDate: "June 19, 2025",
+    time: "6:00 PM",
+    location: "Online",
+    type: "Online",
+    category: "Web3",
+    price: "Free",
+    description:
+      "Monthly meetup for Web3 developers to share knowledge and network.",
+    publish_status: "draft",
+  },
+  {
+    id: 4,
+    title: "DevOps Summit 2025",
+    start_date: "July 2, 2025",
+    endDate: "July 3, 2025",
+    time: "8:00 AM",
+    location: "London, UK",
+    type: "In-person & Online",
+    category: "DevOps",
+    price: "Paid",
+    price_amount: "£150",
+    description: "Learn the latest DevOps practices from industry leaders.",
+    publish_status: "published",
+  },
+  {
+    id: 5,
+    title: "JavaScript Workshop",
+    start_date: "June 22, 2025",
+    // endDate: "June 23, 2025",
+    time: "2:00 PM",
+    location: "Online",
+    type: "Online",
+    category: "Web",
+    price: "Paid",
+    price_amount: "$49",
+    description: "Hands-on JavaScript workshop covering modern ES6+ features.",
+    publish_status: "draft",
+  },
+];
+
+// Mock admins data
+export const mockAdmins = [
+  {
+    id: 1,
+    name: "John Doe",
+    email: "john.doe@linkup.com",
+    role: "super_admin",
+    last_login: "Today, 9:30 AM",
+    created_at: "2025-01-01",
+    password: "password",
+  },
+  {
+    id: 2,
+    name: "Jane Smith",
+    email: "jane.smith@linkup.com",
+    role: "admin",
+    last_login: "Yesterday, 5:15 PM",
+    created_at: "2025-01-01",
+    password: "password",
+  },
+  {
+    id: 3,
+    name: "Alex Johnson",
+    email: "alex.johnson@linkup.com",
+    role: "admin",
+    last_login: "June 10, 2025, 11:45 AM",
+    created_at: "2025-01-01",
+    password: "password",
+  },
+]

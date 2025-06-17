@@ -1,0 +1,24 @@
+<svg classname="h-full w-auto" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <g transform="translate(40, 40)">
+          {/* Outer signal arcs with golden ratio spacing */}
+          <path d="M -32 0 A 32 32 0 0 1 32 0" stroke="#4F46E5" strokewidth="2.5" fill="none" opacity="0.25"/>
+          <path d="M -26 0 A 26 26 0 0 1 26 0" stroke="#4F46E5" strokewidth="2.5" fill="none" opacity="0.4"/>
+          <path d="M -20 0 A 20 20 0 0 1 20 0" stroke="#4F46E5" strokewidth="2.5" fill="none" opacity="0.6"/>
+
+          {/* Location pin shape */}
+          <path d="M 0 -16 C -6 -16 -12 -10 -12 -4 C -12 2 0 16 0 16 C 0 16 12 2 12 -4 C 12 -10 6 -16 0 -16 Z" fill="#4F46E5"/>
+
+          {/* Central node (golden ratio sized) */}
+          <circle cx="0" cy="-4" r="4" fill="#F97316"/>
+
+          {/* Community connection nodes */}
+          <circle cx="-16" cy="8" r="2" fill="#4F46E5" opacity="0.6"/>
+          <circle cx="16" cy="8" r="2" fill="#4F46E5" opacity="0.6"/>
+          <circle cx="0" cy="20" r="2" fill="#4F46E5" opacity="0.6"/>
+
+          {/* Connection lines */}
+          <path d="M -14 6 L -2 -2" stroke="#4F46E5" strokewidth="1.5" opacity="0.4"/>
+          <path d="M 14 6 L 2 -2" stroke="#4F46E5" strokewidth="1.5" opacity="0.4"/>
+          <path d="M 0 18 L 0 0" stroke="#4F46E5" strokewidth="1.5" opacity="0.4"/>
+        </g>
+      </svg>
