@@ -51,7 +51,7 @@ export function DashboardNav({isSuperAdmin}: {isSuperAdmin: boolean}) {
           {!isCollapsed
             ?
             <div className="w-24 flex items-center">
-              <Image src={'/assets/logo/LinkUp-Logo-80x35-removebg-preview.png'} width={177} height={72} alt='LinkUp logo.' priority/>
+              <Image src={'/assets/logo/linkup-Logo-80x35-removebg-preview.png'} width={177} height={72} alt='LinkUp logo.' priority/>
             </div>
             :
             <div className="size-8 flex items-center">

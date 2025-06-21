@@ -9,7 +9,7 @@ export default function Navbar() {
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center">
             <Link href="/" className="w-24">
-              <Image src={'/assets/logo/LinkUp-Logo-80x35-removebg-preview.png'} width={177} height={72} alt='LinkUp logo.' priority/>
+              <Image src={'/assets/logo/linkup-Logo-80x35-removebg-preview.png'} width={177} height={72} alt='LinkUp logo.' priority/>
             </Link>
           </div>
           <nav className="hidden md:flex space-x-8">
