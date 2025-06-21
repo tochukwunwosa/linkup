@@ -29,7 +29,8 @@ export function formatDateRange(
     start_date.getMonth() === endDate.getMonth() &&
     start_date.getFullYear() === endDate.getFullYear();
 
-  const sameYear = endDate && start_date.getFullYear() === endDate.getFullYear();
+  const sameYear =
+    endDate && start_date.getFullYear() === endDate.getFullYear();
 
   if (!endDate || sameDay) {
     return format(start_date, "d MMMM, yyyy");
@@ -71,13 +72,26 @@ export function convertTo24Hour(time12h: string): string {
 export const isLiveEvent = ({ event }: { event: Event }) => {
   // Combine date + time into full timestamp
   const now = new Date();
-  const start = new Date(`${event.start_date} ${event.time}`);
+  const startDateString = event.start_date.split("T")[0];
+  const start = new Date(`${startDateString}T${event.time}`);
 
   // assume event is live for 8 hours
-  const end = event.endDate
-    ? new Date(`${event.endDate} ${event.time}`)
+  const end = event.end_date
+    ? new Date(`${event.end_date.split("T")[0]}T${event.time}`)
     : new Date(start.getTime() + 8 * 60 * 60 * 1000); // 8 hours after start
 
   const isLive = now >= start && now <= end;
-  return isLive
+  return isLive;
+};
+
+export const getFirstName = (name: string): string => {
+  return name.split(" ")[0] || "";
+};
+
+export const getInitials = (name: string) => {
+  return name
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .toUpperCase();
 };

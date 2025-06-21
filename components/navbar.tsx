@@ -1,6 +1,5 @@
 import React from 'react'
 import Link from 'next/link'
-import BackgroundSlideButton from './background-slide-button'
 import Image from 'next/image'
 
 export default function Navbar() {
@@ -17,16 +16,16 @@ export default function Navbar() {
             <Link href="#events" className="hover:text-primary font-medium">
               Events
             </Link>
-            <Link href="#submit" className="hover:text-primary font-medium">
+            {/* <Link href="#submit" className="hover:text-primary font-medium">
               Submit
-            </Link>
-            <Link href="#about" className="hover:text-primary font-medium">
+            </Link> */}
+            <Link href="/" className="hover:text-primary font-medium">
               About
             </Link>
           </nav>
-          <BackgroundSlideButton onClick={() => { window.location.href = "/login" }} className="w-fit px-4 border h-10 bg-background rounded-md flex items-center justify-center cursor-pointer text-primary">
+          {/* <BackgroundSlideButton onClick={() => { window.location.href = "/login" }} className={cn("shadow-none w-fit px-4 border h-10 bg-background rounded-md flex items-center justify-center cursor-pointer text-primary")}>
             Login
-          </BackgroundSlideButton>
+          </BackgroundSlideButton> */}
         </div>
       </div>
     </header>

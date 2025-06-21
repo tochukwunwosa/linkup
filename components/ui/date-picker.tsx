@@ -12,14 +12,15 @@ interface DatePickerProps {
   date: Date | undefined
   onChange: (date: Date | undefined) => void
   minDate?: Date
+  required?: boolean
 }
 
-export function DatePicker({ label, date, onChange, minDate }: DatePickerProps) {
+export function DatePicker({ label, date, onChange, minDate, required }: DatePickerProps) {
   const [open, setOpen] = React.useState(false)
 
   return (
     <div className="flex flex-col gap-2">
-      <Label className="px-1">{label}</Label>
+      <Label className="px-1">{label} {required && <span className='text-destructive text-xs'>*</span>}</Label>
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button

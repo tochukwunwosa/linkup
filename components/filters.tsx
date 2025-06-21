@@ -3,19 +3,11 @@
 import React from 'react'
 import { Filter } from 'lucide-react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { useEventContext } from './context/EventContext'
 
-interface FiltersProps {
-  selectedCategory: string
-  setSelectedCategory: (category: string) => void
-  selectedFormat: string
-  setSelectedFormat: (format: string) => void
-  selectedLocation: string
-  setSelectedLocation: (location: string) => void
-  selectedDate: string
-  setSelectedDate: (date: string) => void
-}
+export default function Filters() {
 
-export default function Filters({ selectedCategory, setSelectedCategory, selectedFormat, setSelectedFormat, selectedLocation, setSelectedLocation, selectedDate, setSelectedDate }: FiltersProps) {
+  const { filters, setFilters } = useEventContext();
   return (
     <section id="filters" className="sticky top-16 z-40 bg-white border-b border-gray-200 py-4">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -25,7 +17,10 @@ export default function Filters({ selectedCategory, setSelectedCategory, selecte
             <span className="text-sm font-medium text-gray-700">Filter by:</span>
           </div>
 
-          <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+          <Select
+            value={filters.category}
+            onValueChange={(value) => setFilters({ category: value })}
+          >
             <SelectTrigger className="min-w-[140px] w-fit">
               <SelectValue placeholder="Category" />
             </SelectTrigger>
@@ -39,7 +34,8 @@ export default function Filters({ selectedCategory, setSelectedCategory, selecte
             </SelectContent>
           </Select>
 
-          <Select value={selectedFormat} onValueChange={setSelectedFormat}>
+          <Select value={filters.format}
+            onValueChange={(value) => setFilters({ format: value })}>
             <SelectTrigger className="w-fit">
               <SelectValue placeholder="Format" />
             </SelectTrigger>
@@ -50,7 +46,8 @@ export default function Filters({ selectedCategory, setSelectedCategory, selecte
             </SelectContent>
           </Select>
 
-          <Select value={selectedLocation} onValueChange={setSelectedLocation}>
+          <Select value={filters.location}
+            onValueChange={(value) => setFilters({ location: value })}>
             <SelectTrigger className="w-fit">
               <SelectValue placeholder="Location" />
             </SelectTrigger>
@@ -63,7 +60,8 @@ export default function Filters({ selectedCategory, setSelectedCategory, selecte
             </SelectContent>
           </Select>
 
-          <Select value={selectedDate} onValueChange={setSelectedDate}>
+          <Select value={filters.date}
+            onValueChange={(value) => setFilters({ date: value })}>
             <SelectTrigger className="w-fit">
               <SelectValue placeholder="Date" />
             </SelectTrigger>

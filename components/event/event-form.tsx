@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState, useTransition } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -11,20 +11,25 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Switch } from "@/components/ui/switch"
 import { DatePicker } from "../ui/date-picker"
-import { convertTo24Hour } from "@/lib/utils"
 import { Event } from "@/lib/validations/event"
+import { createEventAction } from "@/app/actions/event/createEvent"
+import { toast } from "sonner"
+import { Loader } from "lucide-react"
+import { updateEventAction } from "@/app/actions/event/updateEvent"
 
 interface EventFormProps {
-  initialData?: Partial<Event> | null
-  onSubmit: () => void
-  onCancel: () => void
+  initialData?: Partial<Event> | null;
+  onSubmit: () => void;
+  onCancel: () => void;
+  adminId: string
 }
 
-export function EventForm({ initialData, onSubmit, onCancel }: EventFormProps) {
+export function EventForm({ initialData, onSubmit, onCancel, adminId }: EventFormProps) {
+  const [isPending, startTransition] = useTransition()
   const [formData, setFormData] = useState({
     title: initialData?.title || "",
     start_date: initialData?.start_date ? new Date(initialData.start_date) : new Date(),
-    endDate: initialData?.endDate ? new Date(initialData.endDate) : new Date(),
+    end_date: initialData?.end_date ? new Date(initialData.end_date) : new Date(),
     time: initialData?.time || "",
     location: initialData?.location || "",
     category: initialData?.category || "",
@@ -43,13 +48,13 @@ export function EventForm({ initialData, onSubmit, onCancel }: EventFormProps) {
     })
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     const now = new Date()
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
 
     const start = new Date(formData.start_date)
-    const end = new Date(formData.endDate)
+    const end = new Date(formData.end_date)
 
     if (start > end) {
       alert("Start date cannot be after end date.")
@@ -61,17 +66,41 @@ export function EventForm({ initialData, onSubmit, onCancel }: EventFormProps) {
     const isEndInFuture = end >= today
 
     if (isSingleDay && isStartInPast) {
-      alert("Single-day events cannot be in the past.")
+      toast.info("Single-day events cannot be in the past.")
       return
     }
 
     if (!isSingleDay && !isEndInFuture) {
-      alert("Multi-day events must still be ongoing or in the future.")
+      toast.info("Multi-day events must still be ongoing or in the future.")
       return
     }
 
-    console.log("Form data:", formData)
-    onSubmit()
+    const data = {
+      ...formData,
+      start_date: formData.start_date.toISOString(),
+      end_date: formData.end_date.toISOString(),
+    }
+
+    startTransition(async () => {
+      try {
+        if (initialData?.id) {
+          // 👈 Update existing
+          await updateEventAction(initialData.id, data);
+          toast.success("Event updated successfully!");
+        } else {
+          // 👈 Create new
+          await createEventAction(data, adminId);
+          toast.success("Event created successfully!");
+        }
+
+        onSubmit();
+      } catch (err) {
+        console.error("Failed to save event", err);
+        toast.error("Something went wrong while saving the event.");
+      }
+    });
+
+
   }
 
 
@@ -79,7 +108,7 @@ export function EventForm({ initialData, onSubmit, onCancel }: EventFormProps) {
     <form onSubmit={handleSubmit} className="space-y-6 py-4">
       <div className="space-y-4">
         <div>
-          <Label htmlFor="title">Event Title</Label>
+          <Label htmlFor="title" className="w-fit mb-2">Event Title <span className='text-destructive text-xs'>*</span></Label>
           <Input
             id="title"
             value={formData.title}
@@ -89,11 +118,12 @@ export function EventForm({ initialData, onSubmit, onCancel }: EventFormProps) {
           />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
             <DatePicker
               label="Start Date"
               date={formData.start_date}
+              required
               onChange={(date) => {
                 if (date) {
                   setFormData({ ...formData, start_date: date })
@@ -102,10 +132,10 @@ export function EventForm({ initialData, onSubmit, onCancel }: EventFormProps) {
             />
             <DatePicker
               label="End Date"
-              date={formData.endDate}
+              date={formData.end_date}
               onChange={(date) => {
                 if (date) {
-                  setFormData({ ...formData, endDate: date })
+                  setFormData({ ...formData, end_date: date })
                 }
               }}
               minDate={formData.start_date}
@@ -113,20 +143,22 @@ export function EventForm({ initialData, onSubmit, onCancel }: EventFormProps) {
           </div>
 
           <div>
-            <Label htmlFor="time">Time</Label>
+            <Label htmlFor="time" className="w-fit mb-2">Time <span className='text-destructive text-xs'>*</span></Label>
             <Input
               id="time"
               type="time"
-              value={convertTo24Hour(formData.time)}
+              value={formData.time}
               onChange={(e) => handleChange("time", e.target.value)}
+              className="w-fit"
               required
             />
+
 
           </div>
         </div>
 
         <div>
-          <Label htmlFor="location">Location</Label>
+          <Label htmlFor="location" className="w-fit mb-2">Location <span className='text-destructive text-xs'>*</span></Label>
           <Input
             id="location"
             value={formData.location}
@@ -137,7 +169,7 @@ export function EventForm({ initialData, onSubmit, onCancel }: EventFormProps) {
         </div>
 
         <div>
-          <Label htmlFor="category">Category</Label>
+          <Label htmlFor="category" className="w-fit mb-2">Category <span className='text-destructive text-xs'>*</span></Label>
           <Select value={formData.category} onValueChange={(value) => handleChange("category", value)}>
             <SelectTrigger id="category">
               <SelectValue placeholder="Select category" />
@@ -153,7 +185,7 @@ export function EventForm({ initialData, onSubmit, onCancel }: EventFormProps) {
         </div>
 
         <div>
-          <Label>Event Type</Label>
+          <Label className="w-fit mb-2">Event Type <span className='text-destructive text-xs'>*</span></Label>
           <RadioGroup
             value={formData.type}
             onValueChange={(value) => handleChange("type", value)}
@@ -175,7 +207,7 @@ export function EventForm({ initialData, onSubmit, onCancel }: EventFormProps) {
         </div>
 
         <div>
-          <Label>Pricing</Label>
+          <Label className="w-fit mb-2">Pricing</Label>
           <RadioGroup
             value={formData.price}
             onValueChange={(value) => handleChange("price", value)}
@@ -194,19 +226,19 @@ export function EventForm({ initialData, onSubmit, onCancel }: EventFormProps) {
 
         {formData.price === "Paid" && (
           <div>
-            <Label htmlFor="price_amount">Price Amount</Label>
+            <Label htmlFor="price_amount" className="w-fit mb-2">Price Amount <span className='text-xs'>(do not include coma ,) </span><span className='text-destructive text-xs'>*</span></Label>
             <Input
               id="price_amount"
               value={formData.price_amount}
               onChange={(e) => handleChange("price_amount", e.target.value)}
-              placeholder="e.g. $99"
+              placeholder="e.g. ₦1000"
               required
             />
           </div>
         )}
 
         <div>
-          <Label htmlFor="description">Description</Label>
+          <Label htmlFor="description" className="w-fit mb-2">Description <span className='text-destructive text-xs'>*</span></Label>
           <Textarea
             id="description"
             value={formData.description}
@@ -231,9 +263,23 @@ export function EventForm({ initialData, onSubmit, onCancel }: EventFormProps) {
         <Button type="button" variant="outline" onClick={onCancel}>
           Cancel
         </Button>
-        <Button type="submit" className="bg-indigo-600 hover:bg-indigo-700">
-          {initialData ? "Update Event" : "Create Event"}
+        <Button
+          type="submit"
+          className="bg-indigo-600 hover:bg-indigo-700"
+          disabled={isPending}
+        >
+          {isPending ?
+            <div className="flex items-center gap-px">
+              {initialData ? "Updating..." : "Creating..."}
+              <Loader className="animate-spin" />
+            </div>
+            :
+            <div className="flex items-center gap-px">
+              {initialData ? "Update Event" : "Create Event"}
+            </div>
+          }
         </Button>
+
       </div>
     </form>
   )

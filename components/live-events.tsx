@@ -1,12 +1,12 @@
-import React from 'react'
-import EventsGrid from './events-grid'
-import { Event } from '@/lib/validations/event'
+import { isLiveEvent } from "@/lib/utils"
+import EventsGrid from "@/components/events-grid"
+import { useEventContext } from "@/components/context/EventContext"
 
-interface LiveEventsProp {
-  liveEvents: Event[]
-}
-export default function LiveEvents({ liveEvents }: LiveEventsProp) {
-  return (
-    <EventsGrid title={'Live Tech Events Near You'} filteredEvents={liveEvents} />
-  )
+export default function LiveEvents() {
+  const { filteredEvents } = useEventContext()
+  const liveEvents = filteredEvents.filter((e) => isLiveEvent({ event: e }))
+
+  if (liveEvents.length === 0) return null
+
+  return <EventsGrid title="Live Events Near You" events={liveEvents} />
 }

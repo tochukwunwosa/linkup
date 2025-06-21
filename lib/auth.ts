@@ -1,8 +1,10 @@
-import { supabase } from './supabase'
+import { createClient } from "@/lib/supabase/server"
+
 
 export type Role = 'super_admin' | 'admin'
 
 export const checkUserRole = async (): Promise<Role | null> => {
+  const supabase = await createClient()
   const { data: { session } } = await supabase.auth.getSession()
 
   if (!session) return null

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerFooter } from "@/components/ui/drawer"
@@ -9,18 +9,37 @@ import { Search, UserPlus } from "lucide-react"
 import { AdminsTable } from "@/components/admin/admins-table"
 import { AdminsCardView } from "@/components/admin/admins-card-view"
 import { useIsMobile } from "@/hooks/use-mobile"
-import { parsedAdmins, UpdateAdmin } from "@/lib/validations/admin"
+import { UpdateAdminFormValues } from "@/lib/validations/admin"
+import { Admin } from "@/types"
+import { getAllActiveAdmin } from "@/app/actions/admin/getAllActiveAdmin"
+import { toast } from "sonner"
 
 export default function AdminsPage() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
-  const [editingAdmin, setEditingAdmin] = useState<UpdateAdmin | null>(null)
+  const [editingAdmin, setEditingAdmin] = useState<UpdateAdminFormValues | null>(null)
   const isMobile = useIsMobile()
+  const [admins, setAdmins] = useState<Admin[]>([])
 
-  const filteredAdmins = parsedAdmins.filter(
-    (admin) =>
+  const fetchAdmins = useCallback(async () => {
+    try {
+      const data = await getAllActiveAdmin();
+      setAdmins(data)
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : "An unexpected error occurred"
+      );
+    }
+  }, [])
+
+  useEffect(() => {
+    fetchAdmins();
+  }, [fetchAdmins]);
+
+  const filteredAdmins = admins.filter(
+    (admin: Admin) =>
       admin.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      admin.email.toLowerCase().includes(searchQuery.toLowerCase()),
+      admin.email.toLowerCase().includes(searchQuery.toLowerCase())
   )
 
   const handleCreateAdmin = () => {
@@ -28,15 +47,47 @@ export default function AdminsPage() {
     setIsDrawerOpen(true)
   }
 
-  const handleEditAdmin = (admin: UpdateAdmin) => {
+  const handleEditAdmin = (admin: UpdateAdminFormValues) => {
     setEditingAdmin(admin)
     setIsDrawerOpen(true)
   }
 
-  const handleDeleteAdmin = (id: number) => {
+  const handleDeleteAdmin = (id: string) => {
     // In a real app, this would call an API to delete the admin
     console.log(`Delete admin with ID: ${id}`)
   }
+
+  // const handleAdminSubmit = async (data: CreateAdminFormValues) => {
+  //   try {
+  //     if (data.id) {
+  //       // Update existing admin
+  //       const { error } = await updateAdmin(data); // You need to define this function
+
+  //       if (error) {
+  //         toast.error(error);
+  //       } else {
+  //         toast.success("Admin updated successfully!");
+  //         setIsDrawerOpen(false);
+  //         // Optionally: refetch
+  //       }
+  //     } else {
+  //       // Create new admin
+  //       const res = await createSuperAdmin(data); // This calls supabase.auth.admin.createUser
+
+  //       if (res?.error) {
+  //         toast.error(res.error);
+  //       } else {
+  //         toast.success("Admin created successfully!");
+  //         setIsDrawerOpen(false);
+  //         // Optionally: refetch
+  //       }
+  //     }
+  //   } catch (err) {
+  //     console.error("Submit error:", err);
+  //     toast.error("An error occurred while saving admin");
+  //   }
+  // };
+
 
   return (
     <div className="flex flex-col gap-6">

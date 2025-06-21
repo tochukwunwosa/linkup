@@ -4,24 +4,18 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
 import { toast } from "sonner"
+import { Admin } from "@/types"
 
 interface ProfileFormProps {
-  user: {
-    name: string
-    email: string
-    role: string
-    bio?: string
-  }
-  isSuperAdmin: boolean
+  user: Admin
 }
 
-export function ProfileForm({ user, isSuperAdmin }: ProfileFormProps) {
+export function ProfileForm({ user }: ProfileFormProps) {
+  const isAdmin = user.role === "admin"
   const [formData, setFormData] = useState({
     name: user.name,
     email: user.email,
-    bio: user.bio || "",
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -43,6 +37,7 @@ export function ProfileForm({ user, isSuperAdmin }: ProfileFormProps) {
     }, 1000)
   }
 
+
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="space-y-4">
@@ -52,14 +47,14 @@ export function ProfileForm({ user, isSuperAdmin }: ProfileFormProps) {
             id="name"
             value={formData.name}
             onChange={(e) => handleChange("name", e.target.value)}
-            disabled={!isSuperAdmin}
+            disabled={isAdmin}
             required
           />
-          {!isSuperAdmin && (
+          {isAdmin ? (
             <p className="text-xs text-muted-foreground">
               Only Super Admins can change names. Contact a Super Admin for assistance.
             </p>
-          )}
+          ) : null}
         </div>
 
         <div className="grid gap-2">
@@ -69,17 +64,17 @@ export function ProfileForm({ user, isSuperAdmin }: ProfileFormProps) {
             type="email"
             value={formData.email}
             onChange={(e) => handleChange("email", e.target.value)}
-            disabled={!isSuperAdmin}
+            disabled={isAdmin}
             required
           />
-          {!isSuperAdmin && (
+          {isAdmin ? (
             <p className="text-xs text-muted-foreground">
               Only Super Admins can change email addresses.
             </p>
-          )}
+          ) : null}
         </div>
 
-        <div className="grid gap-2">
+        {/* <div className="grid gap-2">
           <Label htmlFor="bio">Bio</Label>
           <Textarea
             id="bio"
@@ -91,7 +86,7 @@ export function ProfileForm({ user, isSuperAdmin }: ProfileFormProps) {
           <p className="text-xs text-muted-foreground">
             This will be displayed on your profile.
           </p>
-        </div>
+        </div> */}
       </div>
 
       <Button type="submit" className="bg-indigo-600 hover:bg-indigo-700" disabled={isSubmitting}>

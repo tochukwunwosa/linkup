@@ -6,7 +6,7 @@ import { useState, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Camera, Loader2 } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { cn, getInitials } from "@/lib/utils"
 
 interface ProfilePictureProps {
   user: {
@@ -19,14 +19,6 @@ export function ProfilePicture({ user }: ProfilePictureProps) {
   const [avatar, setAvatar] = useState<string | undefined>(user.avatar)
   const [isUploading, setIsUploading] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
-
-  const getInitials = (name: string) => {
-    return name
-      .split(" ")
-      .map((n) => n[0])
-      .join("")
-      .toUpperCase()
-  }
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]

@@ -1,15 +1,30 @@
-"use client"
+"use client";
 
-import { Cell, Pie, PieChart, ResponsiveContainer } from "recharts"
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
+import { Cell, Pie, PieChart, ResponsiveContainer } from "recharts";
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart";
+import type { Event } from "@/lib/validations/event";
 
-// Mock data for event type distribution
-const data = [
-  { name: "Online", value: 35, color: "#4F46E5" },
-  { name: "In-person", value: 65, color: "#F97316" },
-]
+interface Props {
+  events: Event[];
+}
 
-export function EventTypeDistributionChart() {
+export function EventTypeDistributionChart({ events }: Props) {
+  const onlineCount = events.filter((e) => e.type === "Online").length;
+  const inPersonCount = events.filter((e) => e.type === "In-person").length;
+  const hybridCount = events.filter((e) => e.type === "In-person & Online").length;
+
+  // const total = onlineCount + inPersonCount + hybridCount;
+
+  const data = [
+    { name: "Online", value: onlineCount, color: "#4F46E5" },
+    { name: "In-person", value: inPersonCount, color: "#F97316" },
+    { name: "Hybrid", value: hybridCount, color: "#10B981" },
+  ].filter((d) => d.value > 0); // remove 0-value types
+
   return (
     <div className="flex flex-col h-full w-full">
       <div className="flex-1">
@@ -32,7 +47,9 @@ export function EventTypeDistributionChart() {
                 outerRadius={80}
                 paddingAngle={5}
                 dataKey="value"
-                label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                label={({ name, percent }) =>
+                  `${name} ${(percent * 100).toFixed(0)}%`
+                }
               >
                 {data.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={entry.color} />
@@ -44,8 +61,7 @@ export function EventTypeDistributionChart() {
         </ChartContainer>
       </div>
 
-      {/* Legend outside of the chart, placed below */}
-      <div className="flex mt-20  justify-center gap-6 py-4">
+      <div className="flex mt-20 justify-center gap-6 py-4">
         {data.map((entry, index) => (
           <div key={index} className="flex items-center gap-2">
             <div
@@ -57,6 +73,5 @@ export function EventTypeDistributionChart() {
         ))}
       </div>
     </div>
-  )
+  );
 }
-

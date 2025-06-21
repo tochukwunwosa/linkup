@@ -1,153 +1,163 @@
 "use client"
 
-import type React from "react"
-
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import {
+  Form,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage,
+} from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import { Button } from "@/components/ui/button"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { UpdateAdmin } from "@/lib/validations/admin"
+import { Label } from "@/components/ui/label"
+
+import {
+  CreateAdminFormValues,
+  UpdateAdminFormValues,
+  createAdminFormSchema,
+  updateAdminFormSchema,
+} from "@/lib/validations/admin"
 
 interface AdminFormProps {
-  initialData?: UpdateAdmin | null
-  onSubmit: () => void
+  initialData?: UpdateAdminFormValues | null
+  onSubmit: (data: CreateAdminFormValues | UpdateAdminFormValues) => void
   onCancel: () => void
 }
 
 export function AdminForm({ initialData, onSubmit, onCancel }: AdminFormProps) {
-  const [formData, setFormData] = useState({
-    name: initialData?.name || "",
-    email: initialData?.email || "",
-    role: initialData?.role || "admin",
-    password: "",
-    confirmPassword: "",
+  const isEditing = !!initialData
+
+  const form = useForm<CreateAdminFormValues | UpdateAdminFormValues>({
+    resolver: zodResolver(isEditing ? updateAdminFormSchema : createAdminFormSchema),
+    defaultValues: {
+      name: initialData?.name || "",
+      email: initialData?.email || "",
+      role: initialData?.role || "admin",
+      password: "",
+      confirmPassword: "",
+    },
   })
 
-  const handleChange = (field: string, value: string) => {
-    setFormData({
-      ...formData,
-      [field]: value,
-    })
-  }
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    // In a real app, this would call an API to save the admin
-    console.log("Form data:", formData)
-    onSubmit()
-  }
-
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 py-4">
-      <div className="space-y-4">
-        <div>
-          <Label htmlFor="name">Name</Label>
-          <Input
-            id="name"
-            value={formData.name}
-            onChange={(e) => handleChange("name", e.target.value)}
-            placeholder="Enter full name"
-            required
-          />
-        </div>
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-6 py-4"
+      >
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Name</FormLabel>
+              <FormControl>
+                <Input placeholder="Enter full name" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-        <div>
-          <Label htmlFor="email">Email</Label>
-          <Input
-            id="email"
-            type="email"
-            value={formData.email}
-            onChange={(e) => handleChange("email", e.target.value)}
-            placeholder="Enter email address"
-            required
-          />
-        </div>
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email</FormLabel>
+              <FormControl>
+                <Input type="email" placeholder="Enter email address" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-        <div>
-          <Label>Role</Label>
-          <RadioGroup
-            value={formData.role}
-            onValueChange={(value) => handleChange("role", value)}
-            className="flex gap-4 mt-2"
-          >
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="admin" id="admin" />
-              <Label htmlFor="admin">Admin</Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="super_admin" id="super-admin" />
-              <Label htmlFor="super-admin">Super Admin</Label>
-            </div>
-          </RadioGroup>
-        </div>
+        <FormField
+          control={form.control}
+          name="role"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Role</FormLabel>
+              <FormControl>
+                <RadioGroup
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                  className="flex gap-4 mt-2"
+                >
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="admin" id="admin" />
+                    <Label htmlFor="admin">Admin</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="super_admin" id="super-admin" />
+                    <Label htmlFor="super-admin">Super Admin</Label>
+                  </div>
+                </RadioGroup>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-        {!initialData && (
-          <>
-            <div>
-              <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                type="password"
-                value={formData.password}
-                onChange={(e) => handleChange("password", e.target.value)}
-                placeholder="Enter password"
-                required={!initialData}
-              />
-            </div>
-
-            <div>
-              <Label htmlFor="confirmPassword">Confirm Password</Label>
-              <Input
-                id="confirmPassword"
-                type="password"
-                value={formData.confirmPassword}
-                onChange={(e) => handleChange("confirmPassword", e.target.value)}
-                placeholder="Confirm password"
-                required={!initialData}
-              />
-            </div>
-          </>
-        )}
-
-        {initialData && (
-          <>
-            <div>
-              <Label htmlFor="password">New Password (optional)</Label>
-              <Input
-                id="password"
-                type="password"
-                value={formData.password}
-                onChange={(e) => handleChange("password", e.target.value)}
-                placeholder="Leave blank to keep current password"
-              />
-            </div>
-
-            {formData.password && (
-              <div>
-                <Label htmlFor="confirmPassword">Confirm New Password</Label>
+        <FormField
+          control={form.control}
+          name="password"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>
+                {isEditing ? "New Password (optional)" : "Password"}
+              </FormLabel>
+              <FormControl>
                 <Input
-                  id="confirmPassword"
                   type="password"
-                  value={formData.confirmPassword}
-                  onChange={(e) => handleChange("confirmPassword", e.target.value)}
-                  placeholder="Confirm new password"
-                  required={!!formData.password}
+                  placeholder={
+                    isEditing ? "Leave blank to keep current password" : "Enter password"
+                  }
+                  {...field}
                 />
-              </div>
-            )}
-          </>
-        )}
-      </div>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-      <div className="flex justify-end gap-2">
-        <Button type="button" variant="outline" onClick={onCancel}>
-          Cancel
-        </Button>
-        <Button type="submit" className="bg-indigo-600 hover:bg-indigo-700">
-          {initialData ? "Update Admin" : "Add Admin"}
-        </Button>
-      </div>
-    </form>
+        <FormField
+          control={form.control}
+          name="confirmPassword"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>
+                {isEditing ? "Confirm New Password" : "Confirm Password"}
+              </FormLabel>
+              <FormControl>
+                <Input
+                  type="password"
+                  placeholder={
+                    isEditing
+                      ? "Confirm new password"
+                      : "Re-enter your password"
+                  }
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <div className="flex justify-end gap-2">
+          <Button type="button" variant="outline" onClick={onCancel}>
+            Cancel
+          </Button>
+          <Button type="submit" className="bg-indigo-600 hover:bg-indigo-700">
+            {isEditing ? "Update Admin" : "Add Admin"}
+          </Button>
+        </div>
+      </form>
+    </Form>
   )
 }

@@ -37,7 +37,7 @@ export function TableToolbar<TData>({ table }: TableToolbarProps<TData>) {
         {table.getColumn("publish_status") && (
           <DataTableFacetedFilter
             column={table.getColumn("publish_status")}
-            title="publish_status"
+            title="Publish Status"
             options={[
               { label: "Published", value: "Published" },
               { label: "Draft", value: "Draft" },

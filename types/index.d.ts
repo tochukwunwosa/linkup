@@ -1,10 +1,12 @@
 import { Role } from "@/lib/auth";
 
-declare interface Admin {
+export type Admin = {
+  id: string;
   email: string;
   name: string;
+  password?: string;
   role: Role;
   invited_by: string;
-  created_at: string;
-}
+  last_login: string;
+};
 

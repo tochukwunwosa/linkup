@@ -1,5 +1,6 @@
 import { Calendar, Sparkles, ArrowRight } from "lucide-react"
 import BackgroundSlideButton from "@/components/background-slide-button"
+import { cn } from "@/lib/utils"
 
 export default function Hero() {
   return (
@@ -70,7 +71,7 @@ export default function Hero() {
           {/* CTA Buttons with improved spacing */}
           <div className="mb-20">
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center max-w-lg mx-auto">
-              <BackgroundSlideButton onClick={() => { document.getElementById("filters")?.scrollIntoView({ behavior: "smooth" }) }} className="w-fit px-4 max-w-56 h-14 text-background font-semibold text-lg  border border-background">
+              <BackgroundSlideButton onClick={() => { document.getElementById("filters")?.scrollIntoView({ behavior: "smooth" }) }} className={cn("shadow-xl hover:shadow-2xl w-fit px-4 max-w-56 h-14 text-background font-semibold text-lg  border border-background")}>
                 <span className="flex items-center gap-3 text-md">
                   <Calendar className="w-5 h-5" />
                   Find Events

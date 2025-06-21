@@ -52,7 +52,7 @@ export function getEventColumns(onEdit: (event: Event) => void, onDelete: (id: n
     {
       id: "date",
       header: "Date",
-      accessorFn: (row) => formatDateRange(row.start_date, row.endDate || ""),
+      accessorFn: (row) => formatDateRange(row.start_date, row.end_date || ""),
       cell: ({ getValue }) => (
         <div className="text-sm text-muted-foreground">
           {getValue() as string}
@@ -77,7 +77,7 @@ export function getEventColumns(onEdit: (event: Event) => void, onDelete: (id: n
     },
     {
       accessorKey: "publish_status",
-      header: "publish_status",
+      header: "Status",
       cell: ({ row }) => <EventStatusCell value={row.getValue("publish_status")} />,
       filterFn: (row, id, value) => {
         return value.includes(row.getValue(id))

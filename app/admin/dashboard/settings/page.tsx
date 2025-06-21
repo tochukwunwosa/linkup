@@ -7,17 +7,17 @@ import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Switch } from "@/components/ui/switch"
 import { DashboardHeader } from "@/components/dashboard/dashboard-header"
-import { mockAdmins } from "@/lib/mock-data"
 import { Shield } from "lucide-react"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { useRouter } from "next/navigation"
 import { useEffect } from "react"
+import { useAdmin } from "@/components/context/AdminContext"
 
 export default function SettingsPage() {
+  const admin = useAdmin()
   const router = useRouter()
-  const user = mockAdmins[0] // Simulating the logged-in user
 
-  const isSuperAdmin = user.role === "super_admin"
+  const isSuperAdmin = admin.role === "super_admin"
 
   useEffect(() => {
     if (!isSuperAdmin) {

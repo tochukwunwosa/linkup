@@ -15,12 +15,13 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import { Admin, UpdateAdmin } from "@/lib/validations/admin"
+import { Admin } from "@/types"
+import { UpdateAdminFormValues } from "@/lib/validations/admin"
 
 interface AdminsCardViewProps {
   admins: Admin[]
-  onEdit: (admin: UpdateAdmin) => void
-  onDelete: (id: number) => void
+  onEdit: (admin: UpdateAdminFormValues) => void
+  onDelete: (id: string) => void
 }
 
 export function AdminsCardView({ admins, onEdit, onDelete }: AdminsCardViewProps) {
@@ -46,20 +47,30 @@ export function AdminsCardView({ admins, onEdit, onDelete }: AdminsCardViewProps
                   <Mail className="h-3.5 w-3.5 mr-2" />
                   {admin.email}
                 </div>
+                {/* format the date e.g 26 June 2025 at 9:06 PM */}
                 <div className="flex items-center">
                   <Clock className="h-3.5 w-3.5 mr-2" />
-                  Last login: {admin.last_login}
+                  {`Last login: ${admin.last_login ?
+                    new Date(admin.last_login).toLocaleString("en-GB", {
+                      day: "2-digit",
+                      month: "long",
+                      year: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      hour12: true,
+                    }).replace(",", "").replace(" at", " at")
+                    : "Never"}`}
                 </div>
               </div>
             </CardContent>
             <CardFooter className="flex justify-end gap-2 pt-0">
-              <Button variant="ghost" size="sm" onClick={() => onEdit(admin)}>
+              <Button variant="ghost" size="sm" onClick={() => onEdit(admin)} className="cursor-pointer">
                 <Edit className="h-4 w-4 mr-1" />
                 Edit
               </Button>
               <AlertDialog>
                 <AlertDialogTrigger asChild>
-                  <Button variant="ghost" size="sm">
+                  <Button variant="ghost" size="sm" className="text-destructive/70 hover:text-destructive hover:bg-transparent cursor-pointer">
                     <Trash2 className="h-4 w-4 mr-1" />
                     Delete
                   </Button>
@@ -72,8 +83,8 @@ export function AdminsCardView({ admins, onEdit, onDelete }: AdminsCardViewProps
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={() => onDelete(admin.id)} className="bg-red-600 hover:bg-red-700">
+                    <AlertDialogCancel className="cursor-pointer">Cancel</AlertDialogCancel>
+                    <AlertDialogAction onClick={() => onDelete(admin.id)} className="cursor-pointer bg-destructive/70 hover:bg-destructive">
                       Delete
                     </AlertDialogAction>
                   </AlertDialogFooter>

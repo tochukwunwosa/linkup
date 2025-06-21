@@ -36,16 +36,16 @@ export function EventsCardView({ events, onEdit, onDelete }: EventsCardViewProps
               <div className="flex justify-between items-start mb-2">
                 <h3 className="font-medium">{event.title}</h3>
                 <Badge
-                  variant={event.publish_status === "published" ? "default" : "outline"}
-                  className={event.publish_status === "published" ? "bg-green-100 text-green-800 hover:bg-green-100" : ""}
+                  variant={event.publish_status === "Published" ? "default" : "outline"}
+                  className={event.publish_status === "Published" ? "bg-green-100 text-green-800 hover:bg-green-100" : ""}
                 >
-                  {event.publish_status === 'published' ? 'Published' : 'Draft'}
+                  {event.publish_status}
                 </Badge>
               </div>
               <div className="space-y-2 text-sm text-muted-foreground">
                 <div className="flex items-center">
                   <Calendar className="h-3.5 w-3.5 mr-2" />
-                  {formatDateRange(event.start_date, event.endDate || "")}
+                  {formatDateRange(event.start_date, event.end_date || "")}
                 </div>
                 <div className="flex items-center">
                   <MapPin className="h-3.5 w-3.5 mr-2" />

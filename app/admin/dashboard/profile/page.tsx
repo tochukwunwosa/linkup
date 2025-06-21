@@ -5,13 +5,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ProfilePicture } from "@/components/admin/profile/profile-picture"
 import { SecuritySettings } from "@/components/admin/profile/security-settings"
 import { ProfileForm } from "@/components/admin/profile/profile-form"
-import { mockAdmins } from "@/lib/mock-data"
 import { DashboardHeader } from "@/components/dashboard/dashboard-header"
+import { useAdmin } from "@/components/context/AdminContext"
 
 export default function ProfilePage() {
-  const user = mockAdmins[1] // Simulating the logged-in user
+  const admin = useAdmin()
 
-  const isSuperAdmin = user.role === "super_admin"
+  const isSuperAdmin = admin?.role === "super_admin"
 
   return (
     <div className="flex flex-col gap-6">
@@ -25,13 +25,13 @@ export default function ProfilePage() {
             <CardDescription>Manage your account information</CardDescription>
           </CardHeader>
           <CardContent className="flex flex-col items-center">
-            <ProfilePicture user={user} />
+            <ProfilePicture user={admin} />
             <div className="mt-4 text-center">
-              <h2 className="text-xl font-semibold">{user.name}</h2>
-              <p className="text-sm text-muted-foreground">{user.email}</p>
+              <h2 className="text-xl font-semibold">{admin.name}</h2>
+              <p className="text-sm text-muted-foreground">{admin.email}</p>
               <div className="mt-2">
                 <span className="inline-flex items-center rounded-full bg-indigo-100 px-2.5 py-0.5 text-xs font-medium text-indigo-800">
-                  {user.role}
+                  {admin.role}
                 </span>
               </div>
             </div>
@@ -54,7 +54,7 @@ export default function ProfilePage() {
                   <CardDescription>Update your personal information</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <ProfileForm user={user} isSuperAdmin={isSuperAdmin} />
+                  <ProfileForm user={admin} />
                 </CardContent>
               </Card>
             </TabsContent>
@@ -66,7 +66,7 @@ export default function ProfilePage() {
                   <CardDescription>Manage your security preferences</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <SecuritySettings user={user} isSuperAdmin={isSuperAdmin} />
+                  <SecuritySettings user={admin} isSuperAdmin={isSuperAdmin} />
                 </CardContent>
               </Card>
             </TabsContent>

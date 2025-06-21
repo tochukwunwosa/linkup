@@ -3,19 +3,37 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { CalendarDays, Clock, MapPin, Users } from "lucide-react"
-import { mockEvents } from "@/lib/mock-data"
 import { EventCategoryChart } from "@/components/admin/charts/event-category-chart"
 import { EventTypeDistributionChart } from "@/components/admin/charts/event-type-distribution-chart"
 import { EventTrendChart } from "@/components/admin/charts/event-trend-chart"
 import { RecentEventsActivity } from "@/components/admin/recent-events-activity"
 import { DashboardHeader } from "@/components/dashboard/dashboard-header"
-
+import { useCallback, useEffect, useState } from "react"
+import { getAllActiveEvents } from "@/app/actions/event/getAllActiveEvents"
+import { toast } from "sonner"
+import { Event } from "@/lib/validations/event"
 export default function AdminDashboard() {
-  // Calculate dashboard stats
-  const totalEvents = mockEvents.length
-  const publishedEvents = mockEvents.filter((event) => event.publish_status === "published").length
-  const onlineEvents = mockEvents.filter((event) => event.type === "Online").length
-  const inPersonEvents = mockEvents.filter((event) => event.type === "In-person").length
+  const [events, setEvents] = useState<Event[]>([]);
+
+  const fetchEvents = useCallback(async () => {
+    try {
+      const data = await getAllActiveEvents();
+      setEvents(data);
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : "An unexpected error occurred"
+      );
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchEvents();
+  }, [fetchEvents]);
+
+  const totalEvents = events.length;
+  const publishedEvents = events.filter((event) => event.publish_status === "Published").length;
+  const onlineEvents = events.filter((event) => event.type === "Online").length;
+  const inPersonEvents = events.filter((event) => event.type === "In-person").length;
 
   return (
     <div className="flex flex-col gap-6">
@@ -75,48 +93,48 @@ export default function AdminDashboard() {
         </TabsList>
         {/* overview */}
         <TabsContent value="overview" className="space-y-4">
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+          <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-7">
             {/* event trend */}
-            <Card className="md:col-span-4">
+            <Card className="lg:col-span-4">
               <CardHeader>
                 <CardTitle>Event Registrations</CardTitle>
                 <CardDescription>Event registration trends over the past 30 days</CardDescription>
               </CardHeader>
               <CardContent className="pl-2">
-                <EventTrendChart />
+                <EventTrendChart events={events} />
               </CardContent>
             </Card>
             {/* event type distribution */}
-            <Card className="col-span-3">
+            <Card className="lg:col-span-3">
               <CardHeader>
                 <CardTitle>Event Type Distribution</CardTitle>
                 <CardDescription>Online vs In-person events</CardDescription>
               </CardHeader>
               <CardContent>
-                <EventTypeDistributionChart />
+                <EventTypeDistributionChart events={events} />
               </CardContent>
             </Card>
           </div>
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+          <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-7">
             {/* events by category chart */}
-            <Card className=" col-span-4 flex flex-col">
+            <Card className=" lg:col-span-4 flex flex-col">
               <CardHeader>
                 <CardTitle>Events by Category</CardTitle>
                 <CardDescription>Distribution of events across categories</CardDescription>
               </CardHeader>
               <CardContent className="">
-                <EventCategoryChart />
+                <EventCategoryChart events={events} />
               </CardContent>
             </Card>
 
             {/* recent activity */}
-            <Card className="col-span-3">
+            <Card className="lg:col-span-3">
               <CardHeader>
                 <CardTitle>Recent Activity</CardTitle>
                 <CardDescription>Latest events and updates</CardDescription>
               </CardHeader>
               <CardContent>
-                <RecentEventsActivity />
+                <RecentEventsActivity events={events} />
               </CardContent>
             </Card>
           </div>

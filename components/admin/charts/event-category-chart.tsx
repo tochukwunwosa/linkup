@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
   BarChart,
@@ -6,24 +6,35 @@ import {
   ResponsiveContainer,
   XAxis,
   YAxis,
-} from "recharts"
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
+  Cell,
+} from "recharts";
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart";
+import type { Event } from "@/lib/validations/event";
 
-const data = [
-  { name: "Tech", value: 40 },
-  { name: "Design", value: 20 },
-  { name: "Startup", value: 35 },
-  { name: "Marketing", value: 25 },
-  { name: "AI", value: 30 },
-]
+interface Props {
+  events: Event[];
+}
 
-export function EventCategoryChart() {
+const colors = ["#4F46E5", "#F59E0B", "#10B981", "#EF4444", "#6366F1"];
+
+export function EventCategoryChart({ events }: Props) {
+  const categories = ["Tech", "Design", "Startup", "Marketing", "AI", "Web"];
+
+  const data = categories.map((category) => ({
+    name: category,
+    value: events.filter((e) => e.category === category).length,
+  })).filter(d => d.value > 0); // remove empty ones
+
   return (
     <ChartContainer
       config={{
         value: {
           label: "Events",
-          color: "hsl(var(--primary))",
+          color: "var(--primary)",
         },
       }}
       className="h-full flex flex-col min-h-[280px]"
@@ -46,15 +57,13 @@ export function EventCategoryChart() {
             axisLine={false}
           />
           <ChartTooltip content={<ChartTooltipContent />} />
-          <Bar
-            dataKey="value"
-            fill="var(--color-value)"
-            radius={[4, 4, 0, 0]}
-            barSize={36} // makes bars chunkier
-            className="transition-all duration-300 hover:opacity-80"
-          />
+          <Bar dataKey="value" radius={[4, 4, 0, 0]} barSize={36}>
+            {data.map((entry, index) => (
+              <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
+            ))}
+          </Bar>
         </BarChart>
       </ResponsiveContainer>
     </ChartContainer>
-  )
+  );
 }
