@@ -11,14 +11,18 @@ export default function UserLocationProvider() {
   const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
-    // Only show modal if not previously denied
-    const denied = localStorage.getItem("location-denied");
-    if (!denied) setModalOpen(true);
+    // Only show modal if permission has not been handled yet
+    const permissionHandled = localStorage.getItem("location-permission-handled");
+    if (!permissionHandled) {
+      setModalOpen(true);
+    }
   }, []);
 
   const handleAllow = () => {
     setModalOpen(false);
+    localStorage.setItem("location-permission-handled", "true");
     if (!navigator.geolocation) return;
+
     navigator.geolocation.getCurrentPosition(
       async (pos) => {
         const { latitude, longitude } = pos.coords;
@@ -29,9 +33,7 @@ export default function UserLocationProvider() {
         }
       },
       (err) => {
-        // Could not get location
-
-        toast.error(`Could not get location: ${err.message || err.code || 'Unknown error'}`);
+        toast.error(`Could not get location: ${err.message || 'Permission denied'}`);
       },
       { enableHighAccuracy: true, timeout: 10000 }
     );
@@ -55,7 +57,7 @@ export default function UserLocationProvider() {
 
   const handleDeny = () => {
     setModalOpen(false);
-    localStorage.setItem("location-denied", "1");
+    localStorage.setItem("location-permission-handled", "true");
   };
 
   return <LocationPermissionModal open={modalOpen} onAllow={handleAllow} onDeny={handleDeny} />;

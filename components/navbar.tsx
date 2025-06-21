@@ -1,6 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
+// import Image from 'next/image'
 
 export default function Navbar() {
   return (
@@ -8,8 +8,9 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center">
-            <Link href="/" className="w-24">
-              <Image src={'/assets/logo/linkup-logo-80x35.svg'} width={177} height={72} alt='LinkUp logo.' priority/>
+            <Link href="/" className="w-24 font-bold text-primary">
+              {/* <Image src={'/assets/logo/linkup-logo-80x35.svg'} width={177} height={72} alt='LinkUp logo.' priority/> */}
+              <span>LinkUp</span>
             </Link>
           </div>
           <nav className="hidden md:flex space-x-8">

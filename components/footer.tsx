@@ -1,4 +1,4 @@
-import Image from 'next/image'
+// import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 
@@ -8,8 +8,9 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row justify-between items-center">
           <div className="mb-4 md:mb-0">
-            <Link href="/" className="w-6 font-bold text-indigo-600">
-              <Image src={'/assets/logo/linkup-logo-80x35.svg'} width={177} height={72} alt='LinkUp logo.' className='w-32'/>
+            <Link href="/" className="w-6 font-bold text-primary">
+              <span>LinkUp</span>
+              {/* <Image src={'/assets/logo/linkup-logo-80x35.svg'} width={177} height={72} alt='LinkUp logo.' className='w-32'/> */}
             </Link>
             <p className="text-gray-600 mt-px">Discover tech events near you</p>
           </div>
