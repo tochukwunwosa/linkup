@@ -9,7 +9,7 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row justify-between items-center">
           <div className="mb-4 md:mb-0">
             <Link href="/" className="w-6 font-bold text-indigo-600">
-              <Image src={'/assets/logo/linkup-Logo-80x35-removebg-preview.png'} width={177} height={72} alt='LinkUp logo.' className='w-32'/>
+              <Image src={'/assets/logo/linkup-logo-80x35.svg'} width={177} height={72} alt='LinkUp logo.' className='w-32'/>
             </Link>
             <p className="text-gray-600 mt-px">Discover tech events near you</p>
           </div>

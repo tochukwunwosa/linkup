@@ -10,7 +10,7 @@ export default function LocationPermissionModal({ open, onAllow, onDeny }: { ope
           <DialogTitle>Allow Location Access</DialogTitle>
         </DialogHeader>
         <div className="py-2 text-sm text-muted-foreground">
-          Allowing location helps use to show you events closer to you.
+          Enable location access to discover events happening near you.
         </div>
         <DialogFooter className="gap-2">
           <Button variant="outline" onClick={onDeny}>Deny</Button>

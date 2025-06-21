@@ -5,6 +5,7 @@ import Hero from "@/components/hero"
 import UpcomingEvents from "@/components/upcoming-events"
 import Footer from "@/components/footer"
 import LiveEvents from "@/components/live-events"
+import Filters from "@/components/filters"
 
 export default function LinkUpLanding() {
 
@@ -12,6 +13,10 @@ export default function LinkUpLanding() {
     <div className="min-h-screen bg-gray-50">
       <Navbar />
       <Hero />
+
+
+      {/* Filters */}
+      <Filters />
 
       {/* Conditionally render live events */}
       <LiveEvents />

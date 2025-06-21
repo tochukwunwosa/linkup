@@ -6,14 +6,12 @@ import { Calendar, Clock, MapPin, Users, ExternalLink } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { formatDateRange } from '@/lib/utils'
 // import { LiveEventBadge } from './live-event-badge'
-import Filters from "@/components/filters"
 import { Event } from "@/lib/validations/event"
 
 interface UpcomingEventsProp {
   title: string;
   events: Event[];
 }
-
 
 export default function EventsGrid({ title, events }: UpcomingEventsProp) {
 
@@ -31,14 +29,11 @@ export default function EventsGrid({ title, events }: UpcomingEventsProp) {
 
   return (
     <div id="events">
-      {/* Filters */}
-      <Filters />
-
       <section className="py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-8">
             <h2 className="text-3xl font-bold text-gray-900 mb-2">{title}</h2>
-            {/* <p className="text-gray-600">{.length} events found</p> */}
+            <p className="text-muted-foreground text-xs">{events.length} {events.length > 1 ? "events" : "event"} found</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
