@@ -69,13 +69,13 @@ export default function EventsGrid({ title, events }: UpcomingEventsProp) {
       <section className="py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-8">
-            <h2 className="text-3xl font-bold text-gray-900 mb-2">{title}</h2>
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">{title}</h2>
             <p className="text-muted-foreground text-xs">{events.length} {events.length > 1 ? "events" : "event"} found</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {events.map((event) => (
-              <Card key={event.id} className="overflow-hidden">
+              <Card key={event.id} className="max-w-md overflow-hidden">
                 <CardHeader className="p-4">
                   <div className="flex items-start flex-wrap">
                     <div>
@@ -122,7 +122,7 @@ export default function EventsGrid({ title, events }: UpcomingEventsProp) {
                         <Button
                           variant="outline"
                           size="sm"
-                          className="flex-1 bg-primary text-background hover:!bg-secondary hover:text-background cursor-pointer"
+                          className="max-w-fit mx-auto flex-1 bg-primary text-background hover:!bg-secondary hover:text-background cursor-pointer"
                         >
                           Add to Calendar
                           <ChevronDown className="w-4 h-4 ml-2" />

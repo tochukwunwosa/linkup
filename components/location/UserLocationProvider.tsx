@@ -5,10 +5,13 @@ import { useEventContext } from "@/components/context/EventContext";
 import { reverseGeocodeLatLng } from "@/lib/geocode";
 import LocationPermissionModal from "./LocationPermissionModal";
 import { toast } from "sonner";
+import { Alert, AlertDescription } from "../ui/alert";
 
 export default function UserLocationProvider() {
   const { setUserLocation } = useEventContext();
   const [modalOpen, setModalOpen] = useState(false);
+  const [locationError, setLocationError] = useState<string | null>(null);
+
 
   useEffect(() => {
     // Only show modal if permission has not been handled yet
@@ -33,7 +36,16 @@ export default function UserLocationProvider() {
         }
       },
       (err) => {
-        toast.error(`Could not get location: ${err.message || 'Permission denied'}`);
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+        const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+
+        if (isIOS && isSafari) {
+          setLocationError(
+            `Could not get location on iOS Safari.\n\nThis may happen if:\n- You denied permission (check Settings > Privacy > Location Services > Safari Websites)\n- The site is not served over HTTPS\n- You are in Private Browsing mode\n\nError: ${err.message || 'Permission denied'}`
+          );
+        } else {
+          toast.error(`Could not get location: ${err.message || 'Permission denied'}`);
+        }
       },
       { enableHighAccuracy: true, timeout: 10000 }
     );
@@ -60,5 +72,14 @@ export default function UserLocationProvider() {
     localStorage.setItem("location-permission-handled", "true");
   };
 
-  return <LocationPermissionModal open={modalOpen} onAllow={handleAllow} onDeny={handleDeny} />;
+  return (
+    <>
+      {locationError && (
+        <Alert variant="destructive" className="my-4 whitespace-pre-wrap">
+          <AlertDescription>{locationError}</AlertDescription>
+        </Alert>
+      )}
+    <LocationPermissionModal open={modalOpen} onAllow={handleAllow} onDeny={handleDeny} />
+    </>
+  );
 } 
