@@ -2,7 +2,7 @@
 
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Calendar, Clock, MapPin, Users, ExternalLink, ChevronDown } from 'lucide-react'
+import { Calendar, Clock, MapPin, Users, ExternalLink } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { addToGoogleCalendar, formatDateRange, isLiveEvent } from '@/lib/utils'
 // import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
