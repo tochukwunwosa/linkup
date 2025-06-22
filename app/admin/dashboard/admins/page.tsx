@@ -74,7 +74,7 @@ export default function AdminsPage() {
       {isSuperAdmin ? <div className="flex flex-col gap-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <h1 className="text-3xl font-bold">Admins</h1>
-          <Button onClick={handleCreateAdmin} className="bg-indigo-600 hover:bg-indigo-700">
+          <Button onClick={handleCreateAdmin} className="bg-indigo-600 hover:bg-indigo-700  transition-colors duration-300 ease-in-out">
             <UserPlus className="mr-2 h-4 w-4" />
             Add Admin
           </Button>

@@ -11,8 +11,9 @@ export default function LinkUpLanding() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
-      <Hero />
 
+      {/* Hero */}
+      <Hero />
 
       {/* Filters */}
       <Filters />

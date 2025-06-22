@@ -14,13 +14,13 @@ export default function Navbar() {
             </Link>
           </div>
           <nav className="hidden md:flex space-x-8">
-            <Link href="#events" className="hover:text-primary font-medium">
+            <Link href="#events" className="hover:text-primary font-medium  transition-colors duration-300 ease-in-out">
               Events
             </Link>
             {/* <Link href="#submit" className="hover:text-primary font-medium">
               Submit
             </Link> */}
-            <Link href="/" className="hover:text-primary font-medium">
+            <Link href="/" className="hover:text-primary font-medium  transition-colors duration-300 ease-in-out">
               About
             </Link>
           </nav>

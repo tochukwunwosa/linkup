@@ -83,7 +83,7 @@ export default function Filters() {
             </Select>
 
             {hasActiveFilters && (
-              <Button variant="ghost" size="sm" onClick={clearFilters} className="text-gray-500 hover:text-gray-700">
+              <Button variant="ghost" size="sm" onClick={clearFilters} className="text-gray-500 hover:text-gray-700  transition-colors duration-300 ease-in-out">
                 Clear all
               </Button>
             )}
@@ -121,7 +121,7 @@ export default function Filters() {
                   variant="ghost"
                   size="sm"
                   onClick={clearFilters}
-                  className="text-gray-500 hover:text-gray-700 h-8 px-2"
+                  className="text-gray-500 hover:text-gray-700 h-8 px-2  transition-colors duration-300 ease-in-out"
                 >
                   <X className="h-3 w-3 mr-1" />
                   Clear

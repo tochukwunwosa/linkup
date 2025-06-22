@@ -4,8 +4,8 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Calendar, Clock, MapPin, Users, ExternalLink, ChevronDown } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { formatDateRange, isLiveEvent } from '@/lib/utils'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import { addToGoogleCalendar, formatDateRange, isLiveEvent } from '@/lib/utils'
+// import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { LiveEventBadge } from '@/components/live-event-badge'
 
 import { Event } from "@/lib/validations/event"
@@ -17,53 +17,6 @@ interface UpcomingEventsProp {
 
 export default function EventsGrid({ title, events }: UpcomingEventsProp) {
 
-  const addToGoogleCalendar = (event: Event) => {
-    const start_date = new Date(`${event.start_date} ${event.time}`).toISOString().replace(/[-:]/g, "").split(".")[0] + "Z"
-    const endDate =
-      new Date(new Date(`${event.start_date} ${event.end_date} ${event.time}`).getTime() + 2 * 60 * 60 * 1000)
-        .toISOString()
-        .replace(/[-:]/g, "")
-        .split(".")[0] + "Z"
-    const calendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(event.title)}&dates=${start_date}/${endDate}&details=${encodeURIComponent(event.description)}&location=${encodeURIComponent(event.location)}`
-    window.open(calendarUrl, "_blank")
-  }
-
-  const addToAppleCalendar = (event: Event) => {
-    const startDate = new Date(`${event.start_date} ${event.time}`)
-    const endDate = event.end_date
-      ? new Date(`${event.end_date} ${event.time}`)
-      : new Date(startDate.getTime() + 2 * 60 * 60 * 1000) // 2 hours default
-
-    const formatDateForICS = (date: Date) => {
-      return date.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z"
-    }
-
-    const icsContent = [
-      "BEGIN:VCALENDAR",
-      "VERSION:2.0",
-      "PRODID:-//LinkUp Events//Calendar Event//EN",
-      "BEGIN:VEVENT",
-      `UID:${event.id}@linkup.com`,
-      `DTSTART:${formatDateForICS(startDate)}`,
-      `DTEND:${formatDateForICS(endDate)}`,
-      `SUMMARY:${event.title}`,
-      `DESCRIPTION:${event.description}`,
-      `LOCATION:${event.location}`,
-      "END:VEVENT",
-      "END:VCALENDAR"
-    ].join("\r\n")
-
-    const blob = new Blob([icsContent], { type: "text/calendar;charset=utf-8" })
-    const url = URL.createObjectURL(blob)
-    const link = document.createElement("a")
-    link.href = url
-    link.download = `${event.title.replace(/[^a-z0-9]/gi, "_")}.ics`
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-    URL.revokeObjectURL(url)
-  }
-
   return (
     <div id="events">
       <section className="py-12">
@@ -74,7 +27,7 @@ export default function EventsGrid({ title, events }: UpcomingEventsProp) {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {events.map((event) => (
+            {events.map((event: Event) => (
               <Card key={event.id} className="max-w-md overflow-hidden">
                 <CardHeader className="p-4">
                   <div className="flex items-start flex-wrap">
@@ -117,12 +70,12 @@ export default function EventsGrid({ title, events }: UpcomingEventsProp) {
                     <p className="text-sm text-gray-600 line-clamp-2">{event.description}</p>
                   </div>
                   <div className="mt-4 flex gap-2">
-                    <DropdownMenu>
+                    {/* <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button
                           variant="outline"
                           size="sm"
-                          className="max-w-fit mx-auto flex-1 bg-primary text-background hover:!bg-secondary hover:text-background cursor-pointer"
+                          className="max-w-fit mx-auto flex-1 bg-primary text-background hover:!bg-secondary hover:text-background cursor-pointer  transition-colors duration-300 ease-in-out"
                         >
                           Add to Calendar
                           <ChevronDown className="w-4 h-4 ml-2" />
@@ -136,12 +89,21 @@ export default function EventsGrid({ title, events }: UpcomingEventsProp) {
                           Apple Calendar
                         </DropdownMenuItem>
                       </DropdownMenuContent>
-                    </DropdownMenu>
-                    {event.link && (
+                    </DropdownMenu> */}
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => addToGoogleCalendar(event)}
+                      className="w-fit mx-auto flex-1 bg-primary text-background hover:!bg-secondary hover:text-background cursor-pointer  transition-colors duration-300 ease-in-out"
+                    >
+                      Add to Calendar
+                      <ChevronDown className="w-4 h-4 ml-2" />
+                    </Button>
+                    {event && (
                       <Button
                         variant="outline"
                         size="sm"
-                        className="flex-1"
+                        className="flex-1 w-fit hover:bg-secondary hover:text-background cursor-pointer transition-colors duration-300 ease-in-out"
                         onClick={() => window.open(event.link, "_blank")}
                       >
                         <ExternalLink className="w-4 h-4 mr-2" />

@@ -51,7 +51,7 @@ export default function SettingsPage() {
                   </div>
                 </CardContent>
                 <CardFooter>
-                  <Button className="bg-indigo-600 hover:bg-indigo-700">Save Changes</Button>
+                  <Button className="bg-indigo-600 hover:bg-indigo-700  transition-colors duration-300 ease-in-out">Save Changes</Button>
                 </CardFooter>
               </Card>
             </TabsContent>
@@ -85,7 +85,7 @@ export default function SettingsPage() {
                   </div>
                 </CardContent>
                 <CardFooter>
-                  <Button className="bg-indigo-600 hover:bg-indigo-700">Save Changes</Button>
+                  <Button className="bg-indigo-600 hover:bg-indigo-700  transition-colors duration-300 ease-in-out">Save Changes</Button>
                 </CardFooter>
               </Card>
             </TabsContent>
@@ -112,7 +112,7 @@ export default function SettingsPage() {
                   </div>
                 </CardContent>
                 <CardFooter>
-                  <Button className="bg-indigo-600 hover:bg-indigo-700">Save Changes</Button>
+                  <Button className="bg-indigo-600 hover:bg-indigo-700  transition-colors duration-300 ease-in-out">Save Changes</Button>
                 </CardFooter>
               </Card>
             </TabsContent>

@@ -14,14 +14,14 @@ export default function Footer() {
             </Link>
             <p className="text-muted-foreground text-xs md:sm mt-px">Discover tech events near you</p>
           </div>
-          <nav className="flex space-x-6 text-md">
-            <Link href="#about" className="text-muted-forground hover:text-primary">
+          <nav className="flex space-x-6 text-sm">
+            <Link href="#about" className="text-muted-forground hover:text-primary  transition-colors duration-300 ease-in-out">
               About
             </Link>
-            <Link href="#contact" className="text-muted-foreground hover:text-primary">
+            <Link href="#contact" className="text-muted-foreground hover:text-primary  transition-colors duration-300 ease-in-out">
               Contact
             </Link>
-            <Link href="#privacy" className="text-muted-foreground hover:text-primary">
+            <Link href="#privacy" className="text-muted-foreground hover:text-primary  transition-colors duration-300 ease-in-out">
               Privacy
             </Link>
           </nav>

@@ -47,7 +47,7 @@ export default function Hero() {
 
           {/* Main Heading with improved spacing */}
           <div className="mb-10">
-            <h1 className="text-5xl md:text-5xl lg:text-7xl font-bold leading-none tracking-tight">
+            <h1 className="text-3xl md:text-5xl lg:text-7xl font-bold leading-none tracking-tight">
               <span className="block mb-4 bg-gradient-to-r from-white via-slate-100 to-slate-200 bg-clip-text text-transparent">
                 Connect. Learn.
               </span>

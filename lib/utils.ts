@@ -70,17 +70,28 @@ export function convertTo24Hour(time12h: string): string {
 }
 
 export const isLiveEvent = ({ event }: { event: Event }) => {
-  // Combine date + time into full timestamp
+  if (!event.start_date) return false;
+
   const now = new Date();
-  const startDateString = event.start_date.split("T")[0];
-  const start = new Date(`${startDateString}T${event.time}`);
+  const startDate = new Date(event.start_date);
+  const endDate = event.end_date ? new Date(event.end_date) : startDate; // fallback to startDate
 
-  // Event is live for 10 hours from start time
-  const end = new Date(start.getTime() + 10 * 60 * 60 * 1000); // 10 hours after start
+  // Today's date components
+  const year = now.getFullYear();
+  const month = now.getMonth();
+  const date = now.getDate();
 
-  const isLive = now >= start && now <= end;
-  return isLive;
+  // Daily event window: 8 AM to 6 PM
+  const todayStart = new Date(year, month, date, 8, 0);
+  const todayEnd = new Date(year, month, date, 18, 0);
+
+  // Check date range
+  const isBetweenDates = now >= startDate && now <= endDate;
+  const isInTimeWindow = now >= todayStart && now <= todayEnd;
+
+  return isBetweenDates && isInTimeWindow;
 };
+
 
 export const getFirstName = (name: string): string => {
   return name.split(" ")[0] || "";
@@ -93,3 +104,67 @@ export const getInitials = (name: string) => {
     .join("")
     .toUpperCase();
 };
+
+export const addToGoogleCalendar = (event: Event) => {
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+  if (isIOS) {
+    alert(
+      "Your event will open in Google Calendar. Make sure you're signed in."
+    );
+  }
+
+  const startDate = new Date(`${event.start_date}T08:00`); // 8 AM
+  const endDate = event.end_date
+    ? new Date(`${event.end_date}T18:00`) // 6 PM on end date
+    : new Date(`${event.start_date}T18:00`); // 6 PM on same day
+
+  const formatForGoogle = (date: Date) =>
+    date.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
+
+  const calendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(
+    event.title
+  )}&dates=${formatForGoogle(startDate)}/${formatForGoogle(
+    endDate
+  )}&details=${encodeURIComponent(
+    event.description
+  )}&location=${encodeURIComponent(event.location || "")}`;
+
+  window.open(calendarUrl, "_blank");
+};
+
+export const addToAppleCalendar = (event: Event) => {
+  const startDate = new Date(`${event.start_date}T08:00`);
+  const endDate = event.end_date
+    ? new Date(`${event.end_date}T18:00`)
+    : new Date(`${event.start_date}T18:00`);
+
+  const formatDateForICS = (date: Date) =>
+    date.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
+
+  const icsContent = [
+    "BEGIN:VCALENDAR",
+    "VERSION:2.0",
+    "PRODID:-//LinkUp Events//Calendar Event//EN",
+    "BEGIN:VEVENT",
+    `UID:${event.id}@linkup.com`,
+    `DTSTAMP:${formatDateForICS(new Date())}`,
+    `DTSTART:${formatDateForICS(startDate)}`,
+    `DTEND:${formatDateForICS(endDate)}`,
+    `SUMMARY:${event.title}`,
+    `DESCRIPTION:${event.description}`,
+    `LOCATION:${event.location || ""}`,
+    "END:VEVENT",
+    "END:VCALENDAR",
+  ].join("\r\n");
+
+  const blob = new Blob([icsContent], { type: "text/calendar;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `${event.title.replace(/[^a-z0-9]/gi, "_")}.ics`;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+};
+
