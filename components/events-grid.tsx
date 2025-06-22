@@ -96,10 +96,10 @@ export default function EventsGrid({ title, events }: UpcomingEventsProp) {
                       onClick={() => addToGoogleCalendar(event)}
                       className="w-fit mx-auto flex-1 bg-primary text-background hover:!bg-secondary hover:text-background cursor-pointer  transition-colors duration-300 ease-in-out"
                     >
-                      Add to Calendar
-                      <ChevronDown className="w-4 h-4 ml-2" />
+                      Add to Calendar                      
+                      <ExternalLink className="w-4 h-4 mr-2" />
                     </Button>
-                    {event && (
+                    {event.link && (
                       <Button
                         variant="outline"
                         size="sm"
