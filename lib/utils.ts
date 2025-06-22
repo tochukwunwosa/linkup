@@ -75,10 +75,8 @@ export const isLiveEvent = ({ event }: { event: Event }) => {
   const startDateString = event.start_date.split("T")[0];
   const start = new Date(`${startDateString}T${event.time}`);
 
-  // assume event is live for 8 hours
-  const end = event.end_date
-    ? new Date(`${event.end_date.split("T")[0]}T${event.time}`)
-    : new Date(start.getTime() + 8 * 60 * 60 * 1000); // 8 hours after start
+  // Event is live for 10 hours from start time
+  const end = new Date(start.getTime() + 10 * 60 * 60 * 1000); // 10 hours after start
 
   const isLive = now >= start && now <= end;
   return isLive;

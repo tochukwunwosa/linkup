@@ -15,39 +15,67 @@ import { Button } from "@/components/ui/button"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
 
-import {
-  CreateAdminFormValues,
-  UpdateAdminFormValues,
-  createAdminFormSchema,
-  updateAdminFormSchema,
-} from "@/lib/validations/admin"
+import { adminFormSchema, AdminFormValues } from "@/lib/validations/admin"
+import { toast } from "sonner"
+import { createAdmin } from "@/app/actions/admin/createAdmin"
+import { updateAdmin } from "@/app/actions/admin/updateAdmin"
+import { useTransition } from "react"
 
 interface AdminFormProps {
-  initialData?: UpdateAdminFormValues | null
-  onSubmit: (data: CreateAdminFormValues | UpdateAdminFormValues) => void
+  initialData?: Partial<AdminFormValues> | null
+  onSubmit: () => void
   onCancel: () => void
 }
 
 export function AdminForm({ initialData, onSubmit, onCancel }: AdminFormProps) {
+  const [isPending, startTransition] = useTransition()
   const isEditing = !!initialData
 
-  const form = useForm<CreateAdminFormValues | UpdateAdminFormValues>({
-    resolver: zodResolver(isEditing ? updateAdminFormSchema : createAdminFormSchema),
+  const form = useForm<AdminFormValues>({
+    resolver: zodResolver(adminFormSchema),
     defaultValues: {
       name: initialData?.name || "",
       email: initialData?.email || "",
       role: initialData?.role || "admin",
       password: "",
-      confirmPassword: "",
     },
   })
+
+  const handleSubmit = async (data: AdminFormValues) => {
+    startTransition(async () => {
+      try {
+        if (initialData?.id) {
+          const result = await updateAdmin(initialData.id, data);
+          if ("error" in result) {
+            toast.error(result.error);
+          } else {
+            toast.success("Admin created successfully!");
+            onSubmit();
+          }
+        } else {
+          const result = await createAdmin(data);
+          if ('error' in result) {
+            toast.error(result.error);
+          } else {
+            toast.success("Admin created successfully!");
+            onSubmit();
+          }
+        }
+      } catch (error) {
+        toast.error(
+          error instanceof Error ? error.message : "An unexpected error occurred"
+        );
+      }
+    });
+  };
+
 
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-6 py-4"
+        onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6 py-4 max-w-md mx-auto"
       >
+
         <FormField
           control={form.control}
           name="name"
@@ -85,7 +113,7 @@ export function AdminForm({ initialData, onSubmit, onCancel }: AdminFormProps) {
               <FormControl>
                 <RadioGroup
                   onValueChange={field.onChange}
-                  defaultValue={field.value}
+                  value={field.value}
                   className="flex gap-4 mt-2"
                 >
                   <div className="flex items-center space-x-2">
@@ -125,36 +153,16 @@ export function AdminForm({ initialData, onSubmit, onCancel }: AdminFormProps) {
           )}
         />
 
-        <FormField
-          control={form.control}
-          name="confirmPassword"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>
-                {isEditing ? "Confirm New Password" : "Confirm Password"}
-              </FormLabel>
-              <FormControl>
-                <Input
-                  type="password"
-                  placeholder={
-                    isEditing
-                      ? "Confirm new password"
-                      : "Re-enter your password"
-                  }
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
         <div className="flex justify-end gap-2">
           <Button type="button" variant="outline" onClick={onCancel}>
             Cancel
           </Button>
-          <Button type="submit" className="bg-indigo-600 hover:bg-indigo-700">
-            {isEditing ? "Update Admin" : "Add Admin"}
+          <Button
+            type="submit"
+            className="bg-primary hover:bg-secondary"
+            disabled={isPending}
+          >
+            {isPending ? "Processing..." : (isEditing ? "Update Admin" : "Add Admin")}
           </Button>
         </div>
       </form>

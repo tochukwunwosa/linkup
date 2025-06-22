@@ -4,7 +4,6 @@ import Navbar from "@/components/navbar"
 import Hero from "@/components/hero"
 import UpcomingEvents from "@/components/upcoming-events"
 import Footer from "@/components/footer"
-import LiveEvents from "@/components/live-events"
 import Filters from "@/components/filters"
 
 export default function LinkUpLanding() {
@@ -19,7 +18,7 @@ export default function LinkUpLanding() {
       <Filters />
 
       {/* Conditionally render live events */}
-      <LiveEvents />
+      {/* <LiveEvents /> */}
 
       {/* Always render upcoming */}
       <UpcomingEvents />

@@ -5,15 +5,25 @@ import { createClient } from "@/lib/supabase/server";
 export async function getAllActiveAdmin() {
   const supabase = await createClient();
 
-  const { data, error } = await supabase
-    .from("admins")
-    .select("*")
-    .is("deleted_at", null);
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
-  if (error) {
-    console.error("Error fetching events:", error);
-    throw new Error("Failed to fetch events");
+  // If not authenticated, return empty array
+  if (!user) {
+    console.warn("User not authenticated");
+    return [];
   }
 
-  return data;
+  const { data: admins, error } = await supabase
+    .from("admins")
+    .select("*")
+    .is("deleted_at", null); // ignore soft-deleted admins
+
+  if (error) {
+    console.error("Failed to fetch admins:", error.message);
+    return [];
+  }
+
+  return admins ?? [];
 }

@@ -23,7 +23,7 @@ export default async function DashboardLayout({ children }: DashboardLayoutProps
           {/* Sidebar */}
           <Sidebar variant="sidebar" collapsible="icon">
             <SidebarContent>
-              <DashboardNav isSuperAdmin={admin.role} />
+              <DashboardNav isSuperAdmin={admin.role === "super_admin"} />
             </SidebarContent>
             <SidebarFooter>
               <SidebarUser admin={admin} />

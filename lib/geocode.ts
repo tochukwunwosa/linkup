@@ -28,7 +28,7 @@ export async function reverseGeocodeLatLng(
     geocodeCache.set(cacheKey, result);
     return result;
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return null;
   }
 

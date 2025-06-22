@@ -21,10 +21,9 @@ interface EventFormProps {
   initialData?: Partial<Event> | null;
   onSubmit: () => void;
   onCancel: () => void;
-  adminId: string
 }
 
-export function EventForm({ initialData, onSubmit, onCancel, adminId }: EventFormProps) {
+export function EventForm({ initialData, onSubmit, onCancel }: EventFormProps) {
   const [isPending, startTransition] = useTransition()
   const [formData, setFormData] = useState({
     title: initialData?.title || "",
@@ -89,7 +88,7 @@ export function EventForm({ initialData, onSubmit, onCancel, adminId }: EventFor
           toast.success("Event updated successfully!");
         } else {
           // 👈 Create new
-          await createEventAction(data, adminId);
+          await createEventAction(data);
           toast.success("Event created successfully!");
         }
 
@@ -99,8 +98,6 @@ export function EventForm({ initialData, onSubmit, onCancel, adminId }: EventFor
         toast.error("Something went wrong while saving the event.");
       }
     });
-
-
   }
 
 

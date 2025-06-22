@@ -12,9 +12,12 @@ import { useCallback, useEffect, useState } from "react"
 import { getAllActiveEvents } from "@/app/actions/event/getAllActiveEvents"
 import { toast } from "sonner"
 import { Event } from "@/lib/validations/event"
+import { useAdmin } from "@/components/context/AdminContext"
+import { getFirstName } from "@/lib/utils"
 export default function AdminDashboard() {
+  const admin = useAdmin()
+  const adminFirstName = getFirstName(admin.name)
   const [events, setEvents] = useState<Event[]>([]);
-
   const fetchEvents = useCallback(async () => {
     try {
       const data = await getAllActiveEvents();
@@ -37,7 +40,7 @@ export default function AdminDashboard() {
 
   return (
     <div className="flex flex-col gap-6">
-      <DashboardHeader title="Dashboard" description="Overview of your events and activities" />
+      <DashboardHeader title={`Welcome ${adminFirstName}`} description="Overview of your events and activities" />
       <div className="grid gap-4 grid-cols-[repeat(auto-fill,minmax(200px,1fr))]">
         {/* total events */}
         <Card>

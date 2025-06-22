@@ -19,6 +19,7 @@ import { getFirstName } from "@/lib/utils"
 export function SiteHeader() {
   const admin = useAdmin()
   const router = useRouter()
+  const isSuperAdmin = admin.role === "super_admin"
 
   return (
     <header className="!sticky top-0 z-50 border-b bg-background">
@@ -38,15 +39,20 @@ export function SiteHeader() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => router.push("/admin/profile")}>
-                Profile
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => router.push("/admin/settings")}>
-                Settings
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
+              {isSuperAdmin &&
+                <>
+                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+
+                  <DropdownMenuItem onClick={() => router.push("/admin/dashboard/profile")}>
+                    Profile
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => router.push("/admin/dashboard/settings")}>
+                    Settings
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                </>
+              }
               <DropdownMenuItem asChild>
                 <LogoutAlertDialog
                   onConfirm={adminLogout}

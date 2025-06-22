@@ -10,7 +10,7 @@ export async function getCurrentAdmin() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) return null;
+  if (!user) return "User not authenticated";
 
   const { data: admin, error } = await supabase
     .from("admins")

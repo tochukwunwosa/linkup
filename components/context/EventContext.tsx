@@ -50,18 +50,39 @@ export const EventProvider = ({ children }: { children: React.ReactNode }) => {
   const fetchEvents = useCallback(async () => {
     try {
       const data = await getAllActiveEvents();
-      // Enrich each event with city/country
-      const enriched = await Promise.all(
+
+      // Enrich each event with city/country, but don't fail if geocoding fails
+      const enriched = await Promise.allSettled(
         data.map(async (event: Event) => {
-          if (!event.location) return event;
-          const geo = await geocodeAddress(event.location);
-          return { ...event, city: geo?.city, country: geo?.country };
+          if (!event.location) return { ...event, city: undefined, country: undefined };
+
+          try {
+            const geo = await geocodeAddress(event.location);
+            return { ...event, city: geo?.city, country: geo?.country };
+          } catch (error) {
+            console.warn(`Failed to geocode address for event ${event.id}:`, error);
+            return { ...event, city: undefined, country: undefined };
+          }
         })
       );
-      setEvents(enriched);
-      setFilteredEvents(enriched);
+
+      // Extract successful results and handle rejected ones
+      const successfulEvents = enriched
+        .map((result, index) => {
+          if (result.status === 'fulfilled') {
+            return result.value;
+          } else {
+            console.warn(`Failed to process event ${data[index]?.id}:`, result.reason);
+            return { ...data[index], city: undefined, country: undefined };
+          }
+        })
+        .filter(Boolean);
+
+      setEvents(successfulEvents);
+      setFilteredEvents(successfulEvents);
     } catch (error) {
       console.error("Failed to fetch events", error);
+      // Don't clear existing events on error, just log it
     }
   }, []);
 
@@ -120,6 +141,8 @@ export const EventProvider = ({ children }: { children: React.ReactNode }) => {
 
     setFilteredEvents(newFilteredEvents);
   }, [filters, events, userLocation]);
+
+  
 
   return (
     <EventContext.Provider value={{ events, filters, setFilters, filteredEvents, userLocation, setUserLocation }}>

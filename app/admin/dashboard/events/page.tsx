@@ -15,12 +15,10 @@ import type { Event } from "@/lib/validations/event";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { DashboardHeader } from "@/components/dashboard/dashboard-header";
 import { EventForm } from "@/components/event/event-form";
-import { useAdmin } from "@/components/context/AdminContext";
 import { getAllActiveEvents } from "@/app/actions/event/getAllActiveEvents";
 import { toast } from "sonner";
 
 export default function AdminEventsPage() {
-  const admin = useAdmin();
   const isMobile = useIsMobile();
 
   const [events, setEvents] = useState<Event[]>([]);
@@ -85,7 +83,6 @@ export default function AdminEventsPage() {
             }}
 
             onCancel={() => setIsDrawerOpen(false)}
-            adminId={admin.id}
           />
         </DialogContent>
       </Dialog>

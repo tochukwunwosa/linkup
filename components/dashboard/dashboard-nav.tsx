@@ -43,7 +43,6 @@ export function DashboardNav({isSuperAdmin}: {isSuperAdmin: boolean}) {
   const { state } = useSidebar()
   const isCollapsed = state === "collapsed"
 
-
   return (
     <>
       <SidebarHeader className="border-b border-border/40">

@@ -11,6 +11,25 @@ export async function updateEventAction(
 ) {
   const supabase = await createClient();
 
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) return "User not authenticated";
+
+  // Step 1: Check if user is an admin
+  const { data: admin, error: adminError } = await supabase
+    .from("admins")
+    .select("*")
+    .eq("id", user.id)
+    .single();
+
+  if (adminError || !admin) {
+    console.error("Unauthorized access attempt by user:", user.id);
+    return "Unauthorized";
+  }
+
+
   const parsed = eventSchema.safeParse(formData);
 
   if (!parsed.success) {
@@ -34,7 +53,7 @@ export async function updateEventAction(
     throw new Error("Failed to update event");
   }
 
-  revalidatePath("/admin/events");
+  revalidatePath("/admin/dashboard/events");
 
   return { success: true };
 }
