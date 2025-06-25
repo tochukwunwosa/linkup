@@ -117,7 +117,7 @@ export default function EventsGrid({ title, events }: UpcomingEventsProp) {
                           onClick={() => window.open(event.link, "_blank")}
                         >
                           <ExternalLink className="w-4 h-4 mr-2" />
-                          Register
+                          Read more
                         </Button>
                       )}
                     </div>
