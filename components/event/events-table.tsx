@@ -73,39 +73,44 @@ export function EventsTable({ events, onEdit, onDelete }: EventsTableProps) {
       </div>
 
       {/* Table Container */}
-      <div data-slot="table-container" className="border rounded-md overflow-auto max-h-[calc(100vh-300px)] relative">
-        <Table>
-          {/* sticky header */}
-          <TableHeader className="sticky top-0 z-40 bg-gray-50">
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id} className="bg-gray-50">
-                {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id} className="bg-gray-50 border-b">
-                    {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
-                  </TableHead>
-                ))}
-              </TableRow>
-            ))}
-          </TableHeader>
-          {/* Scrollable Table Body */}
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
+      <div
+        data-slot="table-container"
+        className="border rounded-md overflow-auto max-h-[calc(100vh-300px)] relative w-full"
+      >
+        <div className="min-w-[900px]">
+          <Table>
+            {/* sticky header */}
+            <TableHeader className="sticky top-0 z-40 bg-gray-50">
+              {table.getHeaderGroups().map((headerGroup) => (
+                <TableRow key={headerGroup.id} className="bg-gray-50">
+                  {headerGroup.headers.map((header) => (
+                    <TableHead key={header.id} className="bg-gray-50 border-b">
+                      {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                    </TableHead>
                   ))}
                 </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell colSpan={columns.length} className="h-24 text-center">
-                  No events found
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
+              ))}
+            </TableHeader>
+            {/* Scrollable Table Body */}
+            <TableBody>
+              {table.getRowModel().rows?.length ? (
+                table.getRowModel().rows.map((row) => (
+                  <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={columns.length} className="h-24 text-center">
+                    No events found
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </div>
       </div>
 
       {/* Sticky Pagination */}

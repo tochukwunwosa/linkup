@@ -47,7 +47,10 @@ export function getEventColumns(onEdit: (event: Event) => void, onDelete: (id: n
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       ),
-      cell: ({ row }) => <div className="font-medium">{row.getValue("title")}</div>,
+      cell: ({ row }) =>
+        <div className="whitespace-normal break-words max-w-[300px]">
+          {row.getValue("title")}
+        </div>,
     },
     {
       id: "date",
