@@ -30,8 +30,8 @@ export default function PrivacyPolicyPage() {
         <li>Your location (still optional)</li>
       </ul>
       <p className="mb-6">
-        We'll update this policy when those features go live, but we’re telling
-        you now so you're aware.
+        {`We'll update this policy when those features go live, but we’re telling
+        you now so you're aware.`}
       </p>
 
       <h2 className="text-xl font-semibold mt-10 mb-4">Why We Collect It</h2>
@@ -42,9 +42,9 @@ export default function PrivacyPolicyPage() {
           or set reminders.
         </li>
         <li>
-          To understand how the platform is used and where to improve (we use{" "}
+          {`To understand how the platform is used and where to improve (we use{" "}
           <strong>Umami</strong> for basic analytics — it's privacy-focused and
-          doesn’t track you across the web).
+          doesn’t track you across the web).`}
         </li>
       </ul>
 
