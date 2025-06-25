@@ -244,6 +244,7 @@ export function EventForm({ initialData, onSubmit, onCancel }: EventFormProps) {
             placeholder="Enter event description"
             rows={4}
             required
+            className="w-full resize-y"
           />
         </div>
         
@@ -255,6 +256,7 @@ export function EventForm({ initialData, onSubmit, onCancel }: EventFormProps) {
             onChange={(e) => handleChange("link", e.target.value)}
             placeholder="Enter website link if any"
             rows={4}
+            className="w-full resize-y"
           />
         </div>
 
