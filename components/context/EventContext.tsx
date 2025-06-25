@@ -5,7 +5,6 @@ import { Event } from "@/lib/validations/event";
 import { getAllActiveEvents } from "@/app/actions/event/getAllActiveEvents";
 import { geocodeAddress } from "@/lib/geocode";
 
-// Add user location type
 interface UserLocation {
   city: string;
   country: string;
@@ -27,11 +26,16 @@ type EventContextType = {
   filteredEvents: EventWithLocation[];
   userLocation: UserLocation | null;
   setUserLocation: (loc: UserLocation) => void;
+  isLoading: boolean;
+  isFirstLoad: boolean;
 };
 
 const EventContext = createContext<EventContextType | null>(null);
 
 export const EventProvider = ({ children }: { children: React.ReactNode }) => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [isFirstLoad, setIsFirstLoad] = useState(true);
+
   const [events, setEvents] = useState<EventWithLocation[]>([]);
   const [filteredEvents, setFilteredEvents] = useState<EventWithLocation[]>([]);
   const [filters, setFiltersState] = useState({
@@ -46,43 +50,62 @@ export const EventProvider = ({ children }: { children: React.ReactNode }) => {
     setFiltersState((prev) => ({ ...prev, ...partial }));
   };
 
-  // Enrich events with city/country after fetching
+  const enrichEventData = async (data: Event[]): Promise<EventWithLocation[]> => {
+    const enriched = await Promise.allSettled(
+      data.map(async (event: Event) => {
+        if (!event.location) return { ...event, city: undefined, country: undefined };
+
+        const key = `geo-${event.id}`;
+        const cached = sessionStorage.getItem(key);
+        if (cached) {
+          return { ...event, ...JSON.parse(cached) };
+        }
+
+        try {
+          const geo = await geocodeAddress(event.location);
+          sessionStorage.setItem(key, JSON.stringify(geo));
+          return { ...event, city: geo?.city, country: geo?.country };
+        } catch (error) {
+          console.warn(`Failed to geocode address for event ${event.id}:`, error);
+          return { ...event, city: undefined, country: undefined };
+        }
+      })
+    );
+
+    return enriched.map((res, i) =>
+      res.status === "fulfilled" ? res.value : { ...data[i], city: undefined, country: undefined }
+    );
+  };
+
   const fetchEvents = useCallback(async () => {
     try {
+      const cacheKey = "cachedEvents";
+      const cached = localStorage.getItem(cacheKey);
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        setEvents(parsed);
+        setFilteredEvents(parsed);
+        setIsLoading(false);
+        setIsFirstLoad(false);
+      }
+
       const data = await getAllActiveEvents();
+      const enriched = await enrichEventData(data);
 
-      // Enrich each event with city/country, but don't fail if geocoding fails
-      const enriched = await Promise.allSettled(
-        data.map(async (event: Event) => {
-          if (!event.location) return { ...event, city: undefined, country: undefined };
+      const existing = localStorage.getItem(cacheKey);
+      const currentIds = JSON.stringify(enriched.map((e) => e.id));
+      const existingIds = existing ? JSON.stringify(JSON.parse(existing).map((e: Event) => e.id)) : null;
+      if (currentIds !== existingIds) {
+        localStorage.setItem(cacheKey, JSON.stringify(enriched));
+        setEvents(enriched);
+        setFilteredEvents(enriched);
+      }
 
-          try {
-            const geo = await geocodeAddress(event.location);
-            return { ...event, city: geo?.city, country: geo?.country };
-          } catch (error) {
-            console.warn(`Failed to geocode address for event ${event.id}:`, error);
-            return { ...event, city: undefined, country: undefined };
-          }
-        })
-      );
-
-      // Extract successful results and handle rejected ones
-      const successfulEvents = enriched
-        .map((result, index) => {
-          if (result.status === 'fulfilled') {
-            return result.value;
-          } else {
-            console.warn(`Failed to process event ${data[index]?.id}:`, result.reason);
-            return { ...data[index], city: undefined, country: undefined };
-          }
-        })
-        .filter(Boolean);
-
-      setEvents(successfulEvents);
-      setFilteredEvents(successfulEvents);
+      setIsLoading(false);
+      setIsFirstLoad(false);
     } catch (error) {
+      setIsLoading(false);
       console.error("Failed to fetch events", error);
-      // Don't clear existing events on error, just log it
     }
   }, []);
 
@@ -95,10 +118,8 @@ export const EventProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     let newFilteredEvents = [...events];
 
-    // Location-based filtering (skip if no userLocation)
     if (userLocation && userLocation.city && userLocation.country) {
       newFilteredEvents = newFilteredEvents.filter(event => {
-        // Match by city or country
         return (
           (event.city && event.city.toLowerCase() === userLocation.city.toLowerCase()) ||
           (event.country && event.country.toLowerCase() === userLocation.country.toLowerCase())
@@ -128,8 +149,10 @@ export const EventProvider = ({ children }: { children: React.ReactNode }) => {
         const eventDate = new Date(event.start_date);
         if (filters.date === 'today') return eventDate.toDateString() === now.toDateString();
         if (filters.date === 'week') {
-          const startOfWeek = new Date(now.setDate(now.getDate() - now.getDay()));
-          const endOfWeek = new Date(now.setDate(now.getDate() - now.getDay() + 6));
+          const startOfWeek = new Date(now);
+          startOfWeek.setDate(now.getDate() - now.getDay());
+          const endOfWeek = new Date(now);
+          endOfWeek.setDate(now.getDate() - now.getDay() + 6);
           return eventDate >= startOfWeek && eventDate <= endOfWeek;
         }
         if (filters.date === 'month') {
@@ -142,10 +165,8 @@ export const EventProvider = ({ children }: { children: React.ReactNode }) => {
     setFilteredEvents(newFilteredEvents);
   }, [filters, events, userLocation]);
 
-  
-
   return (
-    <EventContext.Provider value={{ events, filters, setFilters, filteredEvents, userLocation, setUserLocation }}>
+    <EventContext.Provider value={{ isFirstLoad, isLoading, events, filters, setFilters, filteredEvents, userLocation, setUserLocation }}>
       {children}
     </EventContext.Provider>
   );
