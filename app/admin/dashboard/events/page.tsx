@@ -58,7 +58,7 @@ export default function AdminEventsPage() {
     <div className="flex flex-col gap-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <DashboardHeader title="Events" description="Manage all events" />
-        <Button onClick={handleCreateEvent} className="bg-primary hover:bg-accent  transition-colors duration-300 ease-in-out">
+        <Button onClick={handleCreateEvent} className="bg-primary hover:bg-secondary  transition-colors duration-300 ease-in-out">
           <CalendarPlus className="mr-2 h-4 w-4" />
           Create Event
         </Button>
