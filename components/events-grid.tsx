@@ -31,7 +31,10 @@ export default function EventsGrid({ title, events }: UpcomingEventsProp) {
             {events.map((event: Event) => {
               const { wat, local, userZone } = convertWATToLocalTime(event.start_date, event.time);
               return (
-                <Card key={event.id} className="max-w-md overflow-hidden">
+                <Card
+                  key={event.id}
+                  className="max-w-md w-full rounded-xl border border-gray-200 shadow-sm transition-shadow duration-200 hover:shadow-md overflow-hidden"
+                >
                   <CardHeader className="p-4">
                     <div className="flex items-start flex-wrap">
                       <div>
