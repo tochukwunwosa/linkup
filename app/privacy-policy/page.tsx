@@ -42,9 +42,9 @@ export default function PrivacyPolicyPage() {
           or set reminders.
         </li>
         <li>
-          {`To understand how the platform is used and where to improve (we use{" "}
-          <strong>Umami</strong> for basic analytics — it's privacy-focused and
-          doesn’t track you across the web).`}
+          To understand how the platform is used and where to improve (we use{" "}
+          <strong>Umami</strong> for basic analytics —{` it's privacy-focused and
+          doesn’t track you across the web)`}.
         </li>
       </ul>
 
