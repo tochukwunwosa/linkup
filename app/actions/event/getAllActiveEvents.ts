@@ -1,14 +1,16 @@
-'use server'
-
+import { cache } from "react";
 import { createClient } from "@/lib/supabase/server";
 
-export async function getAllActiveEvents() {
+export const getAllActiveEvents = cache(async () => {
   const supabase = await createClient();
+  const now = new Date().toISOString();
 
   const { data, error } = await supabase
     .from("events")
     .select("*")
-    .is("deleted_at", null);
+    .is("deleted_at", null)
+    .gt("end_date", now)
+    .order("start_date", { ascending: false });
 
   if (error) {
     console.error("Error fetching events:", error);
@@ -16,4 +18,4 @@ export async function getAllActiveEvents() {
   }
 
   return data;
-}
+});

@@ -2,6 +2,7 @@ import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { format, isValid } from "date-fns";
 import { Event } from "./validations/event";
+import { DateTime } from "luxon";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -168,3 +169,27 @@ export const addToAppleCalendar = (event: Event) => {
   URL.revokeObjectURL(url);
 };
 
+
+/**
+ * Converts stored event time from WAT (Africa/Lagos) to user's local time
+ * Returns time only (not date)
+ */
+export function convertWATToLocalTime(start_date: string, time: string) {
+  const [hour, minute] = time.split(":").map(Number);
+
+  const watDateTime = DateTime.fromISO(start_date, {
+    zone: "Africa/Lagos",
+  }).set({
+    hour,
+    minute,
+  });
+
+  const userZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const localDateTime = watDateTime.setZone(userZone);
+
+  return {
+    wat: watDateTime.toLocaleString(DateTime.TIME_SIMPLE),   // e.g. "2:00 PM"
+    local: localDateTime.toLocaleString(DateTime.TIME_SIMPLE),
+    userZone,
+  };
+}

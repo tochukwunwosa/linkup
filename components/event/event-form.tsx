@@ -36,6 +36,7 @@ export function EventForm({ initialData, onSubmit, onCancel }: EventFormProps) {
     price: initialData?.price || "Free",
     price_amount: initialData?.price_amount || "",
     description: initialData?.description || "",
+    link: initialData?.link || "",
     publish_status: initialData?.publish_status || "Draft",
   })
 
@@ -243,6 +244,17 @@ export function EventForm({ initialData, onSubmit, onCancel }: EventFormProps) {
             placeholder="Enter event description"
             rows={4}
             required
+          />
+        </div>
+        
+        <div>
+          <Label htmlFor="link" className="w-fit mb-2">Link</Label>
+          <Textarea
+            id="link"
+            value={formData.link}
+            onChange={(e) => handleChange("link", e.target.value)}
+            placeholder="Enter website link if any"
+            rows={4}
           />
         </div>
 
