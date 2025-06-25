@@ -9,9 +9,9 @@ export default function TermsOfUsePage() {
       </p>
 
       <p className="mb-6">
-        {`Welcome to <strong>Tech LinkUp</strong>. If you're here, you're probably trying to
-        find or share tech events — and that’s exactly what we built this for.
-        These are the basic terms that guide how things work around here.`}
+        Welcome to <strong>Tech LinkUp</strong>. {`If you're here, you're probably trying to
+        find or share tech events — and that’s exactly what we built this for.`}
+        These are the basic terms that guide how things work around here.
       </p>
 
       <h2 className="text-xl font-semibold mt-10 mb-4">What This Platform Is</h2>

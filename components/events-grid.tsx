@@ -33,7 +33,7 @@ export default function EventsGrid({ title, events }: UpcomingEventsProp) {
               return (
                 <Card
                   key={event.id}
-                  className="max-w-md w-full rounded-xl border border-gray-200 shadow-sm transition-shadow duration-200 hover:shadow-md overflow-hidden"
+                  className="max-w-md w-full rounded-xl border border-gray-200 shadow-sm transition-shadow duration-200 hover:shadow-lg overflow-hidden"
                 >
                   <CardHeader className="p-4">
                     <div className="flex items-start flex-wrap">
