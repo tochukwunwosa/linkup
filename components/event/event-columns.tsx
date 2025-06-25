@@ -48,7 +48,7 @@ export function getEventColumns(onEdit: (event: Event) => void, onDelete: (id: n
         </Button>
       ),
       cell: ({ row }) =>
-        <div className="whitespace-normal break-words max-w-[300px]">
+        <div className="whitespace-normal break-words max-w-[500px]">
           {row.getValue("title")}
         </div>,
     },
@@ -57,7 +57,7 @@ export function getEventColumns(onEdit: (event: Event) => void, onDelete: (id: n
       header: "Date",
       accessorFn: (row) => formatDateRange(row.start_date, row.end_date || ""),
       cell: ({ getValue }) => (
-        <div className="text-sm text-muted-foreground">
+        <div className="text-sm text-muted-foreground max-w-fit">
           {getValue() as string}
         </div>
       ),
@@ -68,7 +68,10 @@ export function getEventColumns(onEdit: (event: Event) => void, onDelete: (id: n
     {
       accessorKey: "location",
       header: "Location",
-      cell: ({ row }) => <div>{row.getValue("location")}</div>,
+      cell: ({ row }) =>
+        <div className="whitespace-normal break-words max-w-[500px]">
+          {row.getValue("location")}
+        </div>,
     },
     {
       accessorKey: "type",
