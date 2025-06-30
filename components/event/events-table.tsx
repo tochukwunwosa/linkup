@@ -68,7 +68,7 @@ export function EventsTable({ events, onEdit, onDelete }: EventsTableProps) {
   return (
     <div className="space-y-4">
       {/* Sticky Toolbar */}
-      <div className="sticky top-20 z-50 bg-white pb-4">
+      <div className="sticky top-20 z-50">
         <TableToolbar table={table} />
       </div>
 
@@ -77,7 +77,7 @@ export function EventsTable({ events, onEdit, onDelete }: EventsTableProps) {
         data-slot="table-container"
         className="border rounded-md overflow-auto h-[90vh] md:max-h-[calc(100vh-300px)] relative w-full"
       >
-        <div className="w-full overflow-x-auto">
+        <div className="min-w-[900px]">
           <Table>
             {/* sticky header */}
             <TableHeader className="sticky top-0 z-40 bg-gray-50">
@@ -114,7 +114,7 @@ export function EventsTable({ events, onEdit, onDelete }: EventsTableProps) {
       </div>
 
       {/* Sticky Pagination */}
-      <div className="sticky bottom-0 z-50 bg-white pt-4 border-t">
+      <div className="sticky bottom-0 z-50 pt-4 border-t">
         <div className="flex items-center justify-between">
           <div className="flex-1 text-sm text-muted-foreground">
             {table.getFilteredSelectedRowModel().rows.length} of {table.getFilteredRowModel().rows.length} row(s)
