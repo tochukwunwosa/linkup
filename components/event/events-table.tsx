@@ -75,9 +75,9 @@ export function EventsTable({ events, onEdit, onDelete }: EventsTableProps) {
       {/* Table Container */}
       <div
         data-slot="table-container"
-        className="border rounded-md overflow-auto max-h-[calc(100vh-300px)] relative w-full"
+        className="border rounded-md overflow-auto h-[90vh] md:max-h-[calc(100vh-300px)] relative w-full"
       >
-        <div className="min-w-[900px]">
+        <div className="w-full overflow-x-auto">
           <Table>
             {/* sticky header */}
             <TableHeader className="sticky top-0 z-40 bg-gray-50">

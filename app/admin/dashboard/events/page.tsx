@@ -58,7 +58,7 @@ export default function AdminEventsPage() {
     <div className="flex flex-col gap-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <DashboardHeader title="Events" description="Manage all events" />
-        <Button onClick={handleCreateEvent} className="bg-primary hover:bg-secondary  transition-colors duration-300 ease-in-out">
+        <Button onClick={handleCreateEvent} className="w-fit bg-primary hover:bg-secondary  transition-colors duration-300 ease-in-out">
           <CalendarPlus className="mr-2 h-4 w-4" />
           Create Event
         </Button>
@@ -71,7 +71,7 @@ export default function AdminEventsPage() {
       )}
 
       <Dialog open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
-        <DialogContent className="w-[95%] md:w-[75%] max-h-[90vh] overflow-y-auto">
+        <DialogContent className="w-[95%] md:w-[75%] h-[90vh] md:max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>{editingEvent ? "Edit Event" : "Create New Event"}</DialogTitle>
           </DialogHeader>
