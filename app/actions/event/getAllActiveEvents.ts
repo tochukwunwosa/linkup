@@ -12,7 +12,7 @@ export const getAllActiveEvents = cache(async () => {
     .select("*")
     .is("deleted_at", null)
     .gt("end_date", now)
-    .order("start_date", { ascending: false });
+    .order("start_date", { ascending: true }); //Newewst from start date will show first
 
   if (error) {
     console.error("Error fetching events:", error);
