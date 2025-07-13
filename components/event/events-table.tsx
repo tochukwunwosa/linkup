@@ -24,7 +24,7 @@ import { TablePagination } from "@/components/event/table-pagination"
 interface EventsTableProps {
   events: Event[]
   onEdit: (event: Event) => void
-  onDelete: (id: number) => void
+  onDelete: (event: Event) => void
 }
 
 export function EventsTable({ events, onEdit, onDelete }: EventsTableProps) {

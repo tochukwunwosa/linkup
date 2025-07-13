@@ -1,4 +1,3 @@
-// components/animated/AnimatedCard.tsx
 "use client";
 
 import React from "react";

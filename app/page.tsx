@@ -18,8 +18,9 @@ export default function LinkUpLanding() {
       {/* Filters */}
       <Filters />
 
-      {/* Conditionally render live events */}
-      {/* <LiveEvents /> */}
+
+      {/* <EventsNearYou maxEvents={4} showViewAll={true} /> */}
+      {/* <UpcomingEvents maxEvents={8} showViewAll={true} /> */}
 
       {/* Always render upcoming */}
       <UpcomingEvents />

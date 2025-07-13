@@ -1,22 +1,27 @@
 "use client";
 
-import { EventProvider } from '@/components/context/EventContext'
-import React from 'react'
-import { Toaster } from 'sonner'
-import UserLocationProvider from '@/components/location/UserLocationProvider'
-import { usePathname } from 'next/navigation';
+import React, { Suspense } from "react";
+import { usePathname } from "next/navigation";
+import { Toaster } from "sonner";
+import { EventProvider } from "@/components/context/EventContext";
+import { EventUrlSync } from "@/components/context/EventUrlSync";
+import UserLocationProvider from "@/components/location/UserLocationProvider";
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const isAdminRoute = pathname.startsWith('/admin');
+  const is404 = pathname === "/404";
+  const isAdminRoute = pathname.startsWith("/admin");
 
   return (
-    <div>
-      <EventProvider>
-        {!isAdminRoute && <UserLocationProvider />}
-        {children}
-      </EventProvider>
+    <EventProvider>
+      {!is404 && (
+        <Suspense fallback={null}>
+          <EventUrlSync />
+        </Suspense>
+      )}
+      {!isAdminRoute && <UserLocationProvider />}
+      {children}
       <Toaster richColors />
-    </div>
-  )
+    </EventProvider>
+  );
 }

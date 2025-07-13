@@ -4,24 +4,13 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Edit, Trash2, Calendar, MapPin } from "lucide-react"
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
 import { Event } from "@/lib/validations/event"
 import { formatDateRange } from "@/lib/utils"
 
 interface EventsCardViewProps {
   events: Event[]
   onEdit: (event: Event) => void
-  onDelete: (id: number) => void
+  onDelete: (event: Event) => void
 }
 
 export function EventsCardView({ events, onEdit, onDelete }: EventsCardViewProps) {
@@ -63,28 +52,10 @@ export function EventsCardView({ events, onEdit, onDelete }: EventsCardViewProps
                 <Edit className="h-4 w-4 mr-1" />
                 Edit
               </Button>
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  <Button variant="ghost" size="sm">
-                    <Trash2 className="h-4 w-4 mr-1" />
-                    Delete
-                  </Button>
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>Delete Event</AlertDialogTitle>
-                    <AlertDialogDescription>
-                      {`Are you sure you want to delete "{event.title}"? This action cannot be undone.`}
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={() => onDelete(event.id)} className="bg-red-600 hover:bg-red-700">
-                      Delete
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
+              <Button variant="ghost" size="sm" onClick={() => onDelete(event)}>
+                <Trash2 className="h-4 w-4 mr-1" />
+                Delete
+              </Button>
             </CardFooter>
           </Card>
         ))

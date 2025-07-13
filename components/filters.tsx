@@ -1,25 +1,34 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Filter, ChevronDown, X } from "lucide-react"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Button } from "@/components/ui/button"
-import { useEventContext } from "./context/EventContext"
+import { useState } from "react";
+import { Filter, ChevronDown, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
+import { useEventContext } from "./context/EventContext";
+import MultiTagInput from "./ui/multi-tag-input";
+
+const SUGGESTED_CATEGORIES = ["Web", "Web3", "AI", "Mobile", "DevOps"];
 
 export default function Filters() {
-  const { filters, setFilters } = useEventContext()
-  const [showMobileFilters, setShowMobileFilters] = useState(false)
+  const { filters, setFilters } = useEventContext();
+  const [showMobileFilters, setShowMobileFilters] = useState(false);
 
-  const hasActiveFilters = Object.values(filters).some((value) => value !== "all")
+  const hasActiveFilters =
+    filters.category.length > 0 ||
+    filters.format !== "all" ||
+    filters.location !== "all" ||
+    filters.date !== "all";
 
   const clearFilters = () => {
     setFilters({
-      category: "all",
+      category: [],
       format: "all",
       location: "all",
       date: "all",
-    })
-  }
+      city: "",
+      country: ""
+    });
+  };
 
   return (
     <section id="filters" className="sticky top-16 z-40 bg-white border-b border-gray-200">
@@ -32,19 +41,15 @@ export default function Filters() {
               <span className="text-sm font-medium text-gray-700">Filter by:</span>
             </div>
 
-            <Select value={filters.category} onValueChange={(value) => setFilters({ category: value })}>
-              <SelectTrigger className="min-w-[140px] w-fit">
-                <SelectValue placeholder="Category" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Categories</SelectItem>
-                <SelectItem value="ai">AI</SelectItem>
-                <SelectItem value="web3">Web3</SelectItem>
-                <SelectItem value="mobile">Mobile</SelectItem>
-                <SelectItem value="devops">DevOps</SelectItem>
-                <SelectItem value="web">Web</SelectItem>
-              </SelectContent>
-            </Select>
+            {/* Multi-tag input for category */}
+            <div className="min-w-[180px]">
+              <MultiTagInput
+                value={filters.category}
+                onChange={(tags) => setFilters({ category: tags })}
+                suggestions={SUGGESTED_CATEGORIES}
+                placeholder="Search by categories"
+              />
+            </div>
 
             <Select value={filters.format} onValueChange={(value) => setFilters({ format: value })}>
               <SelectTrigger className="w-fit">
@@ -83,7 +88,12 @@ export default function Filters() {
             </Select>
 
             {hasActiveFilters && (
-              <Button variant="ghost" size="sm" onClick={clearFilters} className="text-gray-500 hover:text-gray-700  transition-colors duration-300 ease-in-out">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={clearFilters}
+                className="text-gray-500 hover:text-gray-700 transition-colors duration-300 ease-in-out"
+              >
                 Clear all
               </Button>
             )}
@@ -91,9 +101,8 @@ export default function Filters() {
         </div>
       </div>
 
-      {/* Mobile Filters */}
+      {/* Mobile Filters (unchanged except category tag input added) */}
       <div className="relative md:hidden">
-        {/* Mobile Filter Toggle */}
         <div className="px-4 py-3 max-w-fit">
           <Button
             variant="outline"
@@ -111,7 +120,6 @@ export default function Filters() {
           </Button>
         </div>
 
-        {/* Mobile Filter Panel */}
         {showMobileFilters && (
           <div className="absolute w-full px-4 pb-4 space-y-3 bg-gray-50 border-t">
             <div className="flex items-center justify-between pt-3">
@@ -121,7 +129,7 @@ export default function Filters() {
                   variant="ghost"
                   size="sm"
                   onClick={clearFilters}
-                  className="text-gray-500 hover:text-gray-700 h-8 px-2  transition-colors duration-300 ease-in-out"
+                  className="text-gray-500 hover:text-gray-700 h-8 px-2 transition-colors duration-300 ease-in-out"
                 >
                   <X className="h-3 w-3 mr-1" />
                   Clear
@@ -129,26 +137,23 @@ export default function Filters() {
               )}
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
-              <div className="space-y-1">
-                <label className="text-xs font-medium text-gray-600 uppercase tracking-wide">Category</label>
-                <Select value={filters.category} onValueChange={(value) => setFilters({ category: value })}>
-                  <SelectTrigger className="w-full h-9">
-                    <SelectValue placeholder="Category" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Categories</SelectItem>
-                    <SelectItem value="ai">AI</SelectItem>
-                    <SelectItem value="web3">Web3</SelectItem>
-                    <SelectItem value="mobile">Mobile</SelectItem>
-                    <SelectItem value="devops">DevOps</SelectItem>
-                    <SelectItem value="web">Web</SelectItem>
-                  </SelectContent>
-                </Select>
+            <div className="space-y-3">
+              <div>
+                <label className="text-xs font-medium text-gray-600 uppercase tracking-wide mb-1 block">
+                  Categories
+                </label>
+                <MultiTagInput
+                  value={filters.category}
+                  onChange={(tags) => setFilters({ category: tags })}
+                  suggestions={SUGGESTED_CATEGORIES}
+                  placeholder="Add categories"
+                />
               </div>
 
-              <div className="space-y-1">
-                <label className="text-xs font-medium text-gray-600 uppercase tracking-wide">Format</label>
+              <div>
+                <label className="text-xs font-medium text-gray-600 uppercase tracking-wide mb-1 block">
+                  Format
+                </label>
                 <Select value={filters.format} onValueChange={(value) => setFilters({ format: value })}>
                   <SelectTrigger className="w-full h-9">
                     <SelectValue placeholder="Format" />
@@ -161,8 +166,10 @@ export default function Filters() {
                 </Select>
               </div>
 
-              <div className="space-y-1">
-                <label className="text-xs font-medium text-gray-600 uppercase tracking-wide">Location</label>
+              <div>
+                <label className="text-xs font-medium text-gray-600 uppercase tracking-wide mb-1 block">
+                  Location
+                </label>
                 <Select value={filters.location} onValueChange={(value) => setFilters({ location: value })}>
                   <SelectTrigger className="w-full h-9">
                     <SelectValue placeholder="Location" />
@@ -177,8 +184,10 @@ export default function Filters() {
                 </Select>
               </div>
 
-              <div className="space-y-1">
-                <label className="text-xs font-medium text-gray-600 uppercase tracking-wide">Date</label>
+              <div>
+                <label className="text-xs font-medium text-gray-600 uppercase tracking-wide mb-1 block">
+                  Date
+                </label>
                 <Select value={filters.date} onValueChange={(value) => setFilters({ date: value })}>
                   <SelectTrigger className="w-full h-9">
                     <SelectValue placeholder="Date" />
@@ -196,5 +205,5 @@ export default function Filters() {
         )}
       </div>
     </section>
-  )
+  );
 }

@@ -8,9 +8,8 @@ export const getAllActiveEvents = cache(async () => {
   const now = new Date().toISOString();
 
   const { data, error } = await supabase
-    .from("events")
+    .from("admin_events")
     .select("*")
-    .is("deleted_at", null)
     .gt("end_date", now)
     .order("start_date", { ascending: true }); //Newewst from start date will show first
 

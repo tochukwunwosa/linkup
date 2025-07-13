@@ -8,14 +8,14 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Switch } from "@/components/ui/switch"
 import { DatePicker } from "../ui/date-picker"
-import { Event } from "@/lib/validations/event"
+import { CATEGORY_SUGGESTIONS, Event, EventType, PublishStatus } from "@/lib/validations/event"
 import { createEventAction } from "@/app/actions/event/createEvent"
 import { toast } from "sonner"
 import { Loader } from "lucide-react"
 import { updateEventAction } from "@/app/actions/event/updateEvent"
+import MultiTagInput from "../ui/multi-tag-input"
 
 interface EventFormProps {
   initialData?: Partial<Event> | null;
@@ -23,30 +23,49 @@ interface EventFormProps {
   onCancel: () => void;
 }
 
+type EventFormData = {
+  title: string;
+  start_date: Date;
+  end_date: Date;
+  time: string;
+  location: string;
+  category: string[];
+  type: EventType;
+  price: string;
+  price_amount: string;
+  description: string;
+  link: string;
+  publish_status: PublishStatus;
+};
+
+
+
 export function EventForm({ initialData, onSubmit, onCancel }: EventFormProps) {
   const [isPending, startTransition] = useTransition()
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<EventFormData>({
     title: initialData?.title || "",
     start_date: initialData?.start_date ? new Date(initialData.start_date) : new Date(),
     end_date: initialData?.end_date ? new Date(initialData.end_date) : new Date(),
     time: initialData?.time || "",
     location: initialData?.location || "",
-    category: initialData?.category || "",
+    category: initialData?.category || [],
     type: initialData?.type || "In-person",
     price: initialData?.price || "Free",
     price_amount: initialData?.price_amount || "",
     description: initialData?.description || "",
     link: initialData?.link || "",
     publish_status: initialData?.publish_status || "Draft",
-  })
+  });
 
 
-  const handleChange = (field: string, value: string) => {
-    setFormData({
-      ...formData,
+  const handleChange = <K extends keyof EventFormData>(field: K, value: EventFormData[K]) => {
+    setFormData((prev) => ({
+      ...prev,
       [field]: value,
-    })
-  }
+    }));
+  };
+
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -75,11 +94,18 @@ export function EventForm({ initialData, onSubmit, onCancel }: EventFormProps) {
       return
     }
 
+    // Ensure start_date and end_date are set to noon to avoid timezone date shifting
+    const startDateNoon = new Date(formData.start_date)
+    startDateNoon.setHours(12, 0, 0, 0)
+    const endDateNoon = new Date(formData.end_date)
+    endDateNoon.setHours(12, 0, 0, 0)
     const data = {
       ...formData,
-      start_date: formData.start_date.toISOString(),
-      end_date: formData.end_date.toISOString(),
+      category: formData.category.map((c) => c.trim()),
+      start_date: startDateNoon.toISOString(),
+      end_date: endDateNoon.toISOString(),
     }
+
 
     startTransition(async () => {
       try {
@@ -103,7 +129,7 @@ export function EventForm({ initialData, onSubmit, onCancel }: EventFormProps) {
 
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 py-4">
+    <form onSubmit={handleSubmit} className="max-w-2xl space-y-6 py-4">
       <div className="space-y-4">
         <div>
           <Label htmlFor="title" className="w-fit mb-2">Event Title <span className='text-destructive text-xs'>*</span></Label>
@@ -166,27 +192,23 @@ export function EventForm({ initialData, onSubmit, onCancel }: EventFormProps) {
           />
         </div>
 
-        <div>
-          <Label htmlFor="category" className="w-fit mb-2">Category <span className='text-destructive text-xs'>*</span></Label>
-          <Select value={formData.category} onValueChange={(value) => handleChange("category", value)}>
-            <SelectTrigger id="category">
-              <SelectValue placeholder="Select category" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="AI">AI</SelectItem>
-              <SelectItem value="Web3">Web3</SelectItem>
-              <SelectItem value="Mobile">Mobile</SelectItem>
-              <SelectItem value="DevOps">DevOps</SelectItem>
-              <SelectItem value="Web">Web</SelectItem>
-            </SelectContent>
-          </Select>
+        <div className="relative">
+          <Label htmlFor="category" className="w-fit mb-2">Categories <span className='text-destructive text-xs'>*</span></Label>
+          <MultiTagInput
+            value={formData.category}
+            onChange={(tags) => handleChange("category", tags)}
+            suggestions={CATEGORY_SUGGESTIONS}
+            placeholder="Add categories like AI, Web3, DevOps"
+          />
         </div>
+
+
 
         <div>
           <Label className="w-fit mb-2">Event Type <span className='text-destructive text-xs'>*</span></Label>
           <RadioGroup
             value={formData.type}
-            onValueChange={(value) => handleChange("type", value)}
+            onValueChange={(value) => handleChange("type", value as EventType)}
             className="flex gap-4 mt-2"
           >
             <div className="flex items-center space-x-2">
@@ -229,7 +251,7 @@ export function EventForm({ initialData, onSubmit, onCancel }: EventFormProps) {
               id="price_amount"
               value={formData.price_amount}
               onChange={(e) => handleChange("price_amount", e.target.value)}
-              placeholder="e.g. ₦1000"
+              placeholder="e.g. 1000"
               required
             />
           </div>

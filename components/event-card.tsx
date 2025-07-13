@@ -21,7 +21,7 @@ export default function EventCard({ event }: { event: Event }) {
             <p className="text-sm text-gray-500">{event.category}</p>
           </div>
           <div className='ml-auto flex items-center gap-px '>
-            {isLiveEvent({ event }) ? <LiveEventBadge /> : null}
+            {isLiveEvent({ event }) ? <LiveEventBadge event={event} /> : null}
 
             <Badge variant={event.type === "Online" ? "secondary" : "default"}>
               {event.type}
