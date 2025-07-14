@@ -4,7 +4,7 @@ import { z } from "zod";
 import { eventSchema } from "@/lib/validations/event";
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
-import { geocodeAddress } from "@/lib/geocode";
+import { serverGeocodeAddress } from "@/lib/geocode/geocode-server";
 
 export async function updateEventAction(
   id: string,
@@ -35,7 +35,8 @@ export async function updateEventAction(
     throw new Error("Invalid event data");
   }
 
-  const geo = await geocodeAddress(parsed.data.location);
+  
+    const geo = await serverGeocodeAddress(parsed.data.location);
 
   const result = await supabase
     .from("events")

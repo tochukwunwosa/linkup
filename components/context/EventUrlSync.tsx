@@ -12,7 +12,7 @@ export function EventUrlSync() {
   const { filters, setFilters } = useEventContext();
   const debouncedFilters = useDebounce(filters, 500);
 
-  // Fix: Remove setFilters from dependency array and use useCallback for setFilters
+  // Remove setFilters from dependency array and use useCallback for setFilters
   useEffect(() => {
     const category = searchParams.get("category")
       ?.split(",")
@@ -29,7 +29,7 @@ export function EventUrlSync() {
     };
 
     setFilters(newFilters);
-  }, [searchParams]); // Remove setFilters from dependency array
+  }, [searchParams]);
 
   useEffect(() => {
     const newParams = buildUrlParams(debouncedFilters);

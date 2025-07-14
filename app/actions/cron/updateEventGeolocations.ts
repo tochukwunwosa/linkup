@@ -1,7 +1,7 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
-import { geocodeAddress } from "@/lib/geocode";
+import { geocodeAddress } from "@/lib/geocode/geocode-client";
 
 export async function updateEventGeolocationsCron() {
   const supabase = await createClient();

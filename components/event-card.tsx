@@ -3,11 +3,12 @@ import { Event } from '@/lib/validations/event'
 import React from 'react'
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Calendar, Clock, MapPin, ExternalLink, DollarSign } from 'lucide-react'
+import { Calendar, Clock, MapPin, ExternalLink, Banknote } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { addToGoogleCalendar, convertWATToLocalTime, formatDateRange, isLiveEvent } from '@/lib/utils'
 // import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { LiveEventBadge } from '@/components/live-event-badge'
+import { getCurrencySymbol } from '@/lib/format-currency'
 
 export default function EventCard({ event }: { event: Event }) {
   const { wat, local, userZone } = convertWATToLocalTime(event.start_date, event.time)
@@ -50,13 +51,24 @@ export default function EventCard({ event }: { event: Event }) {
             <MapPin className="w-4 h-4 mr-2" />
             <span>{event.location}</span>
           </div>
-          {event.price && (
+
+          {event.price === 'Paid' && event.price_amount && (
             <div className="flex items-center text-sm">
-              <DollarSign className="w-4 h-4 mr-2" />
-              {/* make accomodation for currency or remove the price and leave paid or free */}
-              <span>{event.price}</span>
+              <Banknote className="w-4 h-4 mr-2" />
+              <span>
+                {getCurrencySymbol(event.currency || 'NGN')}
+                {parseFloat(event.price_amount).toLocaleString()}
+              </span>
             </div>
           )}
+
+          {event.price === 'Free' && (
+            <div className="flex items-center text-sm">
+              <Banknote className="w-4 h-4 mr-2" />
+              <span>Free</span>
+            </div>
+          )}
+
         </div>
         <div className="mt-4">
           <p className="text-sm text-gray-600 line-clamp-2">{event.description}</p>

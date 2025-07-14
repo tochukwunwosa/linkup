@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useEventContext } from "@/components/context/EventContext";
-import { reverseGeocodeLatLng } from "@/lib/geocode";
+import { reverseGeocodeLatLng } from "@/lib/geocode/geocode-client";
 import LocationPermissionModal from "./LocationPermissionModal";
 import { toast } from "sonner";
 import { Alert, AlertDescription } from "../ui/alert";
@@ -79,7 +79,7 @@ export default function UserLocationProvider() {
           <AlertDescription>{locationError}</AlertDescription>
         </Alert>
       )}
-    <LocationPermissionModal open={modalOpen} onAllow={handleAllow} onDeny={handleDeny} />
+      <LocationPermissionModal open={modalOpen} onAllow={handleAllow} onDeny={handleDeny} />
     </>
   );
 } 

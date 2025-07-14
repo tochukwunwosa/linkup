@@ -1,12 +1,10 @@
-
 const geocodeCache = new Map<string, { city: string; country: string }>();
 
-/**
- * Geocode an address using OpenCage but mimic Google format.
- */
 export async function geocodeAddress(
   address: string
 ): Promise<{ city: string; country: string } | null> {
+  if (!address) return null;
+
   const cacheKey = `address:${address}`;
   if (geocodeCache.has(cacheKey)) return geocodeCache.get(cacheKey)!;
 
@@ -18,7 +16,7 @@ export async function geocodeAddress(
     });
 
     if (!res.ok) {
-      console.error("Server geocodeAddress error:", await res.text());
+      console.error("Geocode Address Error:", await res.text());
       return null;
     }
 
@@ -26,13 +24,11 @@ export async function geocodeAddress(
     const result = { city: data.city, country: data.country };
     geocodeCache.set(cacheKey, result);
     return result;
-  } catch (error) {
-    console.error("Client geocodeAddress failed:", error);
+  } catch (err) {
+    console.error("Client geocode error:", err);
     return null;
   }
 }
-
-
 
 export async function reverseGeocodeLatLng(
   lat: number,
@@ -49,7 +45,7 @@ export async function reverseGeocodeLatLng(
     });
 
     if (!res.ok) {
-      console.error("Server geocode error:", await res.text());
+      console.error("Reverse Geocode Error:", await res.text());
       return null;
     }
 
@@ -58,7 +54,7 @@ export async function reverseGeocodeLatLng(
     geocodeCache.set(cacheKey, result);
     return result;
   } catch (err) {
-    console.error("Client geocode error:", err);
+    console.error("Client reverse geocode error:", err);
     return null;
   }
 }

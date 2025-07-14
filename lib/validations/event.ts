@@ -10,6 +10,7 @@ export const eventSchema = z.object({
   type: z.enum(["Online", "In-person", "In-person & Online"]),
   category: z.array(z.string()).min(1, "At least one category is required"), 
   price: z.string().optional(),
+  currency: z.string().optional(),
   price_amount: z.string().optional(),
   description: z.string(),
   publish_status: z.enum(["Published", "Draft"]).default("Draft"),
@@ -27,14 +28,15 @@ export type Event = {
   location: string;
   time: string;
   type: EventType;
-  category: string[]; 
+  category: string[];
   price?: string;
+  currency: string;
   price_amount?: string;
   description: string;
   publish_status: PublishStatus;
   link?: string;
   city?: string;
-  country?: string
+  country?: string;
 };
 
 export const CATEGORY_SUGGESTIONS = [

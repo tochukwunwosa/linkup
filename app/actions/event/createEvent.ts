@@ -4,7 +4,7 @@ import { z } from "zod";
 import { eventSchema } from "@/lib/validations/event";
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
-import { geocodeAddress } from "@/lib/geocode";
+import { serverGeocodeAddress } from "@/lib/geocode/geocode-server";
 
 export async function createEventAction(formData: z.infer<typeof eventSchema>) {
   const supabase = await createClient();
@@ -32,7 +32,7 @@ export async function createEventAction(formData: z.infer<typeof eventSchema>) {
     throw new Error("Invalid event data");
   }
 
-  const geo = await geocodeAddress(parsed.data.location);
+  const geo = await serverGeocodeAddress(parsed.data.location);
 
   const result = await supabase.from("events").insert({
     ...parsed.data,
@@ -43,7 +43,7 @@ export async function createEventAction(formData: z.infer<typeof eventSchema>) {
     end_date: parsed.data.end_date
       ? new Date(parsed.data.end_date).toISOString()
       : null,
-  });
+  }).select();
 
   if (result.error) {
     console.error("Error inserting event:", result.error);

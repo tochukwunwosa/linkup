@@ -16,6 +16,9 @@ import { toast } from "sonner"
 import { Loader } from "lucide-react"
 import { updateEventAction } from "@/app/actions/event/updateEvent"
 import MultiTagInput from "../ui/multi-tag-input"
+import { CURRENCY_LIST } from '@/lib/format-currency'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+
 
 interface EventFormProps {
   initialData?: Partial<Event> | null;
@@ -32,6 +35,7 @@ type EventFormData = {
   category: string[];
   type: EventType;
   price: string;
+  currency: string;
   price_amount: string;
   description: string;
   link: string;
@@ -41,6 +45,7 @@ type EventFormData = {
 
 
 export function EventForm({ initialData, onSubmit, onCancel }: EventFormProps) {
+  // Add default in useState:
   const [isPending, startTransition] = useTransition()
   const [formData, setFormData] = useState<EventFormData>({
     title: initialData?.title || "",
@@ -51,6 +56,7 @@ export function EventForm({ initialData, onSubmit, onCancel }: EventFormProps) {
     category: initialData?.category || [],
     type: initialData?.type || "In-person",
     price: initialData?.price || "Free",
+    currency: initialData?.currency || 'NGN',
     price_amount: initialData?.price_amount || "",
     description: initialData?.description || "",
     link: initialData?.link || "",
@@ -104,6 +110,7 @@ export function EventForm({ initialData, onSubmit, onCancel }: EventFormProps) {
       category: formData.category.map((c) => c.trim()),
       start_date: startDateNoon.toISOString(),
       end_date: endDateNoon.toISOString(),
+      currency: formData.currency,
     }
 
 
@@ -176,8 +183,6 @@ export function EventForm({ initialData, onSubmit, onCancel }: EventFormProps) {
               className="w-fit"
               required
             />
-
-
           </div>
         </div>
 
@@ -201,8 +206,6 @@ export function EventForm({ initialData, onSubmit, onCancel }: EventFormProps) {
             placeholder="Add categories like AI, Web3, DevOps"
           />
         </div>
-
-
 
         <div>
           <Label className="w-fit mb-2">Event Type <span className='text-destructive text-xs'>*</span></Label>
@@ -246,16 +249,39 @@ export function EventForm({ initialData, onSubmit, onCancel }: EventFormProps) {
 
         {formData.price === "Paid" && (
           <div>
-            <Label htmlFor="price_amount" className="w-fit mb-2">Price Amount <span className='text-xs'>(do not include coma ,) </span><span className='text-destructive text-xs'>*</span></Label>
-            <Input
-              id="price_amount"
-              value={formData.price_amount}
-              onChange={(e) => handleChange("price_amount", e.target.value)}
-              placeholder="e.g. 1000"
-              required
-            />
+            <Label htmlFor="currency" className="w-fit mb-2 block">Currency & Amount</Label>
+            <div className="flex space-x-2">
+              <Select
+                value={formData.currency}
+                onValueChange={(value) => handleChange("currency", value)}
+              >
+                <SelectTrigger className="w-1/5">
+                  <SelectValue placeholder="Currency" />
+                </SelectTrigger>
+                <SelectContent>
+                  {CURRENCY_LIST.map((curr) => (
+                    <SelectItem key={curr.code} value={curr.code}>
+                      {curr.symbol} {curr.code}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              <Input
+                id="price_amount"
+                value={formData.price_amount}
+                onChange={(e) => handleChange("price_amount", e.target.value)}
+                placeholder="e.g. 1000"
+                required
+                className="w-2/3"
+              />
+            </div>
+            <p className="text-xs text-muted-foreground mt-1">
+              Price in selected currency (do not include commas)
+            </p>
           </div>
         )}
+
 
         <div>
           <Label htmlFor="description" className="w-fit mb-2">Description <span className='text-destructive text-xs'>*</span></Label>
@@ -269,7 +295,7 @@ export function EventForm({ initialData, onSubmit, onCancel }: EventFormProps) {
             className="w-full resize-y"
           />
         </div>
-        
+
         <div>
           <Label htmlFor="link" className="w-fit mb-2">Link</Label>
           <Textarea
