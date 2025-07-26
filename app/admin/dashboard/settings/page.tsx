@@ -8,7 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Switch } from "@/components/ui/switch"
 import { DashboardHeader } from "@/components/dashboard/dashboard-header"
 import { useRouter } from "next/navigation"
-import { useAdmin } from "@/components/context/AdminContext"
+import { useAdmin } from "@/context/AdminContext"
 import { PermissionAlert } from "@/components/permission-alert"
 
 export default function SettingsPage() {

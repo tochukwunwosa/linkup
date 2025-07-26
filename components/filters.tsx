@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Filter, ChevronDown, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
-import { useEventContext } from "./context/EventContext";
+import { useEventContext } from "@/context/EventContext";
 import MultiTagInput from "./ui/multi-tag-input";
 
 const SUGGESTED_CATEGORIES = ["Web", "Web3", "AI", "Mobile", "DevOps"];

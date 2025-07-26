@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useEventContext } from "@/components/context/EventContext";
+import { useEventContext } from "@/context/EventContext";
 import { reverseGeocodeLatLng } from "@/lib/geocode/geocode-client";
 import LocationPermissionModal from "./LocationPermissionModal";
 import { toast } from "sonner";

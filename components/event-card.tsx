@@ -19,7 +19,12 @@ export default function EventCard({ event }: { event: Event }) {
         <div className="flex items-start flex-wrap">
           <div>
             <h3 className="font-semibold text-lg">{event.title}</h3>
-            <p className="text-sm text-gray-500">{event.category}</p>
+            {event.category.map((cat) => (
+              <span key={cat} className="text-xs text-gray-900 bg-black/10 px-2 py-1 rounded-full mr-1">
+                {cat}
+              </span>
+            ))}
+
           </div>
           <div className='ml-auto flex items-center gap-px '>
             {isLiveEvent({ event }) ? <LiveEventBadge event={event} /> : null}

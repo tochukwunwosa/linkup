@@ -6,7 +6,7 @@ import AnimatedCard from "./animated-card";
 import EventCard from "./event-card";
 import { SkeletonGrid } from "./event-card-skeleton-grid";
 import Link from "next/link";
-import { useEventContext } from "./context/EventContext";
+import { useEventContext } from "@/context/EventContext";
 import { Event } from "@/lib/validations/event";
 
 interface EventsNearYouProps {

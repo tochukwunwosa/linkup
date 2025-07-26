@@ -6,7 +6,7 @@ import { ProfilePicture } from "@/components/admin/profile/profile-picture"
 import { SecuritySettings } from "@/components/admin/profile/security-settings"
 import { ProfileForm } from "@/components/admin/profile/profile-form"
 import { DashboardHeader } from "@/components/dashboard/dashboard-header"
-import { useAdmin } from "@/components/context/AdminContext"
+import { useAdmin } from "@/context/AdminContext"
 
 export default function ProfilePage() {
   const admin = useAdmin()

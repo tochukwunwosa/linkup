@@ -3,9 +3,9 @@
 import React, { Suspense } from "react";
 import { usePathname } from "next/navigation";
 import { Toaster } from "sonner";
-import { EventProvider } from "@/components/context/EventContext";
-import { EventUrlSync } from "@/components/context/EventUrlSync";
 import UserLocationProvider from "@/components/location/UserLocationProvider";
+import { EventProvider } from "@/context/EventContext";
+import { EventUrlSync } from "@/context/EventUrlSync";
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();

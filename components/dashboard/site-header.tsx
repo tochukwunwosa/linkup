@@ -13,7 +13,7 @@ import {
 import { useRouter } from "next/navigation"
 import { LogoutAlertDialog } from "@/components/logout-alert-dialog"
 import { adminLogout } from "@/lib/logout/admin-logout"
-import { useAdmin } from "@/components/context/AdminContext"
+import { useAdmin } from "@/context/AdminContext"
 import { getFirstName } from "@/lib/utils"
 
 export function SiteHeader() {

@@ -1,14 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import { Event } from "@/lib/validations/event";
 import { useInView } from "react-intersection-observer";
-import { useEventContext } from "@/components/context/EventContext";
+import { useEventContext } from "@/context/EventContext";
 
 export default function useInfiniteScrollEvents({ filters }: { filters: any }) {
   const [events, setEvents] = useState<Event[]>([]);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
-  const { setTotalEventsFound } = useEventContext();
+  const { setTotalEventsFound, userLocation } = useEventContext();
 
   // Trigger earlier - when 200px from bottom instead of exactly at bottom
   const { ref: observerRef, inView } = useInView({
@@ -53,6 +53,10 @@ export default function useInfiniteScrollEvents({ filters }: { filters: any }) {
         }
         if (filters.location && filters.location !== "all") {
           params.set("location", filters.location);
+        }
+        if (userLocation?.lat && userLocation?.lng) {
+          params.set("lat", userLocation.lat.toString());
+          params.set("lng", userLocation.lng.toString());
         }
         if (filters.date && filters.date !== "all") {
           params.set("date", filters.date);

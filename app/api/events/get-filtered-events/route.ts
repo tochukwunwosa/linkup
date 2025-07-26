@@ -21,12 +21,18 @@ export async function GET(req: Request) {
     country: searchParams.get("country") || "",
   };
 
-  // 🧭 Optional user location (for sorting by distance)
+  // user location (for sorting by distance)
   const userLat = parseFloat(searchParams.get("lat") || "");
   const userLng = parseFloat(searchParams.get("lng") || "");
+  const userCity = searchParams.get("city") || undefined;
+  const userCountry = searchParams.get("country") || undefined;
 
   const userLocation =
-    !isNaN(userLat) && !isNaN(userLng) ? { lat: userLat, lng: userLng } : null;
+    !isNaN(userLat) && !isNaN(userLng)
+      ? { lat: userLat, lng: userLng, city: userCity, country: userCountry }
+      : userCity || userCountry
+      ? { city: userCity, country: userCountry }
+      : null;
 
   const { data, hasMore } = await getPaginatedFilteredEvents({
     page,

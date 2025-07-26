@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
-import { useEventContext } from "./EventContext";
 import { useDebounce } from "@/hooks/use-debounce";
 import { buildUrlParams } from "@/lib/filter-helper";
+import { useEventContext } from "./EventContext";
 
 export function EventUrlSync() {
   const pathname = usePathname();
@@ -12,7 +12,8 @@ export function EventUrlSync() {
   const { filters, setFilters } = useEventContext();
   const debouncedFilters = useDebounce(filters, 500);
 
-  // Remove setFilters from dependency array and use useCallback for setFilters
+  const setFiltersSafe = useCallback(setFilters, [setFilters]);
+
   useEffect(() => {
     const category = searchParams.get("category")
       ?.split(",")
@@ -28,19 +29,20 @@ export function EventUrlSync() {
       country: searchParams.get("country") || "",
     };
 
-    setFilters(newFilters);
-  }, [searchParams]);
+    setFiltersSafe(newFilters);
+  }, [searchParams, setFiltersSafe]);
 
   useEffect(() => {
     const newParams = buildUrlParams(debouncedFilters);
     const currentParams = searchParams.toString();
 
-    if (newParams !== currentParams) {
-      const scrollY = window.scrollY;
-      const newUrl = `${pathname}${newParams ? `?${newParams}` : ""}`;
-      window.history.replaceState(null, "", newUrl);
-      window.scrollTo({ top: scrollY, behavior: "instant" });
-    }
+    if (!currentParams && !newParams) return;
+    if (newParams === currentParams) return;
+
+    const scrollY = window.scrollY;
+    const newUrl = `${pathname}${newParams ? `?${newParams}` : ""}`;
+    window.history.replaceState(null, "", newUrl);
+    window.scrollTo({ top: scrollY, behavior: "auto" });
   }, [debouncedFilters, pathname, searchParams]);
 
   return null;

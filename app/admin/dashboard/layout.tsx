@@ -4,7 +4,7 @@ import { Sidebar, SidebarContent, SidebarFooter } from "@/components/ui/sidebar"
 import { DashboardNav } from "@/components/dashboard/dashboard-nav"
 import { SiteHeader } from "@/components/dashboard/site-header"
 import SidebarUser from "@/components/dashboard/sidebar-user"
-import { AdminProvider } from "@/components/context/AdminContext"
+import { AdminProvider } from "@/context/AdminContext"
 import { redirect } from "next/navigation"
 import { getCurrentAdmin } from "@/app/actions/admin/getCurrentAdmin"
 

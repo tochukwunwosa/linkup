@@ -44,6 +44,8 @@ export async function updateEventAction(
       ...parsed.data,
       city: geo?.city ?? null,
       country: geo?.country ?? null,
+      lat: geo?.lat ?? null,
+      lng: geo?.lng ?? null,
       start_date: new Date(parsed.data.start_date).toISOString(),
       end_date: parsed.data.end_date
         ? new Date(parsed.data.end_date).toISOString()

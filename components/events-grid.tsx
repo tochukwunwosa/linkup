@@ -5,7 +5,7 @@ import AnimatedCard from "./animated-card";
 import EventCard from "./event-card";
 import { SkeletonGrid } from "./event-card-skeleton-grid";
 import useInfiniteScrollEvents from "@/hooks/useInfinteScrollEvent";
-import { useEventContext } from "./context/EventContext";
+import { useEventContext } from "@/context/EventContext";
 
 interface EventsGridProps {
   title: string;

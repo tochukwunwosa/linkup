@@ -7,6 +7,7 @@ import {
   getStartOfWeek,
 } from "@/lib/filter-helper";
 import { createClient } from "@/lib/supabase/server";
+import { haversineDistance } from "@/lib/utils";
 import { Event } from "@/lib/validations/event";
 
 type Filters = {
@@ -59,10 +60,7 @@ export async function getPaginatedFilteredEvents({
     results = categoryMatched as Event[];
   } else {
     // Get all events if no category filter
-    const { data, error } = await supabase
-      .from("public_events")
-      .select("*")
-      .order("start_date", { ascending: true });
+    const { data, error } = await supabase.from("public_events").select("*");
 
     if (error) {
       console.error("Error fetching events:", error);
@@ -134,24 +132,70 @@ export async function getPaginatedFilteredEvents({
   }
 
   // Sort by user proximity
-  if (userLocation?.city || userLocation?.country) {
-    filteredResults = filteredResults.sort((a, b) => {
-      const aCityMatch =
-        a.city?.toLowerCase() === userLocation?.city?.toLowerCase();
-      const bCityMatch =
-        b.city?.toLowerCase() === userLocation?.city?.toLowerCase();
-      const aCountryMatch =
-        a.country?.toLowerCase() === userLocation?.country?.toLowerCase();
-      const bCountryMatch =
-        b.country?.toLowerCase() === userLocation?.country?.toLowerCase();
+  if (userLocation) {
+    const userCity = userLocation.city?.toLowerCase();
+    const userCountry = userLocation.country?.toLowerCase();
+    const userLat = userLocation.lat;
+    const userLng = userLocation.lng;
 
-      if (aCityMatch && !bCityMatch) return -1;
-      if (!aCityMatch && bCityMatch) return 1;
-      if (aCountryMatch && !bCountryMatch) return -1;
-      if (!aCountryMatch && bCountryMatch) return 1;
+    const cityEvents: Event[] = [];
+    const countryEvents: Event[] = [];
+    const nearbyEvents: (Event & { distance?: number })[] = [];
+    const otherEvents: Event[] = [];
 
-      return 0;
-    });
+    for (const event of filteredResults) {
+      const eventCity = event.city?.toLowerCase();
+      const eventCountry = event.country?.toLowerCase();
+
+      if (userCity && eventCity === userCity) {
+        cityEvents.push(event);
+      } else if (userCountry && eventCountry === userCountry) {
+        countryEvents.push(event);
+      } else if (
+        userLat !== undefined &&
+        userLng !== undefined &&
+        event.lat &&
+        event.lng
+      ) {
+        const distance = haversineDistance(
+          userLat,
+          userLng,
+          event.lat,
+          event.lng
+        );
+        if (distance <= 1000) {
+          // 1000 km threshold for "nearby"
+          nearbyEvents.push({ ...event, distance });
+        } else {
+          otherEvents.push(event);
+        }
+      } else {
+        otherEvents.push(event);
+      }
+    }
+
+    // Sort each group
+    cityEvents.sort(
+      (a, b) =>
+        new Date(a.start_date).getTime() - new Date(b.start_date).getTime()
+    );
+    countryEvents.sort(
+      (a, b) =>
+        new Date(a.start_date).getTime() - new Date(b.start_date).getTime()
+    );
+    nearbyEvents.sort((a, b) => (a.distance || 0) - (b.distance || 0));
+    otherEvents.sort(
+      (a, b) =>
+        new Date(a.start_date).getTime() - new Date(b.start_date).getTime()
+    );
+
+    // Merge all groups: city first, then country, nearby, others
+    filteredResults = [
+      ...cityEvents,
+      ...countryEvents,
+      ...nearbyEvents,
+      ...otherEvents,
+    ];
   }
 
   // Apply pagination

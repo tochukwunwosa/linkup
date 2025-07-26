@@ -15,6 +15,8 @@ export const eventSchema = z.object({
   description: z.string(),
   publish_status: z.enum(["Published", "Draft"]).default("Draft"),
   link: z.string().optional(),
+  lat: z.number(),
+  lng:z.number()
 });
 
 export type PublishStatus = "Published" | "Draft";
@@ -37,6 +39,8 @@ export type Event = {
   link?: string;
   city?: string;
   country?: string;
+  lat: number,
+  lng: number
 };
 
 export const CATEGORY_SUGGESTIONS = [

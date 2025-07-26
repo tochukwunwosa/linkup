@@ -18,6 +18,7 @@ import { updateEventAction } from "@/app/actions/event/updateEvent"
 import MultiTagInput from "../ui/multi-tag-input"
 import { CURRENCY_LIST } from '@/lib/format-currency'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import AddressAutocomplete from "../address-autocomplete"
 
 
 interface EventFormProps {
@@ -40,6 +41,8 @@ type EventFormData = {
   description: string;
   link: string;
   publish_status: PublishStatus;
+  lat: number;
+  lng: number
 };
 
 
@@ -53,6 +56,8 @@ export function EventForm({ initialData, onSubmit, onCancel }: EventFormProps) {
     end_date: initialData?.end_date ? new Date(initialData.end_date) : new Date(),
     time: initialData?.time || "",
     location: initialData?.location || "",
+    lat: initialData?.lat || 0,
+    lng: initialData?.lng || 0,
     category: initialData?.category || [],
     type: initialData?.type || "In-person",
     price: initialData?.price || "Free",
@@ -188,13 +193,16 @@ export function EventForm({ initialData, onSubmit, onCancel }: EventFormProps) {
 
         <div>
           <Label htmlFor="location" className="w-fit mb-2">Location <span className='text-destructive text-xs'>*</span></Label>
-          <Input
-            id="location"
+          <AddressAutocomplete
             value={formData.location}
-            onChange={(e) => handleChange("location", e.target.value)}
-            placeholder="Enter location or online platform"
-            required
+            onChange={(val) => handleChange("location", val)}
+            onSelect={(address, lat, lng) => {
+              handleChange("location", address)
+              handleChange("lat", lat)
+              handleChange("lng", lng)
+            }}
           />
+
         </div>
 
         <div className="relative">

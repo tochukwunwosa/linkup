@@ -13,7 +13,7 @@ import { AdminFormValues } from "@/lib/validations/admin"
 import { Admin } from "@/types"
 import { getAllActiveAdmin } from "@/app/actions/admin/getAllActiveAdmin"
 import { toast } from "sonner"
-import { useAdmin } from "@/components/context/AdminContext"
+import { useAdmin } from "@/context/AdminContext"
 import { useDebounce } from "@/hooks/use-debounce"
 import { useRouter } from "next/navigation"
 import { PermissionAlert } from "@/components/permission-alert"
@@ -114,7 +114,7 @@ export default function AdminsPage() {
           </DrawerContent>
         </Drawer>
       </div>
-        : <PermissionAlert onBack={() => router.push("/admin/dashboard") } />
+        : <PermissionAlert onBack={() => router.push("/admin/dashboard")} />
       }
     </div>
 

@@ -32,18 +32,24 @@ export async function createEventAction(formData: z.infer<typeof eventSchema>) {
     throw new Error("Invalid event data");
   }
 
+  // 🗺️ Geocode the address
   const geo = await serverGeocodeAddress(parsed.data.location);
 
-  const result = await supabase.from("events").insert({
-    ...parsed.data,
-    created_by: admin.id,
-    city: geo?.city ?? null,
-    country: geo?.country ?? null,
-    start_date: new Date(parsed.data.start_date).toISOString(),
-    end_date: parsed.data.end_date
-      ? new Date(parsed.data.end_date).toISOString()
-      : null,
-  }).select();
+  const result = await supabase
+    .from("events")
+    .insert({
+      ...parsed.data,
+      created_by: admin.id,
+      city: geo?.city ?? null,
+      country: geo?.country ?? null,
+      lat: geo?.lat ?? null, 
+      lng: geo?.lng ?? null, 
+      start_date: new Date(parsed.data.start_date).toISOString(),
+      end_date: parsed.data.end_date
+        ? new Date(parsed.data.end_date).toISOString()
+        : null,
+    })
+    .select();
 
   if (result.error) {
     console.error("Error inserting event:", result.error);

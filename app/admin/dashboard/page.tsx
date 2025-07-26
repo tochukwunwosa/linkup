@@ -12,7 +12,7 @@ import { useCallback, useEffect, useState } from "react"
 import { getAllActiveEvents } from "@/app/actions/event/getAllActiveEvents"
 import { toast } from "sonner"
 import { Event } from "@/lib/validations/event"
-import { useAdmin } from "@/components/context/AdminContext"
+import { useAdmin } from "@/context/AdminContext"
 import { getFirstName } from "@/lib/utils"
 export default function AdminDashboard() {
   const admin = useAdmin()
