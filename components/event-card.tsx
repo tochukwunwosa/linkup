@@ -39,28 +39,28 @@ export default function EventCard({ event }: { event: Event }) {
         <div className="space-y-2">
           <div className="flex items-center text-sm">
             <Calendar className="w-4 h-4 mr-2" />
-            <span>{formatDateRange(event.start_date, event.end_date || "")}</span>
+            <span className="font-semibold">{formatDateRange(event.start_date, event.end_date || "")}</span>
           </div>
           <div className="flex flex-col gap-1 text-sm">
             <div className="flex items-center">
               <Clock className="w-4 h-4 mr-2" />
-              <span>{wat}</span>
+              <span className="font-semibold">{wat}</span>
             </div>
             {!local && (
-              <div className="pl-6 text-xs text-muted-foreground">
+              <div className="pl-6 text-xs font-semibold text-muted-foreground">
                 Your Time: {local} ({userZone})
               </div>
             )}
           </div>
           <div className="flex items-center text-sm">
             <MapPin className="w-4 h-4 mr-2" />
-            <span>{event.location}</span>
+            <span className="font-semibold">{event.location}</span>
           </div>
 
           {event.price === 'Paid' && event.price_amount && (
             <div className="flex items-center text-sm">
               <Banknote className="w-4 h-4 mr-2" />
-              <span>
+              <span className="font-semibold">
                 {getCurrencySymbol(event.currency || 'NGN')}
                 {parseFloat(event.price_amount).toLocaleString()}
               </span>
@@ -70,7 +70,7 @@ export default function EventCard({ event }: { event: Event }) {
           {event.price === 'Free' && (
             <div className="flex items-center text-sm">
               <Banknote className="w-4 h-4 mr-2" />
-              <span>Free</span>
+              <span className="font-semibold">Free</span>
             </div>
           )}
 
