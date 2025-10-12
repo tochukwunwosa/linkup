@@ -1,4 +1,3 @@
-// components/ui/multi-tag-input.tsx
 "use client"
 
 import { useEffect, useRef, useState } from "react"
@@ -89,7 +88,7 @@ export default function MultiTagInput({
         className="border-none focus:outline-none focus:ring-0 focus-visible:ring-0 bg-transparent shadow-none px-0 py-0 text-sm w-auto flex-1"
       />
       {filteredSuggestions.length > 0 && (
-        <div className="absolute top-full z-50 w-fit bg-white border border-gray-200 rounded-md shadow-lg">
+        <div className="absolute top-full z-50 w-fit bg-white border border-gray-200 rounded-md shadow-lg h-[250px] overflow-y-auto">
           {filteredSuggestions.map((suggestion) => (
             <div
               key={suggestion}

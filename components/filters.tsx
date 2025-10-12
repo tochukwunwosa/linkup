@@ -6,8 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { useEventContext } from "@/context/EventContext";
 import MultiTagInput from "./ui/multi-tag-input";
-
-const SUGGESTED_CATEGORIES = ["Web", "Web3", "AI", "Mobile", "DevOps"];
+import { NigerianStatesCombobox } from "./NigerianStatesCombobox";
+import { SUGGESTED_CATEGORIES } from "@/app/constants/categories";
 
 export default function Filters() {
   const { filters, setFilters } = useEventContext();
@@ -62,18 +62,12 @@ export default function Filters() {
               </SelectContent>
             </Select>
 
-            <Select value={filters.location} onValueChange={(value) => setFilters({ location: value })}>
-              <SelectTrigger className="w-fit">
-                <SelectValue placeholder="Location" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Locations</SelectItem>
-                <SelectItem value="lagos">Lagos</SelectItem>
-                <SelectItem value="san francisco">San Francisco</SelectItem>
-                <SelectItem value="london">London</SelectItem>
-                <SelectItem value="toronto">Toronto</SelectItem>
-              </SelectContent>
-            </Select>
+            {/* states */}
+            <NigerianStatesCombobox
+              className="w-[200px]"
+              value={filters.location}
+              onValueChange={(value) => setFilters({ location: value })}
+            />
 
             <Select value={filters.date} onValueChange={(value) => setFilters({ date: value })}>
               <SelectTrigger className="w-fit">
@@ -103,11 +97,11 @@ export default function Filters() {
 
       {/* Mobile Filters (unchanged except category tag input added) */}
       <div className="relative md:hidden">
-        <div className="px-4 py-3 max-w-fit">
+        <div className="px-4 py-3 w-full">
           <Button
             variant="outline"
             onClick={() => setShowMobileFilters(!showMobileFilters)}
-            className="w-full justify-between h-10"
+            className="w-full justify-between h-10 bg-white hover:!bg-muted"
           >
             <div className="flex items-center gap-2">
               <Filter className="h-4 w-4" />
@@ -121,7 +115,7 @@ export default function Filters() {
         </div>
 
         {showMobileFilters && (
-          <div className="absolute w-full px-4 pb-4 space-y-3 bg-gray-50 border-t">
+          <div className="absolute w-full px-4 pb-4 space-y-3 bg-white border min-h-[70vh]">
             <div className="flex items-center justify-between pt-3">
               <span className="text-sm font-medium text-gray-700">Filter Options</span>
               {hasActiveFilters && (
@@ -170,18 +164,7 @@ export default function Filters() {
                 <label className="text-xs font-medium text-gray-600 uppercase tracking-wide mb-1 block">
                   Location
                 </label>
-                <Select value={filters.location} onValueChange={(value) => setFilters({ location: value })}>
-                  <SelectTrigger className="w-full h-9">
-                    <SelectValue placeholder="Location" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Locations</SelectItem>
-                    <SelectItem value="lagos">Lagos</SelectItem>
-                    <SelectItem value="san francisco">San Francisco</SelectItem>
-                    <SelectItem value="london">London</SelectItem>
-                    <SelectItem value="toronto">Toronto</SelectItem>
-                  </SelectContent>
-                </Select>
+                <NigerianStatesCombobox value={filters.location} onValueChange={(value) => setFilters({ location: value })} />
               </div>
 
               <div>
