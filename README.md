@@ -1,110 +1,173 @@
-# Admin Dashboard
+# Tech Linkup
 
-A modern admin dashboard built with Next.js, Tailwind CSS, and Supabase.
+Tech Linkup is a platform and community for tech enthusiasts, organizers, and professionals to discover, host, and attend tech events locally. Whether it's meetups, hackathons, workshops, or conferences, Tech Linkup helps bridge the gap between communities and opportunities in tech.
 
-## Features
+---
 
-- 🔐 Authentication with Supabase
-- 👥 Role-based access control (Admin & Super Admin)
-- 📅 Event management
-- 👤 Admin invitation system
-- 🎨 Modern UI with Tailwind CSS and shadcn/ui
-- 🚀 Built with Next.js App Router
-- 📱 Responsive design
+## 📖 Table of Contents
 
-## Tech Stack
+* [Vision & Mission](#vision--mission)
+* [Features](#features)
+* [Getting Started](#getting-started)
+* [Usage](#usage)
+* [Contributing](#contributing)
+* [Roadmap](#roadmap)
+* [License](#license)
+* [Acknowledgments](#acknowledgments)
 
-- Next.js 14 (App Router)
-- Tailwind CSS
-- shadcn/ui
-- Supabase
-- TypeScript
-- React Hook Form + Zod
-- Sonner (Toast notifications)
+---
 
-## Getting Started
+## 🎯 Vision & Mission
+
+### Vision
+
+To create a thriving and connected tech ecosystem, where individuals and organizations can easily discover, share, and engage in technology events in their region.
+
+### Mission
+
+* Empower organizers to promote tech events with ease.
+* Enable attendees to find relevant events near them (or online).
+* Foster collaboration, learning, and networking across tech communities.
+
+---
+
+## 🛠 Features
+
+* **Event Discovery**: Browse tech events by location, category, date, and tags.
+* **State/Location Filter**: Select state (e.g. in Nigeria) and view events in that location.
+* **Search & Pagination**: Search by keywords, filter, and paginate results.
+* **Event Cards**: Display event information including title, category, date & time, location, price, link, and calendar integration.
+* **Charts & Analytics**: Visualize trends (e.g. events by category) using charts.
+* **Share & RSVP**: Share events via social/sharing APIs and add to calendar.
+* **User Context / Filters**: Persist filters, preferences, and UI state.
+* **Responsive & Accessible UI**: Works well on desktop and mobile; supports keyboard navigation, ARIA, etc.
+
+---
+
+## 🚀 Getting Started
 
 ### Prerequisites
 
-- Node.js 18+
-- npm or yarn
-- Supabase account
+* Node.js (v18+ recommended)
+* npm or yarn
+* Database (Supabase)
 
-### Environment Variables
+### Setup
 
-Create a `.env.local` file in the root directory with the following variables:
+Clone the repo:
+
+```bash
+git clone https://github.com/tochukwunwosa/tech-linkup.git
+cd tech-linkup
+```
+
+Install dependencies:
+
+```bash
+npm install
+# or
+yarn install
+```
+
+Configure environment variables (e.g. `.env.local`):
 
 ```env
-NEXT_PUBLIC_SUPABASE_URL=your-supabase-project-url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
-SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+# Supabase Configuration
+NEXT_PUBLIC_SUPABASE_URL=your_url_here
+SUPABASE_SERVICE_ROLE_KEY=your_role_key_here
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key_here
+
+#Analytics
+NEXT_PUBLIC_UMAMI_WEBSITE_ID=umami_website_ID, #visit https://umami.is/
+
+
+# Site Configuration
+NEXT_PUBLIC_SITE_URL=https://techup-linkup.vercel.app
+
+# OpenCage
+OPENCAGE_API_KEY=your_key_here
+
+# Google Map
+GOOGLE_MAPS_API_KEY=your_key_here
+
 ```
 
-### Installation
+Run development server:
 
-1. Clone the repository
-2. Install dependencies:
+```bash
+npm run dev
+# or
+yarn dev
+```
+
+Visit [http://localhost:3000](http://localhost:3000) to view the UI.
+
+---
+
+## 🦯 Usage
+
+### Home / Hero
+
+* The hero section shows a background image with overlay.
+* There’s a state / location combobox that allows selecting a state. Once selected, it scrolls or navigates to the events section.
+
+### Filters & Search
+
+* Use categories, formats (online / in-person), and dates to filter.
+* Multi-tag input for categories.
+* Filters persist in context so as you navigate, your preferences remain.
+
+### Event Listing & Cards
+
+* Events display in cards.
+* Cards show title, categories, date/time (with local conversion), location, price, and description snippet.
+* Buttons to **Add to Calendar**, **Read More**, and optional **Share**.
+
+### Charts & Analytics
+
+* Category chart that shows the number of events per category (aggregated).
+* Labels for each bar appear **above** the bar, remaining visible regardless of bar height.
+
+---
+
+## 🧹 Contributing
+
+We welcome your contributions! Here’s how to get started:
+
+1. Fork the repository.
+2. Create a feature branch:
+
    ```bash
-   npm install
+   git checkout -b feature/your-feature
    ```
-3. Run the development server:
-   ```bash
-   npm run dev
-   ```
-4. Open [http://localhost:3000](http://localhost:3000) in your browser
+3. Make changes & commit with clear messages.
+4. Push to your fork.
+5. Open a Pull Request with a description and screenshots (if applicable).
 
-### Database Setup
+Please follow the existing code style and patterns.
 
-1. Create a new Supabase project
-2. Run the migration in `supabase/migrations/20240318000000_init.sql`
-3. Enable Email authentication in Supabase Auth settings
+---
 
-## Project Structure
+## 📦 Roadmap
 
-```
-├── app/
-│   ├── admin/
-│   │   ├── dashboard/
-│   │   ├── events/
-│   │   └── invite/
-│   └── layout.tsx
-├── components/
-│   ├── admin/
-│   │   ├── EventForm.tsx
-│   │   ├── EventsTable.tsx
-│   │   └── Sidebar.tsx
-│   └── ui/
-├── lib/
-│   └── supabase.ts
-└── types/
-```
+* [ ] Event submission flow (for organizers)
+* [ ] User authentication / profiles
+* [ ] Social sharing & embeds
+* [ ] Advanced filtering (by tags, speakers, sponsors)
+* [ ] Notifications & email reminders
+* [ ] Analytics dashboard (views, clicks, attendance)
+* [ ] Multilingual / localization support
+* [ ] Mobile app or PWA
 
-## Features
+---
 
-### Authentication
+## 📄 License
 
-- Email/Password authentication with Supabase
-- Protected routes for admin users
-- Role-based access control
+Distributed under the **MIT License**. See the `LICENSE` file for details.
 
-### Event Management
+---
 
-- Create, read, update, and delete events
-- Event details include title, description, date, and location
-- Table view with sorting and loading states
+## 🙏 Acknowledgments
 
-### Admin Management
-
-- Create new admin
-
-### UI/UX
-
-- Modern and clean design
-- Responsive layout
-- Toast notifications for user feedback
-- Loading states and skeletons
-- Form validation with React Hook Form and Zod
-
-## License
-
-MIT
+* Thanks to the open source community, Recharts, shadcn/ui, lucide-react, and others.
+* Inspiration from event listing platforms and community tech hubs.

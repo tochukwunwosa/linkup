@@ -32,17 +32,17 @@ export default function Hero() {
       <div className="absolute inset-0 bg-black/60" />
 
       <div className="relative z-10 max-w-3xl mx-auto px-6">
-        <h1 className="text-4xl md:text-6xl font-bold leading-tight mb-4 text-white">
+        <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold leading-tight mb-4 text-white">
           Discover Tech Events Across Nigeria
         </h1>
 
-        <p className="text-lg text-gray-200 mb-8">
+        <p className="text-sm sm:text-lg text-gray-200 mb-8">
           Connect, learn, and grow with other innovators in your city.
         </p>
 
         <div className="flex justify-center">
           <NigerianStatesCombobox
-            className="max-w-[400px]"
+            className="max-w-[300px] md:max-w-[400px]"
             value={filters.location}
             onValueChange={handleStateChange}
             loading={loading}

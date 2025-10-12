@@ -37,6 +37,7 @@ export default function AdminDashboard() {
   const publishedEvents = events.filter((event) => event.publish_status === "Published").length;
   const onlineEvents = events.filter((event) => event.type === "Online").length;
   const inPersonEvents = events.filter((event) => event.type === "In-person").length;
+  const inPersonAndOnlineEvents = events.filter((event) => event.type === "In-person & Online").length;
 
   return (
     <div className="flex flex-col gap-6">
@@ -87,6 +88,17 @@ export default function AdminDashboard() {
             <p className="text-xs text-muted-foreground">Physical events</p>
           </CardContent>
         </Card>
+        {/* Hybrid events */}
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+            <CardTitle className="text-sm font-medium">Hybrid Events</CardTitle>
+            <MapPin className="w-4 h-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{inPersonAndOnlineEvents}</div>
+            <p className="text-xs text-muted-foreground">Hybrid events</p>
+          </CardContent>
+        </Card>
       </div>
 
       <Tabs defaultValue="overview" className="space-y-4">
@@ -125,7 +137,7 @@ export default function AdminDashboard() {
                 <CardTitle>Events by Category</CardTitle>
                 <CardDescription>Distribution of events across categories</CardDescription>
               </CardHeader>
-              <CardContent className="">
+              <CardContent>
                 <EventCategoryChart events={events} />
               </CardContent>
             </Card>

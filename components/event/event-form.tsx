@@ -10,7 +10,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Switch } from "@/components/ui/switch"
 import { DatePicker } from "../ui/date-picker"
-import { CATEGORY_SUGGESTIONS, Event, EventType, PublishStatus } from "@/lib/validations/event"
+import { Event, EventType, PublishStatus } from "@/lib/validations/event"
 import { createEventAction } from "@/app/actions/event/createEvent"
 import { toast } from "sonner"
 import { Loader } from "lucide-react"
@@ -19,6 +19,7 @@ import MultiTagInput from "../ui/multi-tag-input"
 import { CURRENCY_LIST } from '@/lib/format-currency'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import AddressAutocomplete from "../address-autocomplete"
+import { SUGGESTED_CATEGORIES } from "@/app/constants/categories"
 
 
 interface EventFormProps {
@@ -210,7 +211,7 @@ export function EventForm({ initialData, onSubmit, onCancel }: EventFormProps) {
           <MultiTagInput
             value={formData.category}
             onChange={(tags) => handleChange("category", tags)}
-            suggestions={CATEGORY_SUGGESTIONS}
+            suggestions={SUGGESTED_CATEGORIES}
             placeholder="Add categories like AI, Web3, DevOps"
           />
         </div>
