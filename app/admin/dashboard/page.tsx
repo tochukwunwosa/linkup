@@ -9,7 +9,7 @@ import { EventTrendChart } from "@/components/admin/charts/event-trend-chart"
 import { RecentEventsActivity } from "@/components/admin/recent-events-activity"
 import { DashboardHeader } from "@/components/dashboard/dashboard-header"
 import { useCallback, useEffect, useState } from "react"
-import { getAllActiveEvents } from "@/app/actions/event/getAllActiveEvents"
+import { getAllEvents } from "@/app/actions/event/getAllEvents"
 import { toast } from "sonner"
 import { Event } from "@/lib/validations/event"
 import { useAdmin } from "@/context/AdminContext"
@@ -18,9 +18,10 @@ export default function AdminDashboard() {
   const admin = useAdmin()
   const adminFirstName = getFirstName(admin.name)
   const [events, setEvents] = useState<Event[]>([]);
+  
   const fetchEvents = useCallback(async () => {
     try {
-      const data = await getAllActiveEvents();
+      const data = await getAllEvents();
       setEvents(data);
     } catch (error) {
       toast.error(
@@ -102,7 +103,7 @@ export default function AdminDashboard() {
       </div>
 
       <Tabs defaultValue="overview" className="space-y-4">
-        <TabsList>
+        <TabsList className="bg-neutral-200">
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="analytics">Analytics</TabsTrigger>
         </TabsList>

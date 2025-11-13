@@ -22,14 +22,14 @@ export function SiteHeader() {
   const isSuperAdmin = admin.role === "super_admin"
 
   return (
-    <header className="!sticky top-0 z-50 border-b bg-background">
+    <header className="sticky top-0 z-50 border-b bg-background">
       <div className="flex h-16 items-center justify-between px-4">
         <div className="flex items-center gap-2">
           <SidebarTrigger />
         </div>
         <div className="">
           <DropdownMenu modal={false}>
-            <DropdownMenuTrigger asChild className="hover:bg-white hover:text-foreground">
+            <DropdownMenuTrigger asChild className="hover:bg-inherit cursor-pointer">
               <Button variant="ghost" className="flex items-center gap-2">
                 <div className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-200">
                   <User className="h-4 w-4 text-slate-600" />

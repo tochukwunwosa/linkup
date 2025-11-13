@@ -20,7 +20,9 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
         </Suspense>
       )}
       {!isAdminRoute && <UserLocationProvider />}
-      {children}
+      <div className="">
+        {children}
+      </div>
       <Toaster richColors />
     </EventProvider>
   );

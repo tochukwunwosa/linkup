@@ -2,7 +2,25 @@ import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { serverGeocodeAddress } from "@/lib/geocode/geocode-server";
 
-export async function GET() {
+export async function GET(req: Request) {
+  // SECURITY: Verify cron secret to prevent unauthorized access
+  const authHeader = req.headers.get("authorization");
+  const cronSecret = process.env.CRON_SECRET;
+
+  if (!cronSecret) {
+    return NextResponse.json(
+      { error: "Cron secret not configured" },
+      { status: 500 }
+    );
+  }
+
+  if (authHeader !== `Bearer ${cronSecret}`) {
+    return NextResponse.json(
+      { error: "Unauthorized" },
+      { status: 401 }
+    );
+  }
+
   const supabase = await createClient();
 
   // Fetch events missing lat or lng, limit to 50 per batch (adjust as needed)

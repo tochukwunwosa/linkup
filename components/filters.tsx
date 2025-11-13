@@ -31,7 +31,7 @@ export default function Filters() {
   };
 
   return (
-    <section id="filters" className="sticky top-16 z-40 bg-white border-b border-gray-200">
+    <section id="filters" className="sticky top-0 z-50 bg-white border-b border-gray-200">
       {/* Desktop Filters */}
       <div className="hidden md:block py-4">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

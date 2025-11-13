@@ -9,7 +9,7 @@ import Filters from "@/components/filters"
 export default function LinkUpLanding() {
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className=" bg-gray-50 overflow-visible">
       <Navbar />
 
       {/* Hero */}
@@ -17,7 +17,6 @@ export default function LinkUpLanding() {
 
       {/* Filters */}
       <Filters />
-
 
       {/* <EventsNearYou maxEvents={4} showViewAll={true} /> */}
       {/* <UpcomingEvents maxEvents={8} showViewAll={true} /> */}

@@ -8,31 +8,53 @@ export default function useInfiniteScrollEvents({ filters }: { filters: any }) {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [shouldFetchNext, setShouldFetchNext] = useState(false);
   const { setTotalEventsFound, userLocation } = useEventContext();
+  const filtersStringRef = useRef<string>("");
+  const prevPageRef = useRef<number>(1);
 
-  // Trigger earlier - when 200px from bottom instead of exactly at bottom
+  // Much more aggressive prefetching - trigger 1500px before observer
   const { ref: observerRef, inView } = useInView({
     triggerOnce: false,
     threshold: 0,
-    rootMargin: "200px", // Trigger 200px before the element comes into view
+    rootMargin: "1500px", // Start loading much earlier
   });
 
   // Load more when triggered
   useEffect(() => {
     if (inView && hasMore && !loading) {
-      setPage((prev) => prev + 1);
+      setShouldFetchNext(true);
     }
   }, [inView, hasMore, loading]);
 
-  // Refetch on filters change
+  // Refetch on filters change - use ref to avoid unnecessary rerenders
   useEffect(() => {
-    setPage(1);
-    setEvents([]);
-    setHasMore(true);
-  }, [JSON.stringify(filters)]);
+    const filtersString = JSON.stringify(filters);
+    if (filtersString !== filtersStringRef.current) {
+      filtersStringRef.current = filtersString;
+      setPage(1);
+      setEvents([]);
+      setHasMore(true);
+      setShouldFetchNext(false);
+    }
+  }, [filters]);
+
+  // Trigger page increment when shouldFetchNext is true
+  useEffect(() => {
+    if (shouldFetchNext && hasMore && !loading) {
+      setShouldFetchNext(false);
+      setPage((prev) => prev + 1);
+    }
+  }, [shouldFetchNext, hasMore, loading]);
 
   // Fetch paginated data
   useEffect(() => {
+    // Skip if we haven't actually changed page or if we're already on page > 1 and haven't moved
+    if (prevPageRef.current === page && page !== 1) {
+      return;
+    }
+    prevPageRef.current = page;
+
     const fetchEvents = async () => {
       setLoading(true);
       try {
@@ -68,7 +90,7 @@ export default function useInfiniteScrollEvents({ filters }: { filters: any }) {
           params.set("country", filters.country);
         }
 
-        console.log("Fetching with params:", params.toString()); // Debug log
+        console.log("Fetching page:", page, "with params:", params.toString());
 
         const res = await fetch(`/api/events?${params.toString()}`);
         const json = await res.json();
@@ -84,6 +106,14 @@ export default function useInfiniteScrollEvents({ filters }: { filters: any }) {
         if (page === 1) {
           setTotalEventsFound(json.total || json.data?.length || 0);
         }
+
+        // Prefetch next page immediately if we still have more
+        // This creates the "instant" feel like social media
+        if (json.hasMore && page === 1) {
+          setTimeout(() => {
+            setShouldFetchNext(true);
+          }, 100);
+        }
       } catch (err) {
         console.error("Failed to fetch events", err);
         setHasMore(false); // Stop trying to fetch more on error
@@ -93,7 +123,7 @@ export default function useInfiniteScrollEvents({ filters }: { filters: any }) {
     };
 
     fetchEvents();
-  }, [page, JSON.stringify(filters), setTotalEventsFound]);
+  }, [page, filters, setTotalEventsFound, userLocation]);
 
   return {
     events,

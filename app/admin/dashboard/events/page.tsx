@@ -15,7 +15,7 @@ import type { Event } from "@/lib/validations/event";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { DashboardHeader } from "@/components/dashboard/dashboard-header";
 import { EventForm } from "@/components/event/event-form";
-import { getAllActiveEvents } from "@/app/actions/event/getAllActiveEvents";
+import { getAllEvents } from "@/app/actions/event/getAllEvents";
 import { toast } from "sonner";
 import { softDeleteEvent } from "@/app/actions/event/deleteEvent";
 import {
@@ -41,7 +41,7 @@ export default function AdminEventsPage() {
 
   const fetchEvents = useCallback(async () => {
     try {
-      const data = await getAllActiveEvents();
+      const data = await getAllEvents();
       setEvents(data);
     } catch (error) {
       toast.error(

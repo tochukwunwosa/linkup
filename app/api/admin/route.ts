@@ -1,17 +1,30 @@
 // app/api/create-superadmin/route.ts
-import { createClient } from "@supabase/supabase-js";
+import { createClient } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
-// import { createClient } from "@/lib/supabase/client"; // Make sure this uses your service role key securely
-
 
 export async function POST(req: Request) {
-  const body = await req.json();
-  const { email, password, name } = body;
+  const setupToken = process.env.INITIAL_SETUP_TOKEN;
 
-  const supabase = await createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY! // ✅ This is crucial
-  );
+  // If setup token is not configured, endpoint is disabled
+  if (!setupToken || setupToken === "CHANGE_THIS_TO_ENABLE") {
+    return NextResponse.json(
+      { error: "Initial setup endpoint is disabled. Use the admin dashboard to create new admins." },
+      { status: 403 }
+    );
+  }
+
+  const body = await req.json();
+  const { email, password, name, token } = body;
+
+  // Verify setup token
+  if (token !== setupToken) {
+    return NextResponse.json(
+      { error: "Invalid setup token" },
+      { status: 401 }
+    );
+  }
+
+  const supabase = await createClient();
 
   const { data, error } = await supabase.auth.admin.createUser({
     email,

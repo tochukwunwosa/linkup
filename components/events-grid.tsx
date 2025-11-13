@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { Calendar } from "lucide-react";
 import AnimatedCard from "./animated-card";
 import EventCard from "./event-card";
@@ -37,16 +38,33 @@ export default function EventsGrid({ title }: EventsGridProps) {
         {loading && events.length === 0 ? (
           <SkeletonGrid count={3} />
         ) : events.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {events.map((event, index) => (
-              <AnimatedCard key={event.id} delay={index * 100}>
-                <EventCard event={event} />
-              </AnimatedCard>
-            ))}
-            {hasMore && (
-              <div ref={observerRef} className="h-1 w-full col-span-full" />
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {events.map((event, index) => {
+                // Place observer trigger after 6th-to-last item
+                const shouldPlaceObserver = hasMore && index === Math.max(0, events.length - 6);
+
+                return (
+                  <React.Fragment key={event.id}>
+                    <AnimatedCard delay={index * 100}>
+                      <EventCard event={event} />
+                    </AnimatedCard>
+                    {shouldPlaceObserver && (
+                      <div ref={observerRef} className="absolute h-1 w-1 pointer-events-none" />
+                    )}
+                  </React.Fragment>
+                );
+              })}
+            </div>
+            {loading && events.length > 0 && (
+              <div className="flex justify-center items-center py-8">
+                <div className="flex items-center gap-2 text-muted-foreground">
+                  <div className="h-5 w-5 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin" />
+                  <span className="text-sm">Loading more events...</span>
+                </div>
+              </div>
             )}
-          </div>
+          </>
         ) : (
           <div className="text-center py-12">
             <div className="text-gray-400 mb-4">

@@ -87,12 +87,9 @@
   }
 
   html {
-    @apply scroll-smooth overflow-x-hidden;
+    @apply scroll-smooth ;
   }
 
-  body {
-    @apply bg-background text-foreground overflow-x-hidden min-w-full;
-  }
 }
 
 

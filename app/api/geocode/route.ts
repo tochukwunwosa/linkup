@@ -1,9 +1,34 @@
 import { NextRequest, NextResponse } from "next/server";
 import axios from "axios";
+import { rateLimit, getClientIp } from "@/lib/rate-limit";
 
 const OPENCAGE_API_KEY = process.env.OPENCAGE_API_KEY;
 
 export async function POST(req: NextRequest) {
+  // Rate limiting: 20 requests per IP per minute to prevent API abuse
+  const clientIp = getClientIp(req);
+  const rateLimitResult = rateLimit(`geocode:${clientIp}`, {
+    maxRequests: 20,
+    windowMs: 60000, // 1 minute
+  });
+
+  if (!rateLimitResult.success) {
+    const waitTime = Math.ceil((rateLimitResult.resetTime - Date.now()) / 1000);
+    return NextResponse.json(
+      {
+        error: `Rate limit exceeded. Please try again in ${waitTime} seconds.`,
+      },
+      {
+        status: 429,
+        headers: {
+          "Retry-After": waitTime.toString(),
+          "X-RateLimit-Remaining": "0",
+          "X-RateLimit-Reset": new Date(rateLimitResult.resetTime).toISOString(),
+        },
+      }
+    );
+  }
+
   const { lat, lng, address } = await req.json();
 
   if (!OPENCAGE_API_KEY) {
