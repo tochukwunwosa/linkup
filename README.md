@@ -37,6 +37,11 @@ To create a thriving and connected tech ecosystem, where individuals and organiz
 * **State/Location Filter**: Select state (e.g. in Nigeria) and view events in that location.
 * **Search & Pagination**: Search by keywords, filter, and paginate results.
 * **Event Cards**: Display event information including title, category, date & time, location, price, link, and calendar integration.
+* **Event Submission**: Public event submission with admin approval workflow and tracking IDs.
+* **Email Notifications**: Automated email notifications powered by Resend + React Email:
+  - Admins notified when new events are submitted
+  - Organizers notified when events are approved/rejected
+  - Beautiful, responsive HTML email templates
 * **Charts & Analytics**: Visualize trends (e.g. events by category) using charts.
 * **Share & RSVP**: Share events via social/sharing APIs and add to calendar.
 * **User Context / Filters**: Persist filters, preferences, and UI state.
@@ -77,20 +82,24 @@ NEXT_PUBLIC_SUPABASE_URL=your_url_here
 SUPABASE_SERVICE_ROLE_KEY=your_role_key_here
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key_here
 
-#Analytics
-NEXT_PUBLIC_UMAMI_WEBSITE_ID=umami_website_ID, #visit https://umami.is/
-
+# Analytics
+NEXT_PUBLIC_UMAMI_WEBSITE_ID=umami_website_ID  # visit https://umami.is/
 
 # Site Configuration
 NEXT_PUBLIC_SITE_URL=https://techup-linkup.vercel.app
 
-# OpenCage
+# OpenCage Geocoding
 OPENCAGE_API_KEY=your_key_here
 
-# Google Map
-GOOGLE_MAPS_API_KEY=your_key_here
+# Email Notifications (Resend)
+RESEND_API_KEY=your_resend_api_key  # Get from https://resend.com
+REPLY_TO_EMAIL=your-email@example.com  # Optional
 
+# Google Maps (Future use)
+GOOGLE_MAPS_API_KEY=your_key_here
 ```
+
+See `claude-notes/RESEND_SETUP.md` for complete email setup instructions.
 
 Run development server:
 

@@ -71,6 +71,7 @@ export async function updateAdmin(
   }
 
   // Remove password from form data before updating admins table
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { password: _password, ...updateData } = formData;
 
   // Update admin metadata in admins table

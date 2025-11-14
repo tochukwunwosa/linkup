@@ -6,6 +6,7 @@ import { Toaster } from "sonner";
 import UserLocationProvider from "@/components/location/UserLocationProvider";
 import { EventProvider } from "@/context/EventContext";
 import { EventUrlSync } from "@/context/EventUrlSync";
+import { PWAInstallPrompt } from "@/components/pwa/install-prompt";
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -24,6 +25,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
         {children}
       </div>
       <Toaster richColors />
+      {!isAdminRoute && <PWAInstallPrompt />}
     </EventProvider>
   );
 }

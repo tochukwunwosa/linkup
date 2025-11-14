@@ -44,10 +44,25 @@ Tech Linkup is a Next.js 15 application for discovering and managing tech events
 - **react-intersection-observer** (infinite scroll)
 - **@tanstack/react-table** (data tables in admin)
 
+### Email & Notifications
+- **Resend** (transactional email service)
+  - resend package for sending emails
+  - Server-side only (secure)
+  - Free tier: 100 emails/day, 3,000/month
+- **React Email** (email template builder)
+  - react-email and @react-email/components
+  - Type-safe email templates in React/TypeScript
+  - Live preview during development
+- Email templates: lib/email/templates/
+  - AdminNotificationEmail.tsx
+  - OrganizerApprovedEmail.tsx
+  - OrganizerRejectedEmail.tsx
+
 ### External APIs
 - **OpenCage Geocoding API** - Convert addresses to lat/lng and city/country
 - **Google Maps API** - For location features (configured but usage TBD)
 - **Umami Analytics** - Privacy-focused analytics
+- **Resend API** - Transactional email delivery
 
 ### Development Tools
 - **ESLint** with Next.js config
@@ -108,6 +123,12 @@ linkup/
 │
 ├── lib/                          # Utility libraries
 │   ├── supabase/                 # Supabase client setup
+│   ├── email/                    # Email service & templates
+│   │   ├── emailService.ts       # Resend email service
+│   │   └── templates/            # React Email templates
+│   │       ├── AdminNotificationEmail.tsx
+│   │       ├── OrganizerApprovedEmail.tsx
+│   │       └── OrganizerRejectedEmail.tsx
 │   ├── validations/              # Zod schemas
 │   ├── geocode/                  # Geocoding utilities
 │   ├── rate-limit.ts             # In-memory rate limiting
@@ -120,6 +141,8 @@ linkup/
 ├── sql/                          # SQL schemas
 ├── supabase/migrations/          # Database migrations
 ├── public/assets/                # Static assets
+├── claude-notes/                 # Claude-generated documentation
+│   └── RESEND_SETUP.md           # Resend email setup guide
 ├── middleware.ts                 # Next.js middleware (auth)
 ├── next.config.ts                # Next.js configuration
 ├── components.json               # shadcn/ui configuration
@@ -446,8 +469,114 @@ const { events, observerRef, hasMore, loading } = useInfiniteScrollEvents({ filt
 - getAllActiveEvents.ts: Get all events (admin view)
 - getPaginatedFilteredEvents.ts: Paginated filtered events (public + admin)
 
+**Submission Actions**:
+- submitEvent.ts: Public event submission (with email notifications to admins)
+- approveSubmission.ts: Approve submission (with email notification to organizer)
+- rejectSubmission.ts: Reject submission (with email notification to organizer)
+- getAllSubmissions.ts: Get all submissions (admin view)
+- getSubmissionsByEmail.ts: Get submissions by organizer email
+
 **Cron Actions**:
 - updateEventGeolocations.ts: Batch geocode events
+
+
+## Email Notification System
+
+Tech Linkup uses **Resend** with **React Email** templates for transactional email notifications.
+
+### Email Service Architecture
+
+**Location**: `lib/email/`
+- `emailService.ts` - Main email service using Resend API
+- `templates/` - React Email template components
+
+### Email Templates (React Email)
+
+All email templates are built with React Email for type safety and better developer experience:
+
+**1. AdminNotificationEmail** (`lib/email/templates/AdminNotificationEmail.tsx`)
+- **Purpose**: Notify all admins when a new event is submitted
+- **Trigger**: On public event submission (`submitEvent.ts:87-115`)
+- **Sent to**: All admin emails from database
+- **Includes**: Event details, organizer info, tracking ID, review link
+- **Style**: Purple gradient header
+
+**2. OrganizerApprovedEmail** (`lib/email/templates/OrganizerApprovedEmail.tsx`)
+- **Purpose**: Confirm event approval to organizer
+- **Trigger**: When admin approves submission (`approveSubmission.ts:116-135`)
+- **Sent to**: Organizer email
+- **Includes**: Event details, tracking ID, live event URL
+- **Style**: Green gradient with 🎉 emoji
+
+**3. OrganizerRejectedEmail** (`lib/email/templates/OrganizerRejectedEmail.tsx`)
+- **Purpose**: Notify organizer of rejection with feedback
+- **Trigger**: When admin rejects submission (`rejectSubmission.ts:80-94`)
+- **Sent to**: Organizer email
+- **Includes**: Event details, tracking ID, admin feedback, resubmit link
+- **Style**: Amber gradient
+
+### Email Flow
+
+```
+New Event Submitted → Admins receive AdminNotificationEmail
+        ↓
+Admin Reviews Submission
+        ↓
+    Approve → Organizer receives OrganizerApprovedEmail
+       OR
+    Reject → Organizer receives OrganizerRejectedEmail
+```
+
+### Email Service Functions
+
+**Location**: `lib/email/emailService.ts`
+
+```typescript
+// Send admin notification
+sendAdminNotification(params: AdminNotificationParams): Promise<boolean>
+
+// Send organizer approval notification
+sendOrganizerApprovedNotification(params: OrganizerApprovedParams): Promise<boolean>
+
+// Send organizer rejection notification
+sendOrganizerRejectedNotification(params: OrganizerRejectedParams): Promise<boolean>
+
+// Get all admin emails from database
+getAdminEmails(supabase: any): Promise<string[]>
+```
+
+### Email Configuration
+
+**Environment Variables**:
+```env
+RESEND_API_KEY=re_your_api_key_here
+REPLY_TO_EMAIL=your-email@example.com  # Optional
+```
+
+**Sending Domain**:
+- Default: `Tech Linkup <onboarding@resend.dev>` (Resend's default domain)
+- Custom domain can be configured in Resend dashboard (optional)
+
+**Rate Limits**:
+- Resend free tier: 100 emails/day, 3,000/month
+- Email sending is non-blocking (won't fail submission if email fails)
+
+### Email Template Features
+
+- **Type-safe**: Full TypeScript support with props
+- **Responsive**: Mobile and desktop optimized
+- **Brand colors**: Gradient headers, card layouts
+- **Email client compatible**: Works in Gmail, Outlook, Apple Mail, etc.
+- **Preview locally**: Use React Email dev server to preview
+
+### Setup Guide
+
+See `claude-notes/RESEND_SETUP.md` for complete setup instructions including:
+- Creating Resend account
+- Getting API key
+- Environment variable configuration
+- Testing email notifications
+- Customizing templates
 
 
 ## Security Implementation
@@ -511,6 +640,10 @@ NEXT_PUBLIC_SITE_URL=
 
 # Geocoding
 OPENCAGE_API_KEY=
+
+# Email Notifications (Resend)
+RESEND_API_KEY=  # Get from https://resend.com
+REPLY_TO_EMAIL=  # Optional: Custom reply-to email address
 
 # Future use
 GOOGLE_MAPS_API_KEY=
@@ -836,6 +969,13 @@ npm update               # Update packages
 - README.md - User-facing documentation
 - SECURITY_FIXES.md - Security implementation details
 - .env.example - Environment variables reference
+- claude-notes/RESEND_SETUP.md - Email notification setup guide
+
+### Claude-Generated Documentation Convention
+All Claude-generated technical documentation and setup guides should be placed in the `claude-notes/` directory. This keeps the project root clean while providing detailed implementation guides for developers.
+
+**Current Claude Notes:**
+- `claude-notes/RESEND_SETUP.md` - Complete Resend + React Email setup guide
 
 ### External APIs
 - OpenCage Geocoding: https://opencagedata.com/api
@@ -850,6 +990,12 @@ npm update               # Update packages
 
 ---
 
-**Last Updated**: 2025-11-13
-**Document Version**: 1.0
+**Last Updated**: 2025-01-14
+**Document Version**: 1.1
 **Maintained By**: Claude Code instances working on Tech Linkup
+
+**Recent Updates**:
+- Added Email Notification System (Resend + React Email)
+- Added claude-notes/ directory convention
+- Updated environment variables with RESEND_API_KEY
+- CLAUDE.md

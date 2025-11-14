@@ -2,13 +2,14 @@ import type React from "react"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import ClientLayout from "./client-layout"
-import { siteConfig } from "@/lib/metadata"
+import { siteConfig, viewport as siteViewport } from "@/lib/metadata"
 import "./globals.css"
 import Script from "next/script"
 
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = siteConfig
+export const viewport = siteViewport
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

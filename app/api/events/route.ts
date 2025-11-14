@@ -18,11 +18,25 @@ export async function GET(req: Request) {
     country: searchParams.get("country") || "",
   };
 
-  const { data, hasMore } = await getPaginatedFilteredEvents({
+  // Extract user location from query params
+  const lat = searchParams.get("lat");
+  const lng = searchParams.get("lng");
+  const userLocationCity = searchParams.get("userCity");
+  const userLocationCountry = searchParams.get("userCountry");
+
+  const userLocation = lat && lng ? {
+    lat: parseFloat(lat),
+    lng: parseFloat(lng),
+    city: userLocationCity || undefined,
+    country: userLocationCountry || undefined,
+  } : null;
+
+  const { data, hasMore, total } = await getPaginatedFilteredEvents({
     page,
     limit,
     filters,
+    userLocation,
   });
 
-  return Response.json({ data, hasMore });
+  return Response.json({ data, hasMore, total });
 }

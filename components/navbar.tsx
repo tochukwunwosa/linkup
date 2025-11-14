@@ -1,34 +1,90 @@
-import React from 'react'
-import Link from 'next/link'
-// import Image from 'next/image'
+"use client";
+
+import React, { useState } from 'react';
+import Link from 'next/link';
+import { Button } from './ui/button';
+import { Menu, X, Plus } from 'lucide-react';
+import { Sheet, SheetContent, SheetTrigger } from './ui/sheet';
 
 export default function Navbar() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const navLinks = [
+    { href: "/#events", label: "Events" },
+    { href: "/my-submissions", label: "Track Submissions" },
+  ];
+
   return (
-    <header className="bg-white border-gray-200 shadow-sm">
+    <header className="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
+          {/* Logo */}
           <div className="flex items-center">
-            <Link href="/" className="w-24 font-bold text-primary">
-              {/* <Image src={'/assets/logo/linkup-logo-80x35.svg'} width={177} height={72} alt='LinkUp logo.' priority/> */}
-              <span>LinkUp</span>
+            <Link href="/" className="font-bold text-xl text-primary">
+              Tech LinkUp
             </Link>
           </div>
-          <nav className="hidden md:flex space-x-8">
-            <Link href="#events" className="hover:text-primary font-medium  transition-colors duration-300 ease-in-out">
-              Events
-            </Link>
-            {/* <Link href="#submit" className="hover:text-primary font-medium">
-              Submit
-            </Link> */}
-            <Link href="/" className="hover:text-primary font-medium  transition-colors duration-300 ease-in-out">
-              About
-            </Link>
+
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex items-center space-x-6">
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="hover:text-primary font-medium transition-colors duration-300 ease-in-out"
+              >
+                {link.label}
+              </Link>
+            ))}
+            <Button asChild className="ml-2">
+              <Link href="/submit-event">
+                <Plus className="mr-2 h-4 w-4" />
+                Submit Event
+              </Link>
+            </Button>
           </nav>
-          {/* <BackgroundSlideButton onClick={() => { window.location.href = "/login" }} className={cn("shadow-none w-fit px-4 border h-10 bg-background rounded-md flex items-center justify-center cursor-pointer text-primary")}>
-            Login
-          </BackgroundSlideButton> */}
+
+          {/* Mobile Navigation */}
+          <div className="md:hidden flex items-center gap-2">
+            <Button asChild size="sm" className="text-xs">
+              <Link href="/submit-event">
+                <Plus className="mr-1 h-3 w-3" />
+                Submit
+              </Link>
+            </Button>
+
+            <Sheet open={isOpen} onOpenChange={setIsOpen}>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon" className="md:hidden">
+                  {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-[250px]">
+                <nav className="flex flex-col space-y-4 mt-8">
+                  {navLinks.map((link) => (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      className="text-lg font-medium hover:text-primary transition-colors"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
+                  <div className="pt-4 border-t">
+                    <Button asChild className="w-full">
+                      <Link href="/submit-event" onClick={() => setIsOpen(false)}>
+                        <Plus className="mr-2 h-4 w-4" />
+                        Submit Event
+                      </Link>
+                    </Button>
+                  </div>
+                </nav>
+              </SheetContent>
+            </Sheet>
+          </div>
         </div>
       </div>
     </header>
-  )
+  );
 }

@@ -79,6 +79,13 @@ export default function useInfiniteScrollEvents({ filters }: { filters: any }) {
         if (userLocation?.lat && userLocation?.lng) {
           params.set("lat", userLocation.lat.toString());
           params.set("lng", userLocation.lng.toString());
+          // Also send city and country for better matching
+          if (userLocation.city) {
+            params.set("userCity", userLocation.city);
+          }
+          if (userLocation.country) {
+            params.set("userCountry", userLocation.country);
+          }
         }
         if (filters.date && filters.date !== "all") {
           params.set("date", filters.date);

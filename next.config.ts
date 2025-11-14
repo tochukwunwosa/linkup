@@ -1,6 +1,22 @@
 import type { NextConfig } from "next";
+import withPWAInit from "@ducanh2912/next-pwa";
+
+const withPWA = withPWAInit({
+  dest: "public",
+  cacheOnFrontEndNav: true,
+  aggressiveFrontEndNavCaching: true,
+  reloadOnOnline: true,
+  disable: process.env.NODE_ENV === "development",
+  workboxOptions: {
+    disableDevLogs: true,
+  },
+});
 
 const nextConfig: NextConfig = {
+  // Explicitly set Turbopack root to silence warning about multiple lockfiles
+  turbopack: {
+    root: __dirname,
+  },
   images: {
     remotePatterns: [new URL("https://res.cloudinary.com/**")],
   },
@@ -15,10 +31,6 @@ const nextConfig: NextConfig = {
     // OPENROUTER_API_KEY: process.env.OPENROUTER_API_KEY,
     // NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
     // NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET: process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET,
-    // RESEND_API_KEY: process.env.RESEND_API_KEY,
-    // NEXT_PUBLIC_EMAILJS_SERVICE_ID: process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID,
-    // NEXT_PUBLIC_EMAILJS_TEMPLATE_ID: process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID,
-    // NEXT_PUBLIC_EMAILJS_PUBLIC_KEY: process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY,
     // CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET,
     // NEXT_PUBLIC_CLOUDINARY_API_KEY: process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY,
   },
@@ -99,4 +111,4 @@ requiredEnvVars.forEach((key) => {
   }
 });
 
-export default { ...nextConfig };
+export default withPWA(nextConfig);

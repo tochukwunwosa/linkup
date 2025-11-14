@@ -70,7 +70,7 @@ export const eventFormSchema = z.object({
   }
 });
 
-// API schema - uses string dates for server actions
+// API schema 
 export const eventSchema = z.object({
   id: z.string().optional(),
   title: z.string(),
@@ -116,4 +116,112 @@ export type Event = {
   lat: number,
   lng: number
 };
+
+// Event Submission Schemas
+export const eventSubmissionFormSchema = z.object({
+  // Event details
+  title: z.string().min(1, "Event title is required").min(3, "Event title must be at least 3 characters"),
+  start_date: z.date({
+    required_error: "Start date is required",
+    invalid_type_error: "Please select a valid start date"
+  }),
+  end_date: z.date({
+    required_error: "End date is required",
+    invalid_type_error: "Please select a valid end date"
+  }).optional(),
+  location: z.string().min(1, "Location is required").min(3, "Location must be at least 3 characters"),
+  time: z.string().min(1, "Event time is required"),
+  type: z.enum(["Online", "In-person", "In-person & Online"], {
+    errorMap: () => ({ message: "Please select a valid event type" })
+  }),
+  category: z.array(z.string()).min(1, "At least one category is required"),
+  price: z.string().optional(),
+  currency: z.string().optional(),
+  price_amount: z.string().optional(),
+  description: z.string().min(1, "Description is required").min(10, "Description must be at least 10 characters"),
+  link: z.string().url("Please enter a valid URL").optional().or(z.literal("")),
+  lat: z.number({
+    required_error: "Please select a valid location from the dropdown",
+    invalid_type_error: "Please select a valid location from the dropdown"
+  }),
+  lng: z.number({
+    required_error: "Please select a valid location from the dropdown",
+    invalid_type_error: "Please select a valid location from the dropdown"
+  }),
+
+  // Organizer information
+  organizer_name: z.string().min(1, "Your name is required").min(2, "Name must be at least 2 characters"),
+  organizer_email: z.string().min(1, "Email is required").email("Please enter a valid email address"),
+  organizer_phone: z.string().optional(),
+  organizer_organization: z.string().optional(),
+}).superRefine((data, ctx) => {
+  // Validate that a valid location was selected (lat/lng are not 0)
+  if (data.lat === 0 || data.lng === 0) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "Please select a valid location from the dropdown suggestions",
+      path: ["location"]
+    });
+  }
+
+  // Validate that paid events have a price amount
+  if (data.price === "Paid" && (!data.price_amount || data.price_amount.trim() === "")) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "Price amount is required for paid events",
+      path: ["price_amount"]
+    });
+  }
+
+  // Validate that price amount is a valid number if provided
+  if (data.price === "Paid" && data.price_amount && isNaN(Number(data.price_amount))) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "Price amount must be a valid number",
+      path: ["price_amount"]
+    });
+  }
+
+  // Validate that price amount is positive
+  if (data.price === "Paid" && data.price_amount && Number(data.price_amount) <= 0) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "Price amount must be greater than 0",
+      path: ["price_amount"]
+    });
+  }
+});
+
+export type EventSubmissionFormData = z.infer<typeof eventSubmissionFormSchema>;
+
+export type SubmissionStatus = "pending" | "approved" | "rejected";
+
+
+export type SubmissionMetadata = {
+  submission_status: SubmissionStatus;
+  admin_feedback?: string;
+  reviewed_by?: string;
+  reviewed_at?: string;
+  published_event_id?: number;
+  submitted_at: string;
+  updated_at: string;
+};
+
+
+export type OrganizerInfo = {
+  organizer_name: string;
+  organizer_email: string;
+  organizer_phone?: string;
+  organizer_organization?: string;
+};
+
+
+
+export type EventSubmission = {
+  id: string;
+  tracking_id: string;
+} & Event &
+  OrganizerInfo &
+  SubmissionMetadata;
+
 

@@ -1,10 +1,23 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 
 const APP_NAME = "LinkUp";
 const APP_DEFAULT_TITLE = "LinkUp";
 const APP_TITLE_TEMPLATE = "%s | LinkUp";
 const APP_DESCRIPTION =
   "LinkUp is your ultimate platform for discovering and connecting with tech events happening around you.";
+
+// Viewport configuration (required by Next.js 15+)
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+  viewportFit: "cover",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#0066cc" },
+    { media: "(prefers-color-scheme: dark)", color: "#0066cc" },
+  ],
+};
 
 export const siteConfig: Metadata = {
   metadataBase: new URL(
@@ -16,9 +29,10 @@ export const siteConfig: Metadata = {
     template: APP_TITLE_TEMPLATE,
   },
   description: APP_DESCRIPTION,
+  manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
-    statusBarStyle: "default",
+    statusBarStyle: "black-translucent",
     title: APP_DEFAULT_TITLE,
     // startUpImage: [],
   },
