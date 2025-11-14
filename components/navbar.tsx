@@ -45,7 +45,7 @@ export default function Navbar() {
           </nav>
 
           {/* Mobile Navigation */}
-          <div className="md:hidden flex items-center gap-2">
+          <div className="md:hidden flex items-center gap-4">
             <Button asChild size="sm" className="text-xs">
               <Link href="/submit-event">
                 <Plus className="mr-1 h-3 w-3" />
@@ -56,11 +56,11 @@ export default function Navbar() {
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
               <SheetTrigger asChild>
                 <Button variant="ghost" size="icon" className="md:hidden">
-                  {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+                  {isOpen ? <X  /> : <Menu  />}
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-[250px]">
-                <nav className="flex flex-col space-y-4 mt-8">
+              <SheetContent side="right" className="w-[250px] p-4">
+                <nav className="flex flex-col space-y-4 mt-10">
                   {navLinks.map((link) => (
                     <Link
                       key={link.href}

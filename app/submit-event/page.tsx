@@ -106,7 +106,7 @@ export default function SubmitEventPage() {
         <CardHeader>
           <CardTitle>Event Information</CardTitle>
           <CardDescription>
-            Fill out the form below to submit your event for review. All fields marked with * are required.
+            Fill out the form below to submit your event for review. All fields marked with <span className='text-destructive'>*</span> are required.
           </CardDescription>
         </CardHeader>
         <CardContent>

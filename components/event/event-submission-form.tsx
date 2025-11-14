@@ -128,46 +128,45 @@ export function EventSubmissionForm({ onSuccess }: EventSubmissionFormProps) {
             )}
           />
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
-              <FormField
-                control={form.control}
-                name="start_date"
-                render={({ field }) => (
-                  <FormItem>
-                    <DatePicker
-                      label="Start Date"
-                      date={field.value}
-                      required
-                      onChange={(date) => {
-                        if (date) {
-                          field.onChange(date);
-                        }
-                      }}
-                    />
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="end_date"
-                render={({ field }) => (
-                  <FormItem>
-                    <DatePicker
-                      label="End Date"
-                      date={field.value}
-                      onChange={(date) => {
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-start">
+            <FormField
+              control={form.control}
+              name="start_date"
+              render={({ field }) => (
+                <FormItem>
+                  <DatePicker
+                    label="Start Date"
+                    date={field.value}
+                    required
+                    onChange={(date) => {
+                      if (date) {
                         field.onChange(date);
-                      }}
-                      minDate={form.watch("start_date")}
-                    />
-                    <FormDescription className="text-xs">Leave blank for single-day events</FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+                      }
+                    }}
+                  />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="end_date"
+              render={({ field }) => (
+                <FormItem>
+                  <DatePicker
+                    label="End Date"
+                    date={field.value}
+                    onChange={(date) => {
+                      field.onChange(date);
+                    }}
+                    minDate={form.watch("start_date")}
+                  />
+                  <FormDescription className="text-xs">Leave blank for single-day events</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
             <FormField
               control={form.control}

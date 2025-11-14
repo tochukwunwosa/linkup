@@ -72,16 +72,16 @@ export default function AddressAutocomplete({ value, onChange, onSelect }: Props
         onChange={(e) => onChange(e.target.value)}
       />
       {isLoading && (
-        <div className="absolute z-10 mt-1 bg-white border rounded shadow w-full text-sm px-3 py-2 text-gray-500">
+        <div className="absolute z-10 mt-1 bg-white dark:bg-gray-950 border-2 border-gray-200 dark:border-gray-800 rounded-md shadow-lg w-full text-sm px-3 py-2 text-gray-500 dark:text-gray-400">
           Loading...
         </div>
       )}
       {!isLoading && suggestions.length > 0 && (
-        <ul className="absolute z-10 mt-1 bg-white border rounded shadow w-full text-sm">
+        <ul className="absolute z-10 mt-1 bg-white dark:bg-gray-950 border-2 border-gray-200 dark:border-gray-800 rounded-md shadow-lg w-full text-sm">
           {suggestions.map((s, idx) => (
             <li
               key={idx}
-              className="px-3 py-2 cursor-pointer hover:bg-gray-100"
+              className="px-3 py-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
               onClick={() => handleSelect(s)}
             >
               {s.name}
