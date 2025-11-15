@@ -37,10 +37,10 @@ export default function ContactPage() {
           </CardHeader>
           <CardContent>
             <a
-              href="mailto:tochukwunwosa@gmail.com"
+              href="mailto:tochukwunwosa28@gmail.com"
               className="text-blue-600 hover:underline font-medium"
             >
-              tochukwunwosa@gmail.com
+              tochukwunwosa28@gmail.com
             </a>
           </CardContent>
         </Card>
@@ -60,10 +60,10 @@ export default function ContactPage() {
           </CardHeader>
           <CardContent>
             <a
-              href="mailto:tochukwunwosa@gmail.com"
+              href="mailto:tochukwunwosa28@gmail.com"
               className="text-blue-600 hover:underline font-medium"
             >
-              tochukwunwosa@gmail.com
+              tochukwunwosa28@gmail.com
             </a>
           </CardContent>
         </Card>

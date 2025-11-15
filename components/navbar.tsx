@@ -10,6 +10,8 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
   const navLinks = [
+    { href: "/about", label: "About" },
+    { href: "/contact", label: "Contact" },
     { href: "/#events", label: "Events" },
     { href: "/my-submissions", label: "Track Submissions" },
   ];
@@ -56,7 +58,7 @@ export default function Navbar() {
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
               <SheetTrigger asChild>
                 <Button variant="ghost" size="icon" className="md:hidden">
-                  {isOpen ? <X  /> : <Menu  />}
+                  {isOpen ? <X /> : <Menu />}
                 </Button>
               </SheetTrigger>
               <SheetContent side="right" className="w-[250px] p-4">

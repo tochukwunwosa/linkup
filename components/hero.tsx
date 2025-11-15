@@ -88,14 +88,14 @@ export default function Hero() {
         </div>
 
         {/* Main Heading */}
-        <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold leading-tight mb-6 text-white animate-fade-in-up">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6 text-white animate-fade-in-up">
           Discover Tech Events
           <br />
           Built by the Community
         </h1>
 
         {/* Subheading */}
-        <p className="text-base sm:text-lg text-gray-200 mb-10 max-w-2xl mx-auto animate-fade-in-up delay-200">
+        <p className="text-sm sm:text-base md:text-lg text-gray-200 mb-10 max-w-2xl mx-auto animate-fade-in-up delay-200">
           Join thousands of tech enthusiasts discovering conferences, meetups,
           and workshops across Nigeria.
         </p>
