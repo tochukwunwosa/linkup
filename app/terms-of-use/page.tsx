@@ -1,8 +1,17 @@
 import React from "react";
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export default function TermsOfUsePage() {
   return (
     <main className="max-w-3xl mx-auto px-4 py-12 text-base leading-relaxed text-gray-800">
+      <Link href="/">
+        <Button variant="ghost" className="mb-6 -ml-4">
+          <ArrowLeft className="mr-2 h-4 w-4" />
+          Back to Home
+        </Button>
+      </Link>
       <h1 className="text-3xl font-bold mb-6">Terms of Use</h1>
       <p className="text-sm text-gray-500 mb-8">
         Effective: June 2025 · Last Updated: June 25, 2025

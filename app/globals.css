@@ -62,7 +62,7 @@
   --accent: #e6f7ff;
   --accent-foreground: #0c4a6e;
   --destructive: #e11d48;
-  --border: #e2e8f0;
+  --border: #cfd1d4;
   --input: #c5c5c7;
   --ring: #3b82f6;
   --chart-1: #0066cc;
@@ -102,5 +102,45 @@
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Hero Section Animations */
+.animate-fade-in {
+  animation: fadeIn 0.8s ease-out forwards;
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.8s ease-out forwards;
+  opacity: 0;
+}
+
+/* Animation Delays */
+.delay-200 {
+  animation-delay: 200ms;
+}
+
+.delay-300 {
+  animation-delay: 300ms;
+}
+
+.delay-400 {
+  animation-delay: 400ms;
+}
+
+.delay-500 {
+  animation-delay: 500ms;
+}
+
+.delay-700 {
+  animation-delay: 700ms;
 }
 

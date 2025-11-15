@@ -13,18 +13,18 @@ export default function Footer() {
               <span>LinkUp</span>
             </Link>
             <p className="text-muted-foreground text-xs mt-px">
-              Discover tech events near you
+              Community-driven tech event discovery
             </p>
           </div>
           <nav className="flex flex-wrap gap-4 text-sm text-muted-foreground">
             <Link
-              href="#about"
+              href="/about"
               className="hover:text-primary transition-colors duration-300 ease-in-out"
             >
               About
             </Link>
             <Link
-              href="#contact"
+              href="/contact"
               className="hover:text-primary transition-colors duration-300 ease-in-out"
             >
               Contact

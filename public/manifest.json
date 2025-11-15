@@ -1,7 +1,7 @@
 {
-  "name": "Tech LinkUp - Nigerian Tech Events",
-  "short_name": "Tech LinkUp",
-  "description": "Discover and manage tech events across Nigeria. Find conferences, meetups, workshops, and hackathons in your area.",
+  "name": "LinkUp - Community-Driven Tech Event Discovery",
+  "short_name": "LinkUp",
+  "description": "Discover and connect with tech events across Nigeria through our community-driven platform. Join thousands of tech enthusiasts finding conferences, meetups, workshops, and networking events submitted by the community.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
