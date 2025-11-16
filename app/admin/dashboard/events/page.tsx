@@ -113,7 +113,7 @@ export default function AdminEventsPage() {
         <EventsTable
           events={events}
           onEdit={handleEditEvent}
-            onDelete={handleOpenDeleteEventDialog}
+          onDelete={handleOpenDeleteEventDialog}
         />
       )}
 

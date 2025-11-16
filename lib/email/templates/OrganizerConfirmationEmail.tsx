@@ -26,7 +26,6 @@ export const OrganizerConfirmationEmail = ({
   eventTitle = "Lagos Tech Summit 2025",
   eventDate = "December 15, 2025",
   eventLocation = "Lagos, Nigeria",
-  eventWebsite,
   trackingId = "EVT-A1B2C3D4",
   trackingUrl = "https://tech-linkup.vercel.app/my-submissions",
 }: OrganizerConfirmationEmailProps) => {

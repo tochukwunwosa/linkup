@@ -12,7 +12,7 @@ import OrganizerConfirmationEmail from "./templates/OrganizerConfirmationEmail";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 const FROM_EMAIL = "Tech Linkup <onboarding@resend.dev>"; // Using Resend's default domain
-const REPLY_TO = process.env.REPLY_TO_EMAIL || "noreply@tech-linkup.vercel.app";
+const REPLY_TO = process.env.REPLY_TO_EMAIL || "tochukwunwosa28@gmail.com";
 
 export interface AdminNotificationParams {
   eventTitle: string;
