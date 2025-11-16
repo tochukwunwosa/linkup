@@ -92,7 +92,6 @@ const APP_KEYWORDS = [
   "Gusau tech events",
 ];
 
-
 // Viewport configuration (required by Next.js 15+)
 export const viewport: Viewport = {
   width: "device-width",
