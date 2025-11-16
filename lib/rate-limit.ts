@@ -9,8 +9,8 @@ interface RateLimitEntry {
 const rateLimitStore = new Map<string, RateLimitEntry>();
 
 export interface RateLimitConfig {
-  maxRequests: number;  // Maximum requests allowed
-  windowMs: number;     // Time window in milliseconds
+  maxRequests: number;  
+  windowMs: number;    
 }
 
 /**

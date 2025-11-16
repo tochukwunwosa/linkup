@@ -10,41 +10,39 @@ type Props = {
   onSelect: (address: string, lat: number, lng: number) => void
 }
 
-type PhotonFeature = {
-  properties: {
-    name: string
-    city?: string
-    country?: string
-  }
-  geometry: {
-    coordinates: [number, number] // [lon, lat]
-  }
+type Suggestion = {
+  name: string
+  lat: number
+  lng: number
+  city: string
+  country: string
 }
 
 export default function AddressAutocomplete({ value, onChange, onSelect }: Props) {
-  const [suggestions, setSuggestions] = useState<{ name: string; lat: number; lon: number }[]>([])
+  const [suggestions, setSuggestions] = useState<Suggestion[]>([])
   const [isLoading, setIsLoading] = useState(false)
 
   const fetchSuggestions = async (query: string) => {
-    if (!query || query.length < 3) return
+    if (!query || query.length < 3) {
+      setSuggestions([])
+      return
+    }
 
     setIsLoading(true)
     try {
-      const res = await axios.get("https://photon.komoot.io/api/", {
-        params: { q: query, limit: 5 },
+      const res = await axios.post("/api/geocode", {
+        address: query,
+        autocomplete: true,
       })
 
-      const features: PhotonFeature[] = res.data.features
-
-      const results = features.map((f) => ({
-        name: `${f.properties.name}, ${f.properties.city ?? f.properties.country ?? ""}`,
-        lat: f.geometry.coordinates[1],
-        lon: f.geometry.coordinates[0],
-      }))
-
-      setSuggestions(results)
+      if (res.data.suggestions) {
+        setSuggestions(res.data.suggestions)
+      } else {
+        setSuggestions([])
+      }
     } catch (error) {
       console.error("Error fetching address suggestions:", error)
+      setSuggestions([])
     } finally {
       setIsLoading(false)
     }
@@ -58,9 +56,9 @@ export default function AddressAutocomplete({ value, onChange, onSelect }: Props
     return () => clearTimeout(timer)
   }, [value])
 
-  const handleSelect = (item: { name: string; lat: number; lon: number }) => {
+  const handleSelect = (item: Suggestion) => {
     onChange(item.name)
-    onSelect(item.name, item.lat, item.lon)
+    onSelect(item.name, item.lat, item.lng)
     setSuggestions([])
   }
 

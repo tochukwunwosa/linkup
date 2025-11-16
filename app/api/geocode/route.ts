@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const { lat, lng, address } = await req.json();
+  const { lat, lng, address, autocomplete } = await req.json();
 
   if (!OPENCAGE_API_KEY) {
     return NextResponse.json({ error: "Missing API key" }, { status: 500 });
@@ -39,10 +39,29 @@ export async function POST(req: NextRequest) {
     try {
       const url = `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(
         address
-      )}&key=${OPENCAGE_API_KEY}&language=en`;
+      )}&key=${OPENCAGE_API_KEY}&language=en&limit=${autocomplete ? 5 : 1}`;
 
       const { data } = await axios.get(url);
 
+      // If autocomplete is requested, return multiple suggestions
+      if (autocomplete) {
+        const suggestions = data.results?.map((result: any) => {
+          const components = result.components || {};
+          const geometry = result.geometry || {};
+
+          return {
+            name: result.formatted || address,
+            lat: geometry.lat,
+            lng: geometry.lng,
+            city: components.city || components.town || components.village || components.hamlet || "",
+            country: components.country || "",
+          };
+        }) || [];
+
+        return NextResponse.json({ suggestions });
+      }
+
+      // Single result for non-autocomplete requests
       const components = data.results[0]?.components || {};
       const city =
         components.city ||
