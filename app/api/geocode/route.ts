@@ -4,6 +4,25 @@ import { rateLimit, getClientIp } from "@/lib/rate-limit";
 
 const OPENCAGE_API_KEY = process.env.OPENCAGE_API_KEY;
 
+interface OpenCageComponents {
+  city?: string;
+  town?: string;
+  village?: string;
+  hamlet?: string;
+  country?: string;
+}
+
+interface OpenCageGeometry {
+  lat: number;
+  lng: number;
+}
+
+interface OpenCageResult {
+  formatted: string;
+  components: OpenCageComponents;
+  geometry: OpenCageGeometry;
+}
+
 export async function POST(req: NextRequest) {
   // Rate limiting: 20 requests per IP per minute to prevent API abuse
   const clientIp = getClientIp(req);
@@ -45,7 +64,7 @@ export async function POST(req: NextRequest) {
 
       // If autocomplete is requested, return multiple suggestions
       if (autocomplete) {
-        const suggestions = data.results?.map((result: any) => {
+        const suggestions = data.results?.map((result: OpenCageResult) => {
           const components = result.components || {};
           const geometry = result.geometry || {};
 
