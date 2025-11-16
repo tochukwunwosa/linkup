@@ -7,7 +7,7 @@ import { createClient } from "@/lib/supabase/server";
  */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const siteUrl =
-    process.env.NEXT_PUBLIC_APP_URL || "https://techup-linkup.vercel.app";
+    process.env.NEXT_PUBLIC_APP_URL || "https://tech-linkup.vercel.app";
 
   // Static pages
   const staticPages: MetadataRoute.Sitemap = [

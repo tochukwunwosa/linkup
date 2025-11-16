@@ -6,7 +6,7 @@ import { revalidatePath } from "next/cache";
 import { serverGeocodeAddress } from "@/lib/geocode/geocode-server";
 import { headers } from "next/headers";
 import { rateLimit } from "@/lib/rate-limit";
-import { sendAdminNotification, getAdminEmails } from "@/lib/email/emailService";
+import { sendAdminNotification, getAdminEmails, sendOrganizerConfirmation } from "@/lib/email/emailService";
 
 export async function submitEventAction(formData: unknown) {
   try {
@@ -84,16 +84,32 @@ export async function submitEventAction(formData: unknown) {
     // Revalidate admin submissions page
     revalidatePath("/admin/dashboard/submissions");
 
-    // Send email notification to admins (async, don't block the response)
+    // Send email notifications (async, don't block the response)
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://tech-linkup.vercel.app";
+    const eventDate = new Date(data.start_date).toLocaleDateString("en-US", {
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    });
+
+    // Send confirmation email to organizer
+    sendOrganizerConfirmation({
+      organizerName: data.organizer_name,
+      organizerEmail: data.organizer_email,
+      eventTitle: data.title,
+      eventDate,
+      eventLocation: data.location,
+      trackingId: submission.tracking_id,
+      trackingUrl: `${siteUrl}/my-submissions`,
+    }).catch((error) => {
+      console.error("Failed to send organizer confirmation:", error);
+      // Don't fail the submission if email fails
+    });
+
+    // Send notification to admins
     getAdminEmails(supabase).then(async (adminEmails) => {
       if (adminEmails.length > 0) {
-        const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://techup-linkup.vercel.app";
         const submissionUrl = `${siteUrl}/admin/dashboard/submissions`;
-        const eventDate = new Date(data.start_date).toLocaleDateString("en-US", {
-          month: "long",
-          day: "numeric",
-          year: "numeric",
-        });
 
         // Send notification to all admins
         for (const adminEmail of adminEmails) {
@@ -102,6 +118,7 @@ export async function submitEventAction(formData: unknown) {
             organizerName: data.organizer_name,
             organizerEmail: data.organizer_email,
             eventDate,
+            eventWebsite: data.link,
             eventLocation: data.location,
             trackingId: submission.tracking_id,
             submissionUrl,

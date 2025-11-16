@@ -11,7 +11,7 @@ import { generateBreadcrumbSchema } from "@/lib/structured-data"
 export default function LinkUpLanding() {
   // Generate breadcrumb schema for homepage
   const siteUrl =
-    process.env.NEXT_PUBLIC_APP_URL || "https://techup-linkup.vercel.app"
+    process.env.NEXT_PUBLIC_APP_URL || "https://tech-linkup.vercel.app"
 
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: "Home", url: siteUrl },

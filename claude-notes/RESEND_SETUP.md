@@ -11,6 +11,7 @@ Tech Linkup uses **Resend** to send three types of transactional email notificat
 3. **Organizer Rejection**: When an admin rejects an event, the organizer receives feedback
 
 **Why Resend?**
+
 - ✅ Built for transactional emails (perfect for notifications)
 - ✅ Free tier: 100 emails/day, 3,000/month
 - ✅ Server-side only (more secure than client-side solutions)
@@ -50,6 +51,7 @@ RESEND_API_KEY=re_your_actual_api_key_here
 ```
 
 **Example**:
+
 ```env
 RESEND_API_KEY=re_123abc456def789ghi012jkl345mno
 ```
@@ -82,6 +84,7 @@ npm run dev
 3. Check your admin email inbox(es) - you should receive a beautifully formatted notification
 
 **What the email includes:**
+
 - Event title, date, and location
 - Organizer name and email
 - Tracking ID
@@ -96,6 +99,7 @@ npm run dev
 5. Check the organizer's email - they should receive an approval notification
 
 **What the email includes:**
+
 - Congratulatory message with 🎉 emoji
 - Event details and tracking ID
 - Link to view the published event on the site
@@ -108,6 +112,7 @@ npm run dev
 4. Check the organizer's email - they should receive a rejection notification
 
 **What the email includes:**
+
 - Polite rejection message
 - Event details and tracking ID
 - Admin feedback (if provided)
@@ -138,6 +143,7 @@ Tech Linkup uses **React Email** to build beautiful, maintainable email template
 React Email includes a dev server to preview your templates:
 
 1. Add preview script to `package.json`:
+
    ```json
    "scripts": {
      "email:dev": "email dev"
@@ -145,6 +151,7 @@ React Email includes a dev server to preview your templates:
    ```
 
 2. Run the preview server:
+
    ```bash
    npm run email:dev
    ```
@@ -165,14 +172,15 @@ Emails are sent from: **`Tech Linkup <onboarding@resend.dev>`**
 - ✅ Perfect for getting started
 
 **Email header example:**
+
 ```
 From: Tech Linkup <onboarding@resend.dev>
-Reply-To: noreply@techup-linkup.vercel.app
+Reply-To: noreply@tech-linkup.vercel.app
 ```
 
 ### Custom Domain (Optional Upgrade)
 
-For better branding, you can send from your own domain (e.g., `noreply@techup-linkup.com`):
+For better branding, you can send from your own domain (e.g., `noreply@tech-linkup.com`):
 
 1. **Get a custom domain** (e.g., from Namecheap, GoDaddy) - ~$12/year
 2. In Resend dashboard, go to **Domains** → **Add Domain**
@@ -184,6 +192,7 @@ For better branding, you can send from your own domain (e.g., `noreply@techup-li
    ```
 
 **Benefits:**
+
 - Professional branding
 - Higher deliverability
 - Custom email address
@@ -194,18 +203,19 @@ For better branding, you can send from your own domain (e.g., `noreply@techup-li
 
 The free tier includes:
 
-| Feature | Limit |
-|---------|-------|
-| **Emails per day** | 100 |
-| **Emails per month** | 3,000 |
-| **Domains** | 1 custom domain |
-| **API Keys** | Unlimited |
-| **Team members** | 1 (you) |
-| **Email logs** | 30 days |
+| Feature              | Limit           |
+| -------------------- | --------------- |
+| **Emails per day**   | 100             |
+| **Emails per month** | 3,000           |
+| **Domains**          | 1 custom domain |
+| **API Keys**         | Unlimited       |
+| **Team members**     | 1 (you)         |
+| **Email logs**       | 30 days         |
 
 **For most use cases, this is plenty!**
 
 **When to upgrade?**
+
 - If you get more than 100 submissions/day
 - If you need team collaboration
 - If you want longer log retention
@@ -234,6 +244,7 @@ Check your server logs (Vercel logs or terminal) for:
 ```
 
 Or warnings if Resend isn't configured:
+
 ```bash
 ⚠️ Resend API key not configured. Skipping admin notification.
 ```
@@ -243,42 +254,50 @@ Or warnings if Resend isn't configured:
 ### Emails Not Sending
 
 **1. Check API Key**
-   - Verify `RESEND_API_KEY` is set in `.env.local` or Vercel environment variables
-   - Key should start with `re_`
-   - No quotes needed in `.env.local`
+
+- Verify `RESEND_API_KEY` is set in `.env.local` or Vercel environment variables
+- Key should start with `re_`
+- No quotes needed in `.env.local`
 
 **2. Check Server Logs**
-   ```bash
-   # In terminal or Vercel logs, look for:
-   Error sending admin notification: [error message]
-   ```
+
+```bash
+# In terminal or Vercel logs, look for:
+Error sending admin notification: [error message]
+```
 
 **3. Check Resend Dashboard**
-   - Go to **Logs** in Resend dashboard
-   - See if emails are being sent but bouncing
-   - Check for error messages
+
+- Go to **Logs** in Resend dashboard
+- See if emails are being sent but bouncing
+- Check for error messages
 
 **4. Restart Dev Server**
-   ```bash
-   # Stop server (Ctrl+C) then restart
-   npm run dev
-   ```
+
+```bash
+# Stop server (Ctrl+C) then restart
+npm run dev
+```
 
 ### Common Issues
 
 **"Resend API key not configured"**
+
 - Add `RESEND_API_KEY` to your `.env.local` file
 - Restart dev server
 
 **"Email bounced"**
+
 - Recipient email address is invalid
 - Check for typos in email addresses
 
 **"Rate limit exceeded"**
+
 - You've hit the 100 emails/day limit on free tier
 - Wait 24 hours or upgrade to a paid plan
 
 **Emails going to spam**
+
 - Normal for new domains/accounts
 - Deliverability improves over time
 - Ask admins to mark as "Not Spam"
@@ -287,6 +306,7 @@ Or warnings if Resend isn't configured:
 ### Testing Tips
 
 **Use real email addresses** for testing:
+
 - Use your own Gmail/Outlook for admin emails
 - Use test email addresses for organizer emails
 - Avoid using temporary/disposable email services (they often bounce)
@@ -335,16 +355,18 @@ Includes event     Includes feedback
 
 ### Custom Reply-To Email
 
-By default, replies go to `noreply@techup-linkup.vercel.app`. To customize:
+By default, replies go to `noreply@tech-linkup.vercel.app`. To customize:
 
 1. Add to `.env.local`:
+
    ```env
    REPLY_TO_EMAIL=support@yourdomain.com
    ```
 
 2. Update `lib/email/emailService.ts` (already configured to use this):
    ```typescript
-   const REPLY_TO = process.env.REPLY_TO_EMAIL || "noreply@techup-linkup.vercel.app";
+   const REPLY_TO =
+     process.env.REPLY_TO_EMAIL || "noreply@tech-linkup.vercel.app";
    ```
 
 ### Customizing Email Templates
@@ -357,6 +379,7 @@ Email templates are React components in `lib/email/templates/`. To customize:
    - `lib/email/templates/OrganizerRejectedEmail.tsx` - Rejection emails
 
 2. Edit the JSX and styles:
+
    ```tsx
    // Example: Change header color
    const header = {
@@ -371,6 +394,7 @@ Email templates are React components in `lib/email/templates/`. To customize:
 4. Test by triggering the email action (submit event, approve, reject)
 
 **Benefits of React Email:**
+
 - Type-safe props with TypeScript
 - Reusable components
 - Preview changes instantly

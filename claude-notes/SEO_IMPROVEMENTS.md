@@ -1,6 +1,7 @@
 # SEO Improvements Summary - Community-Driven Tech Event Ecosystem
 
 ## Overview
+
 This document summarizes all SEO enhancements made to LinkUp to emphasize the community-driven tech event ecosystem and improve search engine visibility.
 
 ---
@@ -10,20 +11,24 @@ This document summarizes all SEO enhancements made to LinkUp to emphasize the co
 ### 1. Metadata Updates (`lib/metadata.ts`)
 
 **Updated Title & Description:**
+
 - **New Title**: "LinkUp - Community-Driven Tech Event Discovery in Nigeria"
 - **New Description**: "Discover and connect with tech events across Nigeria through our community-driven platform. Join thousands of tech enthusiasts finding conferences, meetups, workshops, and networking events submitted by the community."
 
 **Added SEO Keywords:**
+
 - Core keywords: Nigeria tech events, tech community Nigeria, community-driven events
 - Comprehensive location keywords: All 36 Nigerian states + capitals
 - Category keywords: Tech conferences, meetups, workshops, startup events
 
 **Updated OG & Twitter Cards:**
+
 - New OG image path: `/assets/images/linkup-og-community-1200x630.png`
 - Added proper dimensions (1200x630)
 - Enhanced alt text with community-driven messaging
 
 **Files Modified:**
+
 - `lib/metadata.ts:4-21` - Title, description, and keywords
 - `lib/metadata.ts:67-72` - Open Graph configuration
 - `lib/metadata.ts:83-88` - Twitter Card configuration
@@ -37,16 +42,19 @@ This document summarizes all SEO enhancements made to LinkUp to emphasize the co
 Implemented schema.org markup generators for:
 
 ✅ **Organization Schema** - Defines LinkUp as an organization
+
 - Organization name, URL, logo
 - Description, location (Nigeria)
 - Ready for social media profiles
 
 ✅ **WebSite Schema** - Defines the website with search functionality
+
 - Site name and description
 - Search action for potential site search integration
 - Helps search engines understand the site structure
 
 ✅ **Event Schema** - Individual event rich snippets
+
 - Complete event details (name, date, location, price)
 - Supports Online, In-person, and Hybrid events
 - Geo-coordinates for location-based search
@@ -54,18 +62,22 @@ Implemented schema.org markup generators for:
 - Event status (scheduled)
 
 ✅ **EventList Schema** - For event listing pages
+
 - List of events with positions
 - Helps search engines understand event collections
 
 ✅ **Breadcrumb Schema** - Navigation hierarchy
+
 - Improves site structure understanding
 - Better search result snippets
 
 **Files Created:**
+
 - `lib/structured-data.ts` - All schema generators
 - `components/JsonLd.tsx` - Reusable component for adding schemas
 
 **Files Modified:**
+
 - `app/layout.tsx:6-9, 19-43` - Added Organization and WebSite schemas (site-wide)
 - `app/page.tsx:8-9, 12-23` - Added Breadcrumb schema to homepage
 
@@ -74,6 +86,7 @@ Implemented schema.org markup generators for:
 ### 3. Dynamic Sitemap (`app/sitemap.ts`)
 
 **Created XML Sitemap Generator:**
+
 - Dynamically fetches all published events from database
 - Includes static pages (home, admin login)
 - Proper priority and changeFrequency settings
@@ -82,9 +95,10 @@ Implemented schema.org markup generators for:
   - Admin: priority 0.3, monthly updates
 - Auto-updates when events are added/modified
 
-**Accessible at:** `https://techup-linkup.vercel.app/sitemap.xml`
+**Accessible at:** `https://tech-linkup.vercel.app/sitemap.xml`
 
 **Files Created:**
+
 - `app/sitemap.ts`
 
 ---
@@ -92,14 +106,16 @@ Implemented schema.org markup generators for:
 ### 4. Robots.txt Configuration (`app/robots.ts`)
 
 **Crawler Access Rules:**
+
 - Allows all search engines to crawl public pages
 - Blocks `/admin/*` and `/api/*` from indexing
 - References sitemap location
 - Optimized for Google and Bing crawlers (0 crawl delay)
 
-**Accessible at:** `https://techup-linkup.vercel.app/robots.txt`
+**Accessible at:** `https://tech-linkup.vercel.app/robots.txt`
 
 **Files Created:**
+
 - `app/robots.ts`
 
 ---
@@ -107,12 +123,14 @@ Implemented schema.org markup generators for:
 ### 5. PWA Manifest Updates (`public/manifest.json`)
 
 **Updated PWA Metadata:**
+
 - App name: "LinkUp - Community-Driven Tech Event Discovery"
 - Short name: "LinkUp"
 - Description updated to emphasize community aspect
 - Maintains all PWA icons and functionality
 
 **Files Modified:**
+
 - `public/manifest.json:2-4`
 
 ---
@@ -120,6 +138,7 @@ Implemented schema.org markup generators for:
 ### 6. OG Image Specifications
 
 **Created Comprehensive Guide:**
+
 - Complete specifications for creating new OG image
 - Design guidelines emphasizing community-driven messaging
 - Three layout options with mockups
@@ -127,6 +146,7 @@ Implemented schema.org markup generators for:
 - Testing instructions with social media debuggers
 
 **Required OG Image:**
+
 - **Path**: `/public/assets/images/linkup-og-community-1200x630.png`
 - **Dimensions**: 1200 x 630 pixels
 - **Format**: PNG preferred
@@ -134,6 +154,7 @@ Implemented schema.org markup generators for:
 - **Content**: Community-driven messaging, LinkUp branding
 
 **Files Created:**
+
 - `claude-notes/OG_IMAGE_SPECIFICATIONS.md` - Complete guide
 
 ---
@@ -147,6 +168,7 @@ Implemented schema.org markup generators for:
 The metadata is already configured to use the new OG image, but the image file doesn't exist yet.
 
 **Steps:**
+
 1. Read the specifications: `claude-notes/OG_IMAGE_SPECIFICATIONS.md`
 2. Create the image (1200x630px) using:
    - Figma: https://figma.com (recommended, free)
@@ -157,6 +179,7 @@ The metadata is already configured to use the new OG image, but the image file d
 
 **Quick Start Option:**
 If you need a temporary image while designing the final version:
+
 - Create a simple gradient background (blue #0066cc to purple)
 - Add white text: "LinkUp - Community-Driven Tech Events"
 - Add LinkUp logo from `/public/assets/Logo/linkup-logo.png`
@@ -169,65 +192,80 @@ If you need a temporary image while designing the final version:
 ### 1. Test Metadata & OG Image
 
 **Facebook Sharing Debugger:**
+
 ```
 https://developers.facebook.com/tools/debug/
 ```
+
 - Enter your site URL
 - Check OG image loads correctly
 - Verify title and description
 
 **Twitter Card Validator:**
+
 ```
 https://cards-dev.twitter.com/validator
 ```
+
 - Enter your site URL
 - Verify Twitter card preview
 - Check image and text
 
 **LinkedIn Post Inspector:**
+
 ```
 https://www.linkedin.com/post-inspector/
 ```
+
 - Enter your site URL
 - Verify LinkedIn preview
 
 ### 2. Test Sitemap
 
 **View in Browser:**
+
 ```
-https://techup-linkup.vercel.app/sitemap.xml
+https://tech-linkup.vercel.app/sitemap.xml
 ```
+
 - Should show XML with all pages and events
 - Check dates and priorities
 
 **Google Search Console:**
-1. Add sitemap URL: `https://techup-linkup.vercel.app/sitemap.xml`
+
+1. Add sitemap URL: `https://tech-linkup.vercel.app/sitemap.xml`
 2. Wait for Google to crawl
 3. Check for errors
 
 ### 3. Test Robots.txt
 
 **View in Browser:**
+
 ```
-https://techup-linkup.vercel.app/robots.txt
+https://tech-linkup.vercel.app/robots.txt
 ```
+
 - Verify allow/disallow rules
 - Check sitemap reference
 
 ### 4. Test Structured Data
 
 **Google Rich Results Test:**
+
 ```
 https://search.google.com/test/rich-results
 ```
+
 - Enter your site URL
 - Check for Event schema detection
 - Verify no errors or warnings
 
 **Schema Markup Validator:**
+
 ```
 https://validator.schema.org/
 ```
+
 - Enter your site URL
 - Verify all schemas are valid
 
@@ -250,6 +288,7 @@ npm start
 ```
 
 **View page source (Ctrl+U) and verify:**
+
 - ✅ Meta title includes "Community-Driven"
 - ✅ Meta description updated
 - ✅ OG image path is `/assets/images/linkup-og-community-1200x630.png`
@@ -263,6 +302,7 @@ npm start
 ### Improved Search Visibility
 
 **Before:**
+
 - Generic title: "LinkUp"
 - Basic description
 - No keywords
@@ -270,6 +310,7 @@ npm start
 - No sitemap
 
 **After:**
+
 - SEO-optimized title: "LinkUp - Community-Driven Tech Event Discovery in Nigeria"
 - Detailed, keyword-rich description
 - Comprehensive keywords (100+ including all Nigerian states)
@@ -279,21 +320,25 @@ npm start
 ### Expected Improvements
 
 **Search Rankings:**
+
 - Better ranking for location-based searches ("Lagos tech events", "Abuja tech meetups")
 - Improved visibility for community-related searches
 - Higher relevance for Nigerian tech ecosystem queries
 
 **Rich Snippets:**
+
 - Events may appear with rich snippets in Google Search
 - Event details (date, location, price) shown directly in search results
 - Increased click-through rates (CTR)
 
 **Social Sharing:**
+
 - Professional preview cards on Facebook, Twitter, LinkedIn
 - Community-driven messaging emphasized
 - Better brand recognition
 
 **Crawl Efficiency:**
+
 - Search engines can discover all events via sitemap
 - Proper robots.txt prevents wasted crawl budget on admin pages
 - Structured data helps search engines understand content
@@ -303,6 +348,7 @@ npm start
 ## File Structure Summary 📁
 
 ### Files Created (New)
+
 ```
 app/
 ├── sitemap.ts                              # Dynamic XML sitemap
@@ -320,6 +366,7 @@ claude-notes/
 ```
 
 ### Files Modified (Updated)
+
 ```
 lib/
 ├── metadata.ts                             # Updated metadata, keywords, OG config
@@ -333,6 +380,7 @@ public/
 ```
 
 ### Files To Create (Your Action Required)
+
 ```
 public/assets/images/
 └── linkup-og-community-1200x630.png        # ⚠️ REQUIRED - See OG_IMAGE_SPECIFICATIONS.md
@@ -345,19 +393,24 @@ public/assets/images/
 Consider implementing these in the future:
 
 ### 1. Individual Event Pages
+
 Create dedicated pages for each event at `/events/[id]`:
+
 - Better SEO (unique URLs per event)
 - Individual Event schemas per page
 - More detailed event information
 - Shareable event links
 
 **Example:**
+
 ```
-https://techup-linkup.vercel.app/events/123
+https://tech-linkup.vercel.app/events/123
 ```
 
 ### 2. Blog/Content Section
+
 Add a blog for:
+
 - Tech event tips and guides
 - Community stories
 - Event recaps
@@ -365,27 +418,35 @@ Add a blog for:
 - More indexable content
 
 ### 3. User-Generated Content
+
 Enable:
+
 - Event reviews/ratings
 - User comments
 - Q&A sections
 - Increases engagement signals
 
 ### 4. Local Business Schema
+
 If you have a physical office/location:
+
 - Add LocalBusiness schema
 - Improves local SEO
 - Better Google Maps integration
 
 ### 5. Video Content
+
 Add:
+
 - Event video previews
 - Community testimonials
 - VideoObject schema
 - YouTube integration
 
 ### 6. FAQ Schema
+
 Create FAQ pages with:
+
 - Common questions about events
 - Platform usage help
 - FAQPage schema for rich snippets
@@ -393,6 +454,7 @@ Create FAQ pages with:
 ### 7. Analytics & Monitoring
 
 **Track SEO Performance:**
+
 - Google Search Console (required)
 - Google Analytics (already using Umami)
 - Track:
@@ -402,6 +464,7 @@ Create FAQ pages with:
   - Rich snippet impressions
 
 **Set up alerts for:**
+
 - Sitemap errors
 - Crawl errors
 - Broken links
@@ -415,12 +478,12 @@ Create FAQ pages with:
 
 1. **Add Property:**
    - Go to https://search.google.com/search-console
-   - Add property: `techup-linkup.vercel.app`
+   - Add property: `tech-linkup.vercel.app`
    - Verify ownership (use Vercel DNS or HTML file method)
 
 2. **Submit Sitemap:**
    - Navigate to "Sitemaps" in left menu
-   - Enter: `https://techup-linkup.vercel.app/sitemap.xml`
+   - Enter: `https://tech-linkup.vercel.app/sitemap.xml`
    - Click "Submit"
 
 3. **Monitor:**
@@ -454,12 +517,14 @@ Before deploying to production:
 ## Support & Resources 📚
 
 ### Documentation
+
 - Next.js Metadata: https://nextjs.org/docs/app/api-reference/functions/generate-metadata
 - Schema.org: https://schema.org
 - Open Graph: https://ogp.me
 - Google Search Central: https://developers.google.com/search
 
 ### Testing Tools
+
 - Facebook Debugger: https://developers.facebook.com/tools/debug/
 - Twitter Card Validator: https://cards-dev.twitter.com/validator
 - Google Rich Results: https://search.google.com/test/rich-results
@@ -467,6 +532,7 @@ Before deploying to production:
 - LinkedIn Inspector: https://www.linkedin.com/post-inspector/
 
 ### SEO Guides
+
 - Google SEO Starter Guide: https://developers.google.com/search/docs/fundamentals/seo-starter-guide
 - Structured Data Guide: https://developers.google.com/search/docs/appearance/structured-data/intro-structured-data
 - OG Image Best Practices: https://ogp.me/#:~:text=best%20practices

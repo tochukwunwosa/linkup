@@ -6,14 +6,14 @@ Tech Linkup is a platform and community for tech enthusiasts, organizers, and pr
 
 ## 📖 Table of Contents
 
-* [Vision & Mission](#vision--mission)
-* [Features](#features)
-* [Getting Started](#getting-started)
-* [Usage](#usage)
-* [Contributing](#contributing)
-* [Roadmap](#roadmap)
-* [License](#license)
-* [Acknowledgments](#acknowledgments)
+- [Vision & Mission](#vision--mission)
+- [Features](#features)
+- [Getting Started](#getting-started)
+- [Usage](#usage)
+- [Contributing](#contributing)
+- [Roadmap](#roadmap)
+- [License](#license)
+- [Acknowledgments](#acknowledgments)
 
 ---
 
@@ -25,27 +25,27 @@ To create a thriving and connected tech ecosystem, where individuals and organiz
 
 ### Mission
 
-* Empower organizers to promote tech events with ease.
-* Enable attendees to find relevant events near them (or online).
-* Foster collaboration, learning, and networking across tech communities.
+- Empower organizers to promote tech events with ease.
+- Enable attendees to find relevant events near them (or online).
+- Foster collaboration, learning, and networking across tech communities.
 
 ---
 
 ## 🛠 Features
 
-* **Event Discovery**: Browse tech events by location, category, date, and tags.
-* **State/Location Filter**: Select state (e.g. in Nigeria) and view events in that location.
-* **Search & Pagination**: Search by keywords, filter, and paginate results.
-* **Event Cards**: Display event information including title, category, date & time, location, price, link, and calendar integration.
-* **Event Submission**: Public event submission with admin approval workflow and tracking IDs.
-* **Email Notifications**: Automated email notifications powered by Resend + React Email:
+- **Event Discovery**: Browse tech events by location, category, date, and tags.
+- **State/Location Filter**: Select state (e.g. in Nigeria) and view events in that location.
+- **Search & Pagination**: Search by keywords, filter, and paginate results.
+- **Event Cards**: Display event information including title, category, date & time, location, price, link, and calendar integration.
+- **Event Submission**: Public event submission with admin approval workflow and tracking IDs.
+- **Email Notifications**: Automated email notifications powered by Resend + React Email:
   - Admins notified when new events are submitted
   - Organizers notified when events are approved/rejected
   - Beautiful, responsive HTML email templates
-* **Charts & Analytics**: Visualize trends (e.g. events by category) using charts.
-* **Share & RSVP**: Share events via social/sharing APIs and add to calendar.
-* **User Context / Filters**: Persist filters, preferences, and UI state.
-* **Responsive & Accessible UI**: Works well on desktop and mobile; supports keyboard navigation, ARIA, etc.
+- **Charts & Analytics**: Visualize trends (e.g. events by category) using charts.
+- **Share & RSVP**: Share events via social/sharing APIs and add to calendar.
+- **User Context / Filters**: Persist filters, preferences, and UI state.
+- **Responsive & Accessible UI**: Works well on desktop and mobile; supports keyboard navigation, ARIA, etc.
 
 ---
 
@@ -53,9 +53,9 @@ To create a thriving and connected tech ecosystem, where individuals and organiz
 
 ### Prerequisites
 
-* Node.js (v18+ recommended)
-* npm or yarn
-* Database (Supabase)
+- Node.js (v18+ recommended)
+- npm or yarn
+- Database (Supabase)
 
 ### Setup
 
@@ -86,7 +86,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key_here
 NEXT_PUBLIC_UMAMI_WEBSITE_ID=umami_website_ID  # visit https://umami.is/
 
 # Site Configuration
-NEXT_PUBLIC_SITE_URL=https://techup-linkup.vercel.app
+NEXT_PUBLIC_SITE_URL=https://tech-linkup.vercel.app
 
 # OpenCage Geocoding
 OPENCAGE_API_KEY=your_key_here
@@ -117,25 +117,25 @@ Visit [http://localhost:3000](http://localhost:3000) to view the UI.
 
 ### Home / Hero
 
-* The hero section shows a background image with overlay.
-* There’s a state / location combobox that allows selecting a state. Once selected, it scrolls or navigates to the events section.
+- The hero section shows a background image with overlay.
+- There’s a state / location combobox that allows selecting a state. Once selected, it scrolls or navigates to the events section.
 
 ### Filters & Search
 
-* Use categories, formats (online / in-person), and dates to filter.
-* Multi-tag input for categories.
-* Filters persist in context so as you navigate, your preferences remain.
+- Use categories, formats (online / in-person), and dates to filter.
+- Multi-tag input for categories.
+- Filters persist in context so as you navigate, your preferences remain.
 
 ### Event Listing & Cards
 
-* Events display in cards.
-* Cards show title, categories, date/time (with local conversion), location, price, and description snippet.
-* Buttons to **Add to Calendar**, **Read More**, and optional **Share**.
+- Events display in cards.
+- Cards show title, categories, date/time (with local conversion), location, price, and description snippet.
+- Buttons to **Add to Calendar**, **Read More**, and optional **Share**.
 
 ### Charts & Analytics
 
-* Category chart that shows the number of events per category (aggregated).
-* Labels for each bar appear **above** the bar, remaining visible regardless of bar height.
+- Category chart that shows the number of events per category (aggregated).
+- Labels for each bar appear **above** the bar, remaining visible regardless of bar height.
 
 ---
 
@@ -149,6 +149,7 @@ We welcome your contributions! Here’s how to get started:
    ```bash
    git checkout -b feature/your-feature
    ```
+
 3. Make changes & commit with clear messages.
 4. Push to your fork.
 5. Open a Pull Request with a description and screenshots (if applicable).
@@ -159,14 +160,14 @@ Please follow the existing code style and patterns.
 
 ## 📦 Roadmap
 
-* [ ] Event submission flow (for organizers)
-* [ ] User authentication / profiles
-* [ ] Social sharing & embeds
-* [ ] Advanced filtering (by tags, speakers, sponsors)
-* [ ] Notifications & email reminders
-* [ ] Analytics dashboard (views, clicks, attendance)
-* [ ] Multilingual / localization support
-* [ ] Mobile app or PWA
+- [ ] Event submission flow (for organizers)
+- [ ] User authentication / profiles
+- [ ] Social sharing & embeds
+- [ ] Advanced filtering (by tags, speakers, sponsors)
+- [ ] Notifications & email reminders
+- [ ] Analytics dashboard (views, clicks, attendance)
+- [ ] Multilingual / localization support
+- [ ] Mobile app or PWA
 
 ---
 
@@ -178,5 +179,5 @@ Distributed under the **MIT License**. See the `LICENSE` file for details.
 
 ## 🙏 Acknowledgments
 
-* Thanks to the open source community, Recharts, shadcn/ui, lucide-react, and others.
-* Inspiration from event listing platforms and community tech hubs.
+- Thanks to the open source community, Recharts, shadcn/ui, lucide-react, and others.
+- Inspiration from event listing platforms and community tech hubs.

@@ -24,7 +24,7 @@ export const OrganizerRejectedEmail = ({
   eventTitle = "Lagos Tech Summit 2025",
   trackingId = "EVT-A1B2C3D4",
   feedback,
-  resubmitUrl = "https://techup-linkup.vercel.app/submit-event",
+  resubmitUrl = "https://tech-linkup.vercel.app/submit-event",
 }: OrganizerRejectedEmailProps) => {
   return (
     <Html>

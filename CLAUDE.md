@@ -6,18 +6,20 @@
 
 Tech Linkup is a Next.js 15 application for discovering and managing tech events in Nigeria. It provides a public-facing event discovery platform and an admin dashboard for event management.
 
-**Live Site**: https://techup-linkup.vercel.app
+**Live Site**: https://tech-linkup.vercel.app
 **Tech Stack**: Next.js 15, React 19, TypeScript, Supabase, Tailwind CSS 4
 
 ## Technology Stack
 
 ### Core Framework
+
 - **Next.js 15.5.6** (App Router with React Server Components)
 - **React 19** with React DOM 19
 - **TypeScript 5**
 - **Node.js 18+** (recommended)
 
 ### Database & Authentication
+
 - **Supabase** (PostgreSQL with Row Level Security)
   - @supabase/ssr for SSR support
   - @supabase/supabase-js 2.49.9
@@ -25,6 +27,7 @@ Tech Linkup is a Next.js 15 application for discovering and managing tech events
 - Database client functions in lib/supabase/
 
 ### UI & Styling
+
 - **Tailwind CSS 4** (latest version)
 - **shadcn/ui** components (Radix UI primitives)
 - **Lucide React** for icons
@@ -33,11 +36,13 @@ Tech Linkup is a Next.js 15 application for discovering and managing tech events
 - **Recharts** for data visualization
 
 ### Forms & Validation
+
 - **React Hook Form** 7.58.1
 - **Zod** 3.25.67 (schema validation)
 - **@hookform/resolvers** for Zod integration
 
 ### Other Key Libraries
+
 - **axios** 1.12.0+ (HTTP client, recently updated for security)
 - **date-fns** 4.1.0 (date manipulation)
 - **luxon** 3.6.1 (timezone handling)
@@ -45,6 +50,7 @@ Tech Linkup is a Next.js 15 application for discovering and managing tech events
 - **@tanstack/react-table** (data tables in admin)
 
 ### Email & Notifications
+
 - **Resend** (transactional email service)
   - resend package for sending emails
   - Server-side only (secure)
@@ -59,95 +65,95 @@ Tech Linkup is a Next.js 15 application for discovering and managing tech events
   - OrganizerRejectedEmail.tsx
 
 ### External APIs
+
 - **OpenCage Geocoding API** - Convert addresses to lat/lng and city/country
 - **Google Maps API** - For location features (configured but usage TBD)
 - **Umami Analytics** - Privacy-focused analytics
 - **Resend API** - Transactional email delivery
 
 ### Development Tools
+
 - **ESLint** with Next.js config
 - **Supabase CLI** 2.26.9 (for migrations)
 - Turbopack for dev server (next dev --turbopack)
 
-
 ## Project Structure
 
 linkup/
-├── app/                          # Next.js App Router
-│   ├── actions/                  # Server Actions
-│   │   ├── admin/               # Admin auth & management
-│   │   ├── event/               # Event CRUD operations
-│   │   ├── user/                # User management (future)
-│   │   └── cron/                # Cron job actions
-│   ├── admin/                    # Admin routes
-│   │   ├── login/               # Admin login page
-│   │   └── dashboard/           # Protected admin dashboard
-│   │       ├── layout.tsx       # Dashboard layout with sidebar
-│   │       ├── page.tsx         # Dashboard home (charts & stats)
-│   │       ├── events/          # Event management
-│   │       ├── admins/          # Admin user management
-│   │       ├── profile/         # Admin profile
-│   │       └── settings/        # App settings
-│   ├── api/                      # API Routes
-│   │   ├── admin/               # Admin creation endpoint
-│   │   ├── events/              # Event listing API
-│   │   ├── geocode/             # Geocoding API
-│   │   └── cron/                # Cron job endpoints
-│   ├── constants/                # App constants (categories, etc.)
-│   ├── client-layout.tsx         # Client-side layout wrapper
-│   ├── layout.tsx                # Root layout (server)
-│   ├── page.tsx                  # Home page
-│   └── globals.css               # Global styles
+├── app/ # Next.js App Router
+│ ├── actions/ # Server Actions
+│ │ ├── admin/ # Admin auth & management
+│ │ ├── event/ # Event CRUD operations
+│ │ ├── user/ # User management (future)
+│ │ └── cron/ # Cron job actions
+│ ├── admin/ # Admin routes
+│ │ ├── login/ # Admin login page
+│ │ └── dashboard/ # Protected admin dashboard
+│ │ ├── layout.tsx # Dashboard layout with sidebar
+│ │ ├── page.tsx # Dashboard home (charts & stats)
+│ │ ├── events/ # Event management
+│ │ ├── admins/ # Admin user management
+│ │ ├── profile/ # Admin profile
+│ │ └── settings/ # App settings
+│ ├── api/ # API Routes
+│ │ ├── admin/ # Admin creation endpoint
+│ │ ├── events/ # Event listing API
+│ │ ├── geocode/ # Geocoding API
+│ │ └── cron/ # Cron job endpoints
+│ ├── constants/ # App constants (categories, etc.)
+│ ├── client-layout.tsx # Client-side layout wrapper
+│ ├── layout.tsx # Root layout (server)
+│ ├── page.tsx # Home page
+│ └── globals.css # Global styles
 │
-├── components/                   # React components
-│   ├── ui/                       # shadcn/ui components (31 components)
-│   ├── admin/                    # Admin-specific components
-│   ├── dashboard/                # Dashboard layout components
-│   ├── event/                    # Event-related components
-│   ├── location/                 # Location & geolocation
-│   ├── filters.tsx               # Event filtering UI
-│   ├── events-grid.tsx           # Event listing with infinite scroll
-│   ├── event-card.tsx            # Individual event card
-│   └── navbar.tsx                # Main site navbar
+├── components/ # React components
+│ ├── ui/ # shadcn/ui components (31 components)
+│ ├── admin/ # Admin-specific components
+│ ├── dashboard/ # Dashboard layout components
+│ ├── event/ # Event-related components
+│ ├── location/ # Location & geolocation
+│ ├── filters.tsx # Event filtering UI
+│ ├── events-grid.tsx # Event listing with infinite scroll
+│ ├── event-card.tsx # Individual event card
+│ └── navbar.tsx # Main site navbar
 │
-├── context/                      # React Context providers
-│   ├── EventContext.tsx          # Global event filters & state
-│   ├── EventUrlSync.tsx          # Sync filters with URL params
-│   └── AdminContext.tsx          # Admin user context
+├── context/ # React Context providers
+│ ├── EventContext.tsx # Global event filters & state
+│ ├── EventUrlSync.tsx # Sync filters with URL params
+│ └── AdminContext.tsx # Admin user context
 │
-├── hooks/                        # Custom React hooks
-│   ├── useInfinteScrollEvent.ts  # Infinite scroll for events
-│   ├── useInViewAnimation.ts     # Intersection observer animations
-│   ├── use-debounce.ts           # Debouncing utility
-│   └── use-mobile.ts             # Mobile detection
+├── hooks/ # Custom React hooks
+│ ├── useInfinteScrollEvent.ts # Infinite scroll for events
+│ ├── useInViewAnimation.ts # Intersection observer animations
+│ ├── use-debounce.ts # Debouncing utility
+│ └── use-mobile.ts # Mobile detection
 │
-├── lib/                          # Utility libraries
-│   ├── supabase/                 # Supabase client setup
-│   ├── email/                    # Email service & templates
-│   │   ├── emailService.ts       # Resend email service
-│   │   └── templates/            # React Email templates
-│   │       ├── AdminNotificationEmail.tsx
-│   │       ├── OrganizerApprovedEmail.tsx
-│   │       └── OrganizerRejectedEmail.tsx
-│   ├── validations/              # Zod schemas
-│   ├── geocode/                  # Geocoding utilities
-│   ├── rate-limit.ts             # In-memory rate limiting
-│   ├── filter-helper.ts          # Event filtering logic
-│   ├── format-currency.ts        # Currency formatting
-│   ├── metadata.ts               # SEO metadata config
-│   └── utils.ts                  # General utilities
+├── lib/ # Utility libraries
+│ ├── supabase/ # Supabase client setup
+│ ├── email/ # Email service & templates
+│ │ ├── emailService.ts # Resend email service
+│ │ └── templates/ # React Email templates
+│ │ ├── AdminNotificationEmail.tsx
+│ │ ├── OrganizerApprovedEmail.tsx
+│ │ └── OrganizerRejectedEmail.tsx
+│ ├── validations/ # Zod schemas
+│ ├── geocode/ # Geocoding utilities
+│ ├── rate-limit.ts # In-memory rate limiting
+│ ├── filter-helper.ts # Event filtering logic
+│ ├── format-currency.ts # Currency formatting
+│ ├── metadata.ts # SEO metadata config
+│ └── utils.ts # General utilities
 │
-├── types/                        # TypeScript type definitions
-├── sql/                          # SQL schemas
-├── supabase/migrations/          # Database migrations
-├── public/assets/                # Static assets
-├── claude-notes/                 # Claude-generated documentation
-│   └── RESEND_SETUP.md           # Resend email setup guide
-├── middleware.ts                 # Next.js middleware (auth)
-├── next.config.ts                # Next.js configuration
-├── components.json               # shadcn/ui configuration
-└── package.json                  # Dependencies
-
+├── types/ # TypeScript type definitions
+├── sql/ # SQL schemas
+├── supabase/migrations/ # Database migrations
+├── public/assets/ # Static assets
+├── claude-notes/ # Claude-generated documentation
+│ └── RESEND_SETUP.md # Resend email setup guide
+├── middleware.ts # Next.js middleware (auth)
+├── next.config.ts # Next.js configuration
+├── components.json # shadcn/ui configuration
+└── package.json # Dependencies
 
 ## Database Architecture
 
@@ -156,6 +162,7 @@ linkup/
 #### Tables
 
 **1. admins table**
+
 - id: uuid (primary key)
 - email: text (unique, not null)
 - name: text (not null)
@@ -165,6 +172,7 @@ linkup/
 - last_login: timestamptz (updated by middleware)
 
 **2. events table**
+
 - id: serial (primary key)
 - title: text (not null)
 - start_date: date (not null)
@@ -187,42 +195,46 @@ linkup/
 - created_at: timestamptz
 
 **3. public_events (view)**
+
 - Filters events to only show published events
 - Used for public-facing queries
 
 #### Row Level Security (RLS)
+
 - All tables have RLS enabled
 - Admins can only access data when authenticated
 - Super admins have additional privileges (e.g., admin management)
 - Public can read from public_events view
 
 #### Database Functions
+
 - search_events_by_categories(keywords text[]) - Full-text search for events by categories
 
 ### Supabase Client Setup
 
 **Server-side** (lib/supabase/server.ts):
+
 ```typescript
-import { createServerClient } from "@supabase/ssr"
-import { cookies } from "next/headers"
+import { createServerClient } from "@supabase/ssr";
+import { cookies } from "next/headers";
 
 export async function createClient() {
-  const cookieStore = await cookies()
+  const cookieStore = await cookies();
   return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     { cookies: { getAll, setAll } }
-  )
+  );
 }
 ```
 
 **Usage in Server Actions**:
-```typescript
-"use server"
-const supabase = await createClient()
-const { data, error } = await supabase.from('events').select('*')
-```
 
+```typescript
+"use server";
+const supabase = await createClient();
+const { data, error } = await supabase.from("events").select("*");
+```
 
 ## Authentication & Authorization
 
@@ -240,7 +252,7 @@ const { data, error } = await supabase.from('events').select('*')
    - Refreshes auth cookie via lib/supabase/middleware.ts
 
 3. **Route Protection**:
-   - /admin/* routes redirect to /admin/login if unauthenticated
+   - /admin/\* routes redirect to /admin/login if unauthenticated
    - If authenticated but not admin → redirect to home
    - If admin at /admin/login → redirect to /admin/dashboard
 
@@ -255,7 +267,6 @@ const { data, error } = await supabase.from('events').select('*')
   - Full access to all features
   - Can create/edit/delete other admins
   - Can manage all events
-  
 - **Admin** (role: 'admin'):
   - Can manage events
   - Can view own profile
@@ -267,37 +278,39 @@ All server actions follow this pattern:
 
 ```typescript
 export async function protectedAction(data) {
-  const supabase = await createClient()
-  
+  const supabase = await createClient();
+
   // 1. Get current user
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return { error: "Not authenticated" }
-  
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { error: "Not authenticated" };
+
   // 2. Verify admin status
   const { data: admin } = await supabase
     .from("admins")
     .select("*")
     .eq("id", user.id)
-    .single()
-  
-  if (!admin) return { error: "Unauthorized" }
-  
+    .single();
+
+  if (!admin) return { error: "Unauthorized" };
+
   // 3. Check role if needed
-  if (admin.role !== 'super_admin') {
-    return { error: "Requires super admin" }
+  if (admin.role !== "super_admin") {
+    return { error: "Requires super admin" };
   }
-  
+
   // 4. Perform action
   // ...
 }
 ```
-
 
 ## Event Management System
 
 ### Event Data Flow
 
 **Public Event Discovery**:
+
 1. User lands on home page (app/page.tsx)
 2. Filters component (components/filters.tsx) manages filter state
 3. State stored in EventContext (category, format, location, date)
@@ -308,6 +321,7 @@ export async function protectedAction(data) {
 8. Events displayed in EventsGrid component with infinite scroll
 
 **Admin Event Management**:
+
 1. Admin navigates to /admin/dashboard/events
 2. Table displays all events (published + drafts)
 3. Create/Edit forms use React Hook Form + Zod validation
@@ -341,6 +355,7 @@ Located in app/actions/event/getPaginatedFilteredEvents.ts:
 Hook: hooks/useInfinteScrollEvent.ts
 
 **Key Features**:
+
 - Uses react-intersection-observer for scroll detection
 - Aggressive prefetching (rootMargin: 1500px)
 - Automatic page 2 prefetch after page 1 loads
@@ -348,6 +363,7 @@ Hook: hooks/useInfinteScrollEvent.ts
 - Filters reset triggers new fetch from page 1
 
 **Usage Pattern**:
+
 ```typescript
 const { events, observerRef, hasMore, loading } = useInfiniteScrollEvents({ filters })
 
@@ -368,6 +384,7 @@ const { events, observerRef, hasMore, loading } = useInfiniteScrollEvents({ filt
 **Location**: lib/geocode/
 
 **Flow**:
+
 1. Admin enters address in event form
 2. On save, serverGeocodeAddress() calls OpenCage API
 3. Returns: { city, country, lat, lng }
@@ -375,15 +392,16 @@ const { events, observerRef, hasMore, loading } = useInfiniteScrollEvents({ filt
 5. Used for proximity sorting and location filtering
 
 **Rate Limiting**:
+
 - Geocoding API: 20 requests per IP per minute
 - Implemented in app/api/geocode/route.ts
-
 
 ## State Management
 
 ### Global State (React Context)
 
 **1. EventContext** (context/EventContext.tsx):
+
 ```typescript
 {
   filters: {
@@ -401,18 +419,20 @@ const { events, observerRef, hasMore, loading } = useInfiniteScrollEvents({ filt
 ```
 
 **2. AdminContext** (context/AdminContext.tsx):
+
 ```typescript
 {
-  id: string
-  email: string
-  name: string
-  role: "admin" | "super_admin"
-  invited_by: string
-  last_login: string
+  id: string;
+  email: string;
+  name: string;
+  role: "admin" | "super_admin";
+  invited_by: string;
+  last_login: string;
 }
 ```
 
 **3. EventUrlSync** (context/EventUrlSync.tsx):
+
 - Syncs EventContext filters with URL query parameters
 - Enables shareable filtered views
 - Uses useSearchParams and useRouter
@@ -424,37 +444,42 @@ const { events, observerRef, hasMore, loading } = useInfiniteScrollEvents({ filt
 - Data fetching: useState + useEffect pattern
 - Admin dashboard: Local state for charts data
 
-
 ## API Routes & Server Actions
 
-### API Routes (app/api/*)
+### API Routes (app/api/\*)
 
 **GET /api/events**:
+
 - Public endpoint for paginated event listing
 - Query params: page, limit, category[], format, location, date, city, country
 - Calls getPaginatedFilteredEvents server action
 
 **POST /api/geocode**:
+
 - Geocodes address or lat/lng to city/country
 - Rate limited: 20 req/IP/min
 - Uses OpenCage API
 
 **POST /api/admin**:
+
 - Creates initial super admin
 - Protected by INITIAL_SETUP_TOKEN env variable
 - Disabled after setup (token = "CHANGE_THIS_TO_ENABLE")
 
 **POST /api/cron/update-geolocations**:
+
 - Backfills geocoding for existing events
 - Protected by CRON_SECRET Bearer token
 
 **POST /api/cron/backfill-events**:
+
 - Future use for event data imports
 - Protected by CRON_SECRET Bearer token
 
-### Server Actions (app/actions/*)
+### Server Actions (app/actions/\*)
 
 **Admin Actions**:
+
 - authAdmin.ts: Login/logout
 - createAdmin.ts: Create new admin (super admin only)
 - updateAdmin.ts: Update admin details, password (with re-auth)
@@ -463,6 +488,7 @@ const { events, observerRef, hasMore, loading } = useInfiniteScrollEvents({ filt
 - getAllActiveAdmin.ts: List all admins (super admin only)
 
 **Event Actions**:
+
 - createEvent.ts: Create event with geocoding
 - updateEvent.ts: Update event with geocoding
 - deleteEvent.ts: Delete event
@@ -470,6 +496,7 @@ const { events, observerRef, hasMore, loading } = useInfiniteScrollEvents({ filt
 - getPaginatedFilteredEvents.ts: Paginated filtered events (public + admin)
 
 **Submission Actions**:
+
 - submitEvent.ts: Public event submission (with email notifications to admins)
 - approveSubmission.ts: Approve submission (with email notification to organizer)
 - rejectSubmission.ts: Reject submission (with email notification to organizer)
@@ -477,8 +504,8 @@ const { events, observerRef, hasMore, loading } = useInfiniteScrollEvents({ filt
 - getSubmissionsByEmail.ts: Get submissions by organizer email
 
 **Cron Actions**:
-- updateEventGeolocations.ts: Batch geocode events
 
+- updateEventGeolocations.ts: Batch geocode events
 
 ## Email Notification System
 
@@ -487,6 +514,7 @@ Tech Linkup uses **Resend** with **React Email** templates for transactional ema
 ### Email Service Architecture
 
 **Location**: `lib/email/`
+
 - `emailService.ts` - Main email service using Resend API
 - `templates/` - React Email template components
 
@@ -495,6 +523,7 @@ Tech Linkup uses **Resend** with **React Email** templates for transactional ema
 All email templates are built with React Email for type safety and better developer experience:
 
 **1. AdminNotificationEmail** (`lib/email/templates/AdminNotificationEmail.tsx`)
+
 - **Purpose**: Notify all admins when a new event is submitted
 - **Trigger**: On public event submission (`submitEvent.ts:87-115`)
 - **Sent to**: All admin emails from database
@@ -502,6 +531,7 @@ All email templates are built with React Email for type safety and better develo
 - **Style**: Purple gradient header
 
 **2. OrganizerApprovedEmail** (`lib/email/templates/OrganizerApprovedEmail.tsx`)
+
 - **Purpose**: Confirm event approval to organizer
 - **Trigger**: When admin approves submission (`approveSubmission.ts:116-135`)
 - **Sent to**: Organizer email
@@ -509,6 +539,7 @@ All email templates are built with React Email for type safety and better develo
 - **Style**: Green gradient with 🎉 emoji
 
 **3. OrganizerRejectedEmail** (`lib/email/templates/OrganizerRejectedEmail.tsx`)
+
 - **Purpose**: Notify organizer of rejection with feedback
 - **Trigger**: When admin rejects submission (`rejectSubmission.ts:80-94`)
 - **Sent to**: Organizer email
@@ -548,16 +579,19 @@ getAdminEmails(supabase: any): Promise<string[]>
 ### Email Configuration
 
 **Environment Variables**:
+
 ```env
 RESEND_API_KEY=re_your_api_key_here
 REPLY_TO_EMAIL=your-email@example.com  # Optional
 ```
 
 **Sending Domain**:
+
 - Default: `Tech Linkup <onboarding@resend.dev>` (Resend's default domain)
 - Custom domain can be configured in Resend dashboard (optional)
 
 **Rate Limits**:
+
 - Resend free tier: 100 emails/day, 3,000/month
 - Email sending is non-blocking (won't fail submission if email fails)
 
@@ -572,12 +606,12 @@ REPLY_TO_EMAIL=your-email@example.com  # Optional
 ### Setup Guide
 
 See `claude-notes/RESEND_SETUP.md` for complete setup instructions including:
+
 - Creating Resend account
 - Getting API key
 - Environment variable configuration
 - Testing email notifications
 - Customizing templates
-
 
 ## Security Implementation
 
@@ -622,6 +656,7 @@ See `claude-notes/RESEND_SETUP.md` for complete setup instructions including:
 ### Environment Variables
 
 Required (see .env.example):
+
 ```
 # Supabase
 NEXT_PUBLIC_SUPABASE_URL=
@@ -649,12 +684,12 @@ REPLY_TO_EMAIL=  # Optional: Custom reply-to email address
 GOOGLE_MAPS_API_KEY=
 ```
 
-
 ## UI/UX Patterns
 
 ### Component Library: shadcn/ui
 
 **Installed Components** (31 total):
+
 - Forms: Button, Input, Textarea, Label, Select, Checkbox, Radio, Switch
 - Layout: Card, Separator, Tabs, Sheet, Drawer, Sidebar
 - Feedback: Toast (Sonner), Alert, AlertDialog, Dialog, Skeleton
@@ -663,6 +698,7 @@ GOOGLE_MAPS_API_KEY=
 - Custom: MultiTagInput, LoadingTable
 
 **Configuration**: components.json
+
 - Style: "new-york"
 - Base color: "neutral"
 - Icons: Lucide React
@@ -672,6 +708,7 @@ GOOGLE_MAPS_API_KEY=
 ### Styling Conventions
 
 **Tailwind Classes**:
+
 - Container max-width: max-w-7xl
 - Padding: px-4 sm:px-6 lg:px-8
 - Text hierarchy: text-2xl md:text-3xl (responsive)
@@ -679,6 +716,7 @@ GOOGLE_MAPS_API_KEY=
 - Animations: Framer Motion (via tw-animate-css)
 
 **Dark Mode**:
+
 - Configured with next-themes
 - Theme provider in client-layout.tsx
 - CSS variables in globals.css
@@ -687,12 +725,14 @@ GOOGLE_MAPS_API_KEY=
 ### Responsive Design
 
 **Breakpoints** (Tailwind defaults):
+
 - sm: 640px
 - md: 768px
 - lg: 1024px
 - xl: 1280px
 
 **Mobile-First Patterns**:
+
 - Filters: Collapsible on mobile, inline on desktop
 - Grid layouts: 1 col → 2 col → 3 col
 - Navigation: Hamburger menu (future) → full navbar
@@ -701,28 +741,31 @@ GOOGLE_MAPS_API_KEY=
 ### Key UI Components
 
 **EventCard** (components/event-card.tsx):
+
 - Displays event info with badges, date, location, price
 - "Add to Calendar" and "Read More" actions
 - Currency conversion display
 - Animated on scroll (via AnimatedCard)
 
 **Filters** (components/filters.tsx):
+
 - Sticky header (desktop)
 - Multi-tag input for categories with autocomplete
 - Nigerian states combobox
 - Clear all filters button
 
 **EventsGrid** (components/events-grid.tsx):
+
 - Infinite scroll container
 - Skeleton loading states
 - Empty state with icon + message
 
 **Admin Dashboard** (app/admin/dashboard/page.tsx):
+
 - Stats cards (total events, published, online, in-person)
 - Recharts: Line chart (trends), Pie chart (distribution), Bar chart (categories)
 - Recent activity feed
 - Tabs: Overview / Analytics
-
 
 ## Common Development Tasks
 
@@ -748,46 +791,50 @@ npm run lint
      "AI/ML",
      "Web Development",
      // Add new category
-   ]
+   ];
    ```
 2. Category is now available in multi-tag input autocomplete
 
 ### Creating a New Server Action
 
 1. Create file in app/actions/[domain]/[actionName].ts:
+
    ```typescript
-   "use server"
-   
-   import { createClient } from "@/lib/supabase/server"
-   import { revalidatePath } from "next/cache"
-   
+   "use server";
+
+   import { createClient } from "@/lib/supabase/server";
+   import { revalidatePath } from "next/cache";
+
    export async function myAction(data: MyData) {
-     const supabase = await createClient()
-     
+     const supabase = await createClient();
+
      // Auth check
-     const { data: { user } } = await supabase.auth.getUser()
-     if (!user) return { error: "Not authenticated" }
-     
+     const {
+       data: { user },
+     } = await supabase.auth.getUser();
+     if (!user) return { error: "Not authenticated" };
+
      // Action logic
-     const { data, error } = await supabase.from('table').insert(data)
-     
-     if (error) return { error: error.message }
-     
-     revalidatePath('/relevant/path')
-     return { success: true, data }
+     const { data, error } = await supabase.from("table").insert(data);
+
+     if (error) return { error: error.message };
+
+     revalidatePath("/relevant/path");
+     return { success: true, data };
    }
    ```
 
 2. Call from client component:
+
    ```typescript
-   import { myAction } from "@/app/actions/domain/myAction"
-   
+   import { myAction } from "@/app/actions/domain/myAction";
+
    async function handleClick() {
-     const result = await myAction(data)
+     const result = await myAction(data);
      if (result.error) {
-       toast.error(result.error)
+       toast.error(result.error);
      } else {
-       toast.success("Success!")
+       toast.success("Success!");
      }
    }
    ```
@@ -795,11 +842,12 @@ npm run lint
 ### Adding a New Admin Dashboard Page
 
 1. Create app/admin/dashboard/[page-name]/page.tsx:
+
    ```typescript
    "use client"
-   
+
    import { DashboardHeader } from "@/components/dashboard/dashboard-header"
-   
+
    export default function MyPage() {
      return (
        <div className="flex flex-col gap-6">
@@ -815,24 +863,26 @@ npm run lint
 ### Adding a New Validation Schema
 
 1. Create schema in lib/validations/[name].ts:
+
    ```typescript
-   import { z } from "zod"
-   
+   import { z } from "zod";
+
    export const mySchema = z.object({
      field: z.string().min(1, "Required"),
-   })
-   
-   export type MyData = z.infer<typeof mySchema>
+   });
+
+   export type MyData = z.infer<typeof mySchema>;
    ```
 
 2. Use in forms with React Hook Form:
+
    ```typescript
-   import { useForm } from "react-hook-form"
-   import { zodResolver } from "@hookform/resolvers/zod"
-   
+   import { useForm } from "react-hook-form";
+   import { zodResolver } from "@hookform/resolvers/zod";
+
    const form = useForm<MyData>({
      resolver: zodResolver(mySchema),
-   })
+   });
    ```
 
 ### Database Migrations
@@ -862,7 +912,6 @@ npx supabase db push
    - Output directory: .next
    - Install command: npm install
 4. Add cron jobs in vercel.json (if needed)
-
 
 ## Known Issues & TODOs
 
@@ -906,17 +955,20 @@ npx supabase db push
 ## Coding Conventions
 
 ### File Naming
+
 - Components: PascalCase (e.g., EventCard.tsx)
 - Utilities: kebab-case (e.g., filter-helper.ts)
 - Server actions: camelCase (e.g., createEvent.ts)
 
 ### Component Patterns
+
 - Use "use client" directive for client components
 - Use "use server" directive for server actions
 - Server Components by default (no directive needed)
 - Prefer named exports for utilities, default export for pages/components
 
 ### Import Order
+
 1. React / Next.js imports
 2. Third-party libraries
 3. Local components
@@ -925,11 +977,13 @@ npx supabase db push
 6. Styles
 
 ### Error Handling
+
 - Server actions: Return { error: string } or { success: true, data }
 - Client: Display errors with toast.error()
 - Log errors to console (TODO: use error tracking service)
 
 ### Async Patterns
+
 - Server actions: Use async/await
 - Client fetching: Use useEffect + useState or React Query (future)
 - Always handle loading and error states
@@ -958,6 +1012,7 @@ npm update               # Update packages
 ## Resources
 
 ### Documentation
+
 - Next.js 15 Docs: https://nextjs.org/docs
 - Supabase Docs: https://supabase.com/docs
 - shadcn/ui: https://ui.shadcn.com
@@ -966,18 +1021,22 @@ npm update               # Update packages
 - React Hook Form: https://react-hook-form.com
 
 ### Internal Docs
+
 - README.md - User-facing documentation
 - SECURITY_FIXES.md - Security implementation details
 - .env.example - Environment variables reference
 - claude-notes/RESEND_SETUP.md - Email notification setup guide
 
 ### Claude-Generated Documentation Convention
+
 All Claude-generated technical documentation and setup guides should be placed in the `claude-notes/` directory. This keeps the project root clean while providing detailed implementation guides for developers.
 
 **Current Claude Notes:**
+
 - `claude-notes/RESEND_SETUP.md` - Complete Resend + React Email setup guide
 
 ### External APIs
+
 - OpenCage Geocoding: https://opencagedata.com/api
 - Google Maps: https://developers.google.com/maps
 - Umami Analytics: https://umami.is
@@ -995,6 +1054,7 @@ All Claude-generated technical documentation and setup guides should be placed i
 **Maintained By**: Claude Code instances working on Tech Linkup
 
 **Recent Updates**:
+
 - Added Email Notification System (Resend + React Email)
 - Added claude-notes/ directory convention
 - Updated environment variables with RESEND_API_KEY

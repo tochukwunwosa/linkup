@@ -11,44 +11,45 @@ import {
 } from "@react-email/components";
 import * as React from "react";
 
-interface AdminNotificationEmailProps {
-  eventTitle: string;
+interface OrganizerConfirmationEmailProps {
   organizerName: string;
-  organizerEmail: string;
+  eventTitle: string;
   eventDate: string;
   eventLocation: string;
   eventWebsite?: string;
   trackingId: string;
-  submissionUrl: string;
+  trackingUrl: string;
 }
 
-export const AdminNotificationEmail = ({
-  eventTitle = "Lagos Tech Summit 2025",
+export const OrganizerConfirmationEmail = ({
   organizerName = "John Doe",
-  organizerEmail = "john@example.com",
+  eventTitle = "Lagos Tech Summit 2025",
   eventDate = "December 15, 2025",
   eventLocation = "Lagos, Nigeria",
-  eventWebsite = "https://www.eventtribe.com",
+  eventWebsite,
   trackingId = "EVT-A1B2C3D4",
-  submissionUrl = "https://tech-linkup.vercel.app/admin/dashboard/submissions",
-}: AdminNotificationEmailProps) => {
+  trackingUrl = "https://tech-linkup.vercel.app/my-submissions",
+}: OrganizerConfirmationEmailProps) => {
   return (
     <Html>
       <Head />
-      <Preview>New event submission: {eventTitle}</Preview>
+      <Preview>
+        Your event submission has been received - {eventTitle}
+      </Preview>
       <Body style={main}>
         <Container style={container}>
           {/* Header */}
           <Section style={header}>
-            <Heading style={headerTitle}>New Event Submission</Heading>
-            <Text style={headerSubtitle}>Tech Linkup Admin Notification</Text>
+            <Heading style={headerTitle}>Submission Received! ✓</Heading>
+            <Text style={headerSubtitle}>Thank you for submitting to Tech Linkup</Text>
           </Section>
 
           {/* Content */}
           <Section style={content}>
-            <Text style={greeting}>Hello Admin,</Text>
+            <Text style={greeting}>Hi {organizerName},</Text>
             <Text style={paragraph}>
-              A new event has been submitted to Tech Linkup and is awaiting your review.
+              We&apos;ve received your event submission and it&apos;s now under review by our team.
+              You&apos;ll receive an email notification once we&apos;ve reviewed your submission.
             </Text>
 
             {/* Event Details Card */}
@@ -70,53 +71,58 @@ export const AdminNotificationEmail = ({
                     <td style={labelCell}>Location:</td>
                     <td style={valueCellNormal}>{eventLocation}</td>
                   </tr>
-                  <tr>
-                    <td style={labelCell}>Tracking ID:</td>
-                    <td style={trackingIdCell}>{trackingId}</td>
-                  </tr>
-                  <tr>
-                    <td style={labelCell}>Event Website:</td>
-                    <td style={trackingIdCell}>{eventWebsite}</td>
-                  </tr>
                 </tbody>
               </table>
             </Section>
 
-            {/* Organizer Info Card */}
+            {/* Tracking ID Card */}
             <Section style={cardSecondary}>
               <Heading as="h2" style={cardTitle}>
-                Organizer Information
+                Your Tracking ID
               </Heading>
-              <table style={detailsTable}>
-                <tbody>
-                  <tr>
-                    <td style={labelCell}>Name:</td>
-                    <td style={valueCellNormal}>{organizerName}</td>
-                  </tr>
-                  <tr>
-                    <td style={labelCell}>Email:</td>
-                    <td style={valueCellNormal}>
-                      <a href={`mailto:${organizerEmail}`} style={link}>
-                        {organizerEmail}
-                      </a>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+              <Text style={trackingIdText}>{trackingId}</Text>
+              <Text style={trackingNote}>
+                Save this ID to track your submission status anytime.
+              </Text>
+            </Section>
+
+            {/* What's Next */}
+            <Section style={cardInfo}>
+              <Heading as="h2" style={cardTitle}>
+                What happens next?
+              </Heading>
+              <ul style={list}>
+                <li style={listItem}>
+                  Our team will review your event within 1-2 business days
+                </li>
+                <li style={listItem}>
+                  You&apos;ll receive an email notification once your event is reviewed
+                </li>
+                <li style={listItem}>
+                  If approved, your event will be published on Tech Linkup
+                </li>
+                <li style={listItem}>
+                  If changes are needed, we&apos;ll provide feedback via email
+                </li>
+              </ul>
             </Section>
 
             {/* CTA Button */}
             <Section style={buttonContainer}>
-              <Button style={button} href={submissionUrl}>
-                Review Submission
+              <Button style={button} href={trackingUrl}>
+                Track My Submissions
               </Button>
             </Section>
+
+            <Text style={helpText}>
+              Need help? Reply to this email and we&apos;ll get back to you shortly.
+            </Text>
           </Section>
 
           {/* Footer */}
           <Section style={footer}>
             <Text style={footerText}>
-              This is an automated notification from Tech Linkup
+              This is an automated confirmation from Tech Linkup
             </Text>
             <Text style={footerCopyright}>
               © {new Date().getFullYear()} Tech Linkup. All rights reserved.
@@ -128,7 +134,7 @@ export const AdminNotificationEmail = ({
   );
 };
 
-export default AdminNotificationEmail;
+export default OrganizerConfirmationEmail;
 
 // Styles
 const main = {
@@ -147,7 +153,7 @@ const container = {
 };
 
 const header = {
-  background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+  background: "linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)",
   padding: "40px 30px",
   textAlign: "center" as const,
 };
@@ -162,7 +168,7 @@ const headerTitle = {
 
 const headerSubtitle = {
   margin: "10px 0 0 0",
-  color: "#e0e7ff",
+  color: "#dbeafe",
   fontSize: "16px",
 };
 
@@ -175,6 +181,7 @@ const greeting = {
   color: "#374151",
   fontSize: "16px",
   lineHeight: "24px",
+  fontWeight: "600",
 };
 
 const paragraph = {
@@ -188,11 +195,19 @@ const cardPrimary = {
   backgroundColor: "#f9fafb",
   borderRadius: "6px",
   padding: "20px",
-  marginBottom: "30px",
+  marginBottom: "20px",
 };
 
 const cardSecondary = {
-  backgroundColor: "#f0fdf4",
+  backgroundColor: "#eff6ff",
+  borderRadius: "6px",
+  padding: "20px",
+  marginBottom: "20px",
+  textAlign: "center" as const,
+};
+
+const cardInfo = {
+  backgroundColor: "#f0f9ff",
   borderRadius: "6px",
   padding: "20px",
   marginBottom: "30px",
@@ -214,7 +229,7 @@ const labelCell = {
   padding: "8px 0",
   color: "#6b7280",
   fontSize: "14px",
-  width: "140px",
+  width: "100px",
   verticalAlign: "top" as const,
 };
 
@@ -231,16 +246,31 @@ const valueCellNormal = {
   fontSize: "14px",
 };
 
-const trackingIdCell = {
-  padding: "8px 0",
-  color: "#111827",
-  fontSize: "14px",
+const trackingIdText = {
+  margin: "10px 0",
+  color: "#1e40af",
+  fontSize: "24px",
+  fontWeight: "700",
   fontFamily: "monospace",
+  letterSpacing: "1px",
 };
 
-const link = {
-  color: "#667eea",
-  textDecoration: "none",
+const trackingNote = {
+  margin: "10px 0 0 0",
+  color: "#6b7280",
+  fontSize: "14px",
+};
+
+const list = {
+  margin: "0",
+  padding: "0 0 0 20px",
+  color: "#374151",
+};
+
+const listItem = {
+  margin: "10px 0",
+  fontSize: "14px",
+  lineHeight: "20px",
 };
 
 const buttonContainer = {
@@ -250,14 +280,21 @@ const buttonContainer = {
 
 const button = {
   display: "inline-block",
-  background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+  background: "linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)",
   color: "#ffffff",
   textDecoration: "none",
   padding: "14px 40px",
   borderRadius: "6px",
   fontSize: "16px",
   fontWeight: "600",
-  boxShadow: "0 4px 6px rgba(102, 126, 234, 0.25)",
+  boxShadow: "0 4px 6px rgba(59, 130, 246, 0.25)",
+};
+
+const helpText = {
+  margin: "30px 0 0 0",
+  color: "#6b7280",
+  fontSize: "14px",
+  textAlign: "center" as const,
 };
 
 const footer = {

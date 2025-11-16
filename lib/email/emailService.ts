@@ -3,6 +3,7 @@ import { render } from "@react-email/components";
 import AdminNotificationEmail from "./templates/AdminNotificationEmail";
 import OrganizerApprovedEmail from "./templates/OrganizerApprovedEmail";
 import OrganizerRejectedEmail from "./templates/OrganizerRejectedEmail";
+import OrganizerConfirmationEmail from "./templates/OrganizerConfirmationEmail";
 
 /**
  * Resend Email Service with React Email Templates
@@ -11,7 +12,7 @@ import OrganizerRejectedEmail from "./templates/OrganizerRejectedEmail";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 const FROM_EMAIL = "Tech Linkup <onboarding@resend.dev>"; // Using Resend's default domain
-const REPLY_TO = process.env.REPLY_TO_EMAIL || "noreply@techup-linkup.vercel.app";
+const REPLY_TO = process.env.REPLY_TO_EMAIL || "noreply@tech-linkup.vercel.app";
 
 export interface AdminNotificationParams {
   eventTitle: string;
@@ -20,6 +21,7 @@ export interface AdminNotificationParams {
   eventDate: string;
   eventLocation: string;
   trackingId: string;
+  eventWebsite?: string;
   submissionUrl: string;
   adminEmail: string;
 }
@@ -43,6 +45,17 @@ export interface OrganizerRejectedParams {
   resubmitUrl: string;
 }
 
+export interface OrganizerConfirmationParams {
+  organizerName: string;
+  organizerEmail: string;
+  eventTitle: string;
+  eventDate: string;
+  eventLocation: string;
+  eventWebsite?: string;
+  trackingId: string;
+  trackingUrl: string;
+}
+
 /**
  * Send email notification to admin when a new event is submitted
  */
@@ -60,6 +73,7 @@ export async function sendAdminNotification(params: AdminNotificationParams): Pr
         organizerEmail: params.organizerEmail,
         eventDate: params.eventDate,
         eventLocation: params.eventLocation,
+        eventWebsite: params.eventWebsite,
         trackingId: params.trackingId,
         submissionUrl: params.submissionUrl,
       })
@@ -77,6 +91,43 @@ export async function sendAdminNotification(params: AdminNotificationParams): Pr
     return true;
   } catch (error) {
     console.error("Error sending admin notification:", error);
+    return false;
+  }
+}
+
+/**
+ * Send confirmation email to organizer when they submit an event
+ */
+export async function sendOrganizerConfirmation(params: OrganizerConfirmationParams): Promise<boolean> {
+  try {
+    if (!process.env.RESEND_API_KEY) {
+      console.warn("Resend API key not configured. Skipping organizer confirmation.");
+      return false;
+    }
+
+    const emailHtml = await render(
+      OrganizerConfirmationEmail({
+        organizerName: params.organizerName,
+        eventTitle: params.eventTitle,
+        eventDate: params.eventDate,
+        eventLocation: params.eventLocation,
+        trackingId: params.trackingId,
+        trackingUrl: params.trackingUrl,
+      })
+    );
+
+    await resend.emails.send({
+      from: FROM_EMAIL,
+      to: params.organizerEmail,
+      replyTo: REPLY_TO,
+      subject: `We've Received Your Event Submission - "${params.eventTitle}"`,
+      html: emailHtml,
+    });
+
+    console.log(`Organizer confirmation sent to ${params.organizerEmail}`);
+    return true;
+  } catch (error) {
+    console.error("Error sending organizer confirmation:", error);
     return false;
   }
 }

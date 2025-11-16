@@ -6,7 +6,7 @@ import { MetadataRoute } from "next";
  */
 export default function robots(): MetadataRoute.Robots {
   const siteUrl =
-    process.env.NEXT_PUBLIC_APP_URL || "https://techup-linkup.vercel.app";
+    process.env.NEXT_PUBLIC_APP_URL || "https://tech-linkup.vercel.app";
 
   return {
     rules: [
