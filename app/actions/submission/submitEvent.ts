@@ -7,6 +7,7 @@ import { serverGeocodeAddress } from "@/lib/geocode/geocode-server";
 import { headers } from "next/headers";
 import { rateLimit } from "@/lib/rate-limit";
 import { sendAdminNotification, getAdminEmails, sendOrganizerConfirmation } from "@/lib/email/emailService";
+import { formatDateToYYYYMMDD } from "@/lib/date-utils";
 
 export async function submitEventAction(formData: unknown) {
   try {
@@ -47,8 +48,8 @@ export async function submitEventAction(formData: unknown) {
       .insert({
         // Event details
         title: data.title,
-        start_date: data.start_date.toISOString().split("T")[0], // Format as YYYY-MM-DD
-        end_date: data.end_date ? data.end_date.toISOString().split("T")[0] : null,
+        start_date: formatDateToYYYYMMDD(data.start_date), // Format as YYYY-MM-DD
+        end_date: data.end_date ? formatDateToYYYYMMDD(data.end_date) : null,
         location: data.location,
         time: data.time,
         type: data.type,

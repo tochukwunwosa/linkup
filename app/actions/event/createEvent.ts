@@ -5,6 +5,7 @@ import { eventSchema } from "@/lib/validations/event";
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 import { serverGeocodeAddress } from "@/lib/geocode/geocode-server";
+import { formatDateToYYYYMMDD } from "@/lib/date-utils";
 
 export async function createEventAction(formData: z.infer<typeof eventSchema>) {
   const supabase = await createClient();
@@ -42,11 +43,11 @@ export async function createEventAction(formData: z.infer<typeof eventSchema>) {
       created_by: admin.id,
       city: geo?.city ?? null,
       country: geo?.country ?? null,
-      lat: geo?.lat ?? null, 
-      lng: geo?.lng ?? null, 
-      start_date: new Date(parsed.data.start_date).toISOString(),
+      lat: geo?.lat ?? null,
+      lng: geo?.lng ?? null,
+      start_date: formatDateToYYYYMMDD(parsed.data.start_date),
       end_date: parsed.data.end_date
-        ? new Date(parsed.data.end_date).toISOString()
+        ? formatDateToYYYYMMDD(parsed.data.end_date)
         : null,
     })
     .select();
