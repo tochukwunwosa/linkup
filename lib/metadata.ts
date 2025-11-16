@@ -4,7 +4,7 @@ const APP_NAME = "LinkUp";
 const APP_DEFAULT_TITLE = "LinkUp - Community-Driven Tech Event Discovery in Nigeria";
 const APP_TITLE_TEMPLATE = "%s | LinkUp";
 const APP_DESCRIPTION =
-  "Discover and connect with tech events across Nigeria through our community-driven platform. Join thousands of tech enthusiasts finding conferences, meetups, workshops, and networking events submitted by the community.";
+  "Discover and connect with tech events across Nigeria through our community-driven platform.";
 const APP_KEYWORDS = [
   "Nigeria tech events",
   "tech community Nigeria",
@@ -137,7 +137,7 @@ export const siteConfig: Metadata = {
     description: APP_DESCRIPTION,
     images: [
       {
-        url: "/assets/images/linkup-og-community-1200x630.png",
+        url: "/assets/images/linkup-og-image-1200x600.webp",
         width: 1200,
         height: 630,
         alt: "LinkUp - Community-Driven Tech Event Discovery in Nigeria",
@@ -153,7 +153,7 @@ export const siteConfig: Metadata = {
     description: APP_DESCRIPTION,
     images: [
       {
-        url: "/assets/images/linkup-og-community-1200x630.png",
+        url: "/assets/images/linkup-og-image-1200x600.webp",
         width: 1200,
         height: 630,
         alt: "LinkUp - Community-Driven Tech Event Discovery in Nigeria",
