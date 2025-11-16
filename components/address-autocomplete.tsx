@@ -41,8 +41,10 @@ export default function AddressAutocomplete({ value, onChange, onSelect }: Props
         setSuggestions([])
       }
     } catch (error) {
-      console.error("Error fetching address suggestions:", error)
-      setSuggestions([])
+      // console.error("Error fetching address suggestions:", error)
+      if (error) {
+        setSuggestions([])
+      }
     } finally {
       setIsLoading(false)
     }
