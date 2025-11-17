@@ -10,7 +10,19 @@ import OrganizerConfirmationEmail from "./templates/OrganizerConfirmationEmail";
  * Handles sending emails for event submission notifications
  */
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Lazy initialization of Resend client to ensure API key is available
+let resendClient: Resend | null = null;
+function getResendClient(): Resend {
+  if (!resendClient) {
+    const apiKey = process.env.RESEND_API_KEY;
+    if (!apiKey) {
+      throw new Error("RESEND_API_KEY is not configured");
+    }
+    resendClient = new Resend(apiKey);
+  }
+  return resendClient;
+}
+
 const FROM_EMAIL = "Tech Linkup <onboarding@resend.dev>"; // Using Resend's default domain
 const REPLY_TO = process.env.REPLY_TO_EMAIL || "tochukwunwosa28@gmail.com";
 
@@ -79,6 +91,7 @@ export async function sendAdminNotification(params: AdminNotificationParams): Pr
       })
     );
 
+    const resend = getResendClient();
     await resend.emails.send({
       from: FROM_EMAIL,
       to: params.adminEmail,
@@ -116,6 +129,7 @@ export async function sendOrganizerConfirmation(params: OrganizerConfirmationPar
       })
     );
 
+    const resend = getResendClient();
     await resend.emails.send({
       from: FROM_EMAIL,
       to: params.organizerEmail,
@@ -153,6 +167,7 @@ export async function sendOrganizerApprovedNotification(params: OrganizerApprove
       })
     );
 
+    const resend = getResendClient();
     await resend.emails.send({
       from: FROM_EMAIL,
       to: params.organizerEmail,
@@ -189,6 +204,7 @@ export async function sendOrganizerRejectedNotification(params: OrganizerRejecte
       })
     );
 
+    const resend = getResendClient();
     await resend.emails.send({
       from: FROM_EMAIL,
       to: params.organizerEmail,
