@@ -1,5 +1,9 @@
 import { MetadataRoute } from "next";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@supabase/supabase-js";
+
+// Force dynamic rendering for sitemap
+export const dynamic = 'force-dynamic';
+export const revalidate = 3600; // Revalidate every hour
 
 /**
  * Dynamic sitemap for SEO
@@ -26,8 +30,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ];
 
   try {
-    // Fetch all published events
-    const supabase = await createClient();
+    // Fetch all published events using public anon client (no cookies needed)
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    );
+
     const { data: events } = await supabase
       .from("public_events")
       .select("id, title, created_at, start_date")
