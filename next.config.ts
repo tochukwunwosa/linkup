@@ -9,7 +9,29 @@ const withPWA = withPWAInit({
   disable: process.env.NODE_ENV === "development",
   workboxOptions: {
     disableDevLogs: true,
+    // Exclude SEO-critical files from service worker navigation fallback
+    navigateFallbackDenylist: [
+      /^\/sitemap\.xml$/,
+      /^\/robots\.txt$/,
+      /^\/googleb9673e02aeda5a49\.html$/,
+    ],
+    // Exclude from runtime caching
+    runtimeCaching: [
+      {
+        urlPattern: ({ url }) =>
+          url.pathname === "/sitemap.xml" ||
+          url.pathname === "/robots.txt" ||
+          url.pathname === "/googleb9673e02aeda5a49.html",
+        handler: "NetworkOnly",
+      },
+    ],
   },
+  // Exclude SEO-critical files from precaching
+  publicExcludes: [
+    "!sitemap.xml",
+    "!robots.txt",
+    "!googleb9673e02aeda5a49.html",
+  ],
 });
 
 const nextConfig: NextConfig = {
