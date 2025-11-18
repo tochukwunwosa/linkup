@@ -1,34 +1,15 @@
 import { MetadataRoute } from "next";
 
-/**
- * Robots.txt configuration for crawler access
- * Allows all crawlers to access public pages while protecting admin routes
- */
 export default function robots(): MetadataRoute.Robots {
   const siteUrl =
-    process.env.NEXT_PUBLIC_APP_URL || "https://tech-linkup.vercel.app";
+    process.env.NEXT_PUBLIC_SITE_URL || "https://tech-link-up.vercel.app";
 
   return {
-    rules: [
-      {
-        userAgent: "*",
-        allow: "/",
-        disallow: ["/admin/*", "/api/*"],
-      },
-      // Special rules for major search engines
-      {
-        userAgent: "Googlebot",
-        allow: "/",
-        disallow: ["/admin/*", "/api/*"],
-        crawlDelay: 0,
-      },
-      {
-        userAgent: "Bingbot",
-        allow: "/",
-        disallow: ["/admin/*", "/api/*"],
-        crawlDelay: 0,
-      },
-    ],
+    rules: {
+      userAgent: "*",
+      allow: "/",
+      disallow: ["/admin/", "/api/"],
+    },
     sitemap: `${siteUrl}/sitemap.xml`,
   };
 }

@@ -6,32 +6,9 @@ const withPWA = withPWAInit({
   cacheOnFrontEndNav: true,
   aggressiveFrontEndNavCaching: true,
   reloadOnOnline: true,
-  disable: process.env.NODE_ENV === "development",
   workboxOptions: {
     disableDevLogs: true,
-    // Exclude SEO-critical files from service worker navigation fallback
-    navigateFallbackDenylist: [
-      /^\/sitemap\.xml$/,
-      /^\/robots\.txt$/,
-      /^\/googleb9673e02aeda5a49\.html$/,
-    ],
-    // Exclude from runtime caching
-    runtimeCaching: [
-      {
-        urlPattern: ({ url }) =>
-          url.pathname === "/sitemap.xml" ||
-          url.pathname === "/robots.txt" ||
-          url.pathname === "/googleb9673e02aeda5a49.html",
-        handler: "NetworkOnly",
-      },
-    ],
   },
-  // Exclude SEO-critical files from precaching
-  publicExcludes: [
-    "!sitemap.xml",
-    "!robots.txt",
-    "!googleb9673e02aeda5a49.html",
-  ],
 });
 
 const nextConfig: NextConfig = {
@@ -48,6 +25,9 @@ const nextConfig: NextConfig = {
     NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
     NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
     NEXT_PUBLIC_UMAMI_WEBSITE_ID: process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID,
+    RESEND_API_KEY: process.env.RESEND_API_KEY,
+    CRON_SECRET: process.env.CRON_SECRET,
+    INITIAL_SETUP_TOKEN: process.env.INITIAL_SETUP_TOKEN,
 
     // Future use – uncomment when needed:
     // OPENROUTER_API_KEY: process.env.OPENROUTER_API_KEY,
@@ -125,6 +105,9 @@ const requiredEnvVars = [
   "NEXT_PUBLIC_SUPABASE_ANON_KEY",
   "NEXT_PUBLIC_SITE_URL",
   "NEXT_PUBLIC_UMAMI_WEBSITE_ID",
+  "RESEND_API_KEY",
+  "CRON_SECRET",
+  "INITIAL_SETUP_TOKEN"
 ];
 
 requiredEnvVars.forEach((key) => {
