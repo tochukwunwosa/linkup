@@ -12,8 +12,8 @@ export async function GET() {
 
   const pages: SitemapPage[] = [
     { loc: siteUrl, changefreq: "daily", priority: 1, lastmod: new Date().toISOString() },
-    { loc: `${siteUrl}/about`, changefreq: "monthly", priority: 0.7 },
-    { loc: `${siteUrl}/contact`, changefreq: "monthly", priority: 0.7 },
+    { loc: `${siteUrl}about`, changefreq: "monthly", priority: 0.7 },
+    { loc: `${siteUrl}contact`, changefreq: "monthly", priority: 0.7 },
   ];
 
    // dynamically fetch events from DB
