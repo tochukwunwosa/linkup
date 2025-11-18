@@ -8,8 +8,14 @@ const withPWA = withPWAInit({
   reloadOnOnline: true,
   workboxOptions: {
     disableDevLogs: true,
+    navigateFallbackDenylist: [
+      /^\/sitemap\.xml$/,
+      /^\/robots\.txt$/,
+    ],
   },
+  publicExcludes: ["!sitemap.xml", "!robots.txt"],
 });
+
 
 const nextConfig: NextConfig = {
   // Explicitly set Turbopack root to silence warning about multiple lockfiles
