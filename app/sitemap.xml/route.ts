@@ -7,19 +7,22 @@ type SitemapPage = {
   lastmod?: string;
 };
 
+// Helper to ensure full URLs without double slashes
+const joinUrl = (base: string, path: string) => new URL(path, base).toString();
+
 export async function GET() {
-  const siteUrl = siteConfig.metadataBase?.toString() ?? "https://tech-linkup.vercel.app";
+  const siteUrl = siteConfig.metadataBase?.toString() || "https://tech-linkup.vercel.app";
 
   const pages: SitemapPage[] = [
-    { loc: siteUrl, changefreq: "daily", priority: 1, lastmod: new Date().toISOString() },
-    { loc: `${siteUrl}about`, changefreq: "monthly", priority: 0.7 },
-    { loc: `${siteUrl}contact`, changefreq: "monthly", priority: 0.7 },
+    { loc: joinUrl(siteUrl, "/"), changefreq: "daily", priority: 1, lastmod: new Date().toISOString() },
+    { loc: joinUrl(siteUrl, "about"), changefreq: "monthly", priority: 0.7 },
+    { loc: joinUrl(siteUrl, "contact"), changefreq: "monthly", priority: 0.7 },
   ];
 
-   // dynamically fetch events from DB
+  // Optional: fetch dynamic events
   // const events = await fetchEvents();
   // events.forEach(e => pages.push({
-  //   loc: `${siteUrl}/events/${e.id}`,
+  //   loc: joinUrl(siteUrl, `/events/${e.id}`),
   //   changefreq: "weekly",
   //   lastmod: e.updatedAt,
   //   priority: 0.8,
@@ -29,19 +32,17 @@ export async function GET() {
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   ${pages
     .map(
-      (page) => `
-  <url>
+      (page) => `<url>
     <loc>${page.loc}</loc>
     ${page.lastmod ? `<lastmod>${page.lastmod}</lastmod>` : ""}
     <changefreq>${page.changefreq}</changefreq>
     <priority>${page.priority}</priority>
-  </url>
-`
+  </url>`
     )
     .join("")}
 </urlset>`;
 
   return new Response(xml, {
-    headers: { "Content-Type": "application/xml" },
+    headers: { "Content-Type": "application/xml; charset=utf-8" },
   });
 }
