@@ -1,12 +1,9 @@
 "use client"
 
+import dynamic from "next/dynamic"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { CalendarDays, Clock, MapPin, Users } from "lucide-react"
-import { EventCategoryChart } from "@/components/admin/charts/event-category-chart"
-import { EventTypeDistributionChart } from "@/components/admin/charts/event-type-distribution-chart"
-import { EventTrendChart } from "@/components/admin/charts/event-trend-chart"
-import { RecentEventsActivity } from "@/components/admin/recent-events-activity"
 import { DashboardHeader } from "@/components/dashboard/dashboard-header"
 import { useCallback, useEffect, useState } from "react"
 import { getAllEvents } from "@/app/actions/event/getAllEvents"
@@ -14,6 +11,24 @@ import { toast } from "sonner"
 import { Event } from "@/lib/validations/event"
 import { useAdmin } from "@/context/AdminContext"
 import { getFirstName } from "@/lib/utils"
+
+// Lazy load heavy chart components (recharts is a large library)
+const EventCategoryChart = dynamic(
+  () => import("@/components/admin/charts/event-category-chart").then((mod) => ({ default: mod.EventCategoryChart })),
+  { ssr: false, loading: () => <div className="h-[300px] flex items-center justify-center text-sm text-muted-foreground">Loading chart...</div> }
+)
+const EventTypeDistributionChart = dynamic(
+  () => import("@/components/admin/charts/event-type-distribution-chart").then((mod) => ({ default: mod.EventTypeDistributionChart })),
+  { ssr: false, loading: () => <div className="h-[300px] flex items-center justify-center text-sm text-muted-foreground">Loading chart...</div> }
+)
+const EventTrendChart = dynamic(
+  () => import("@/components/admin/charts/event-trend-chart").then((mod) => ({ default: mod.EventTrendChart })),
+  { ssr: false, loading: () => <div className="h-[300px] flex items-center justify-center text-sm text-muted-foreground">Loading chart...</div> }
+)
+const RecentEventsActivity = dynamic(
+  () => import("@/components/admin/recent-events-activity").then((mod) => ({ default: mod.RecentEventsActivity })),
+  { ssr: false }
+)
 export default function AdminDashboard() {
   const admin = useAdmin()
   const adminFirstName = getFirstName(admin.name)

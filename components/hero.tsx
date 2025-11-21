@@ -6,6 +6,7 @@ import { NigerianStatesCombobox } from "@/components/NigerianStatesCombobox";
 import { Button } from "@/components/ui/button";
 import { Calendar, ArrowRight } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Hero() {
   const { filters, setFilters, totalEventsFound } = useEventContext();
@@ -73,11 +74,14 @@ export default function Hero() {
   return (
     <section className="relative w-full min-h-[600px] flex items-center justify-center text-center overflow-hidden bg-white">
       {/* Background Image with Dark Overlay */}
-      <div
-        className="absolute inset-0 bg-cover bg-center"
-        style={{
-          backgroundImage: `url('/assets/images/wceu.jpeg')`,
-        }}
+      <Image
+        src="/assets/images/wceu.webp"
+        alt="Tech event background"
+        fill
+        priority
+        quality={85}
+        sizes="100vw"
+        className="object-cover object-center"
       />
       <div className="absolute inset-0 bg-black/70" />
 
