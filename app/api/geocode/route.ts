@@ -1,26 +1,42 @@
 import { NextRequest, NextResponse } from "next/server";
 import axios from "axios";
 import { rateLimit, getClientIp } from "@/lib/rate-limit";
+import { config } from "@/lib/config";
 
-const OPENCAGE_API_KEY = process.env.OPENCAGE_API_KEY;
-
-interface OpenCageComponents {
-  city?: string;
-  town?: string;
-  village?: string;
-  hamlet?: string;
-  country?: string;
+interface AddressComponent {
+  long_name: string;
+  short_name: string;
+  types: string[];
 }
 
-interface OpenCageGeometry {
-  lat: number;
-  lng: number;
+interface GoogleGeocodeResult {
+  formatted_address: string;
+  address_components: AddressComponent[];
+  geometry: {
+    location: {
+      lat: number;
+      lng: number;
+    };
+  };
 }
 
-interface OpenCageResult {
-  formatted: string;
-  components: OpenCageComponents;
-  geometry: OpenCageGeometry;
+
+// Helper function to extract city and country from address components
+function extractLocationFromComponents(components: AddressComponent[]): { city: string; country: string } {
+  let city = "";
+  let country = "";
+
+  for (const component of components) {
+    if (component.types.includes("locality")) {
+      city = component.long_name;
+    } else if (component.types.includes("administrative_area_level_2") && !city) {
+      city = component.long_name;
+    } else if (component.types.includes("country")) {
+      country = component.long_name;
+    }
+  }
+
+  return { city, country };
 }
 
 export async function POST(req: NextRequest) {
@@ -50,45 +66,65 @@ export async function POST(req: NextRequest) {
 
   const { lat, lng, address, autocomplete } = await req.json();
 
-  if (!OPENCAGE_API_KEY) {
-    return NextResponse.json({ error: "Missing API key" }, { status: 500 });
-  }
-
   if (address) {
     try {
-      const url = `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(
-        address
-      )}&key=${OPENCAGE_API_KEY}&language=en&limit=${autocomplete ? 5 : 1}`;
-
-      const { data } = await axios.get(url);
-
-      // If autocomplete is requested, return multiple suggestions
+      // If autocomplete is requested, use Geocoding API with partial matching
       if (autocomplete) {
-        const suggestions = data.results?.map((result: OpenCageResult) => {
-          const components = result.components || {};
-          const geometry = result.geometry || {};
+        // Use Geocoding API for autocomplete-like functionality
+        // This doesn't require Places API and is simpler
+        const geocodeUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
+          address
+        )}&key=${config.googleMaps.serverKey}`;
+
+        const { data } = await axios.get(geocodeUrl);
+
+        if (data.status === "REQUEST_DENIED") {
+          console.error("Google Maps API error:", data.error_message || "REQUEST_DENIED - Check API key and enabled APIs");
+          return NextResponse.json({
+            suggestions: [],
+            error: "Geocoding service unavailable"
+          });
+        }
+
+        if (data.status !== "OK" && data.status !== "ZERO_RESULTS") {
+          console.error("Geocoding error:", data.status, data.error_message);
+          return NextResponse.json({ suggestions: [] });
+        }
+
+        // Return up to 5 results
+        const suggestions = (data.results || []).slice(0, 5).map((result: GoogleGeocodeResult) => {
+          const { lat, lng } = result.geometry.location;
+          const { city, country } = extractLocationFromComponents(result.address_components);
 
           return {
-            name: result.formatted || address,
-            lat: geometry.lat,
-            lng: geometry.lng,
-            city: components.city || components.town || components.village || components.hamlet || "",
-            country: components.country || "",
+            name: result.formatted_address,
+            lat,
+            lng,
+            city,
+            country,
           };
-        }) || [];
+        });
 
         return NextResponse.json({ suggestions });
       }
 
-      // Single result for non-autocomplete requests
-      const components = data.results[0]?.components || {};
-      const city =
-        components.city ||
-        components.town ||
-        components.village ||
-        components.hamlet ||
-        "";
-      const country = components.country || "";
+      // Single result for non-autocomplete requests (forward geocoding)
+      const geocodeUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
+        address
+      )}&key=${config.googleMaps.serverKey}`;
+
+      const { data } = await axios.get(geocodeUrl);
+
+      if (data.status === "REQUEST_DENIED") {
+        console.error("Google Maps API error:", data.error_message || "REQUEST_DENIED - Check API key and enabled APIs");
+        return NextResponse.json({ error: "Geocoding service unavailable" }, { status: 503 });
+      }
+
+      if (data.status !== "OK" || !data.results || data.results.length === 0) {
+        return NextResponse.json({ city: "", country: "" });
+      }
+
+      const { city, country } = extractLocationFromComponents(data.results[0].address_components);
 
       return NextResponse.json({ city, country });
     } catch (err) {
@@ -99,17 +135,20 @@ export async function POST(req: NextRequest) {
 
   if (lat && lng) {
     try {
-      const url = `https://api.opencagedata.com/geocode/v1/json?q=${lat}+${lng}&key=${OPENCAGE_API_KEY}&language=en`;
+      // Reverse geocoding
+      const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${config.googleMaps.serverKey}`;
       const { data } = await axios.get(url);
 
-      const components = data.results[0]?.components || {};
-      const city =
-        components.city ||
-        components.town ||
-        components.village ||
-        components.hamlet ||
-        "";
-      const country = components.country || "";
+      if (data.status === "REQUEST_DENIED") {
+        console.error("Google Maps API error:", data.error_message || "REQUEST_DENIED - Check API key and enabled APIs");
+        return NextResponse.json({ error: "Geocoding service unavailable" }, { status: 503 });
+      }
+
+      if (data.status !== "OK" || !data.results || data.results.length === 0) {
+        return NextResponse.json({ city: "", country: "" });
+      }
+
+      const { city, country } = extractLocationFromComponents(data.results[0].address_components);
 
       return NextResponse.json({ city, country });
     } catch (err) {

@@ -1,9 +1,10 @@
 // app/api/create-superadmin/route.ts
 import { createClient } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
+import { config } from "@/lib/config";
 
 export async function POST(req: Request) {
-  const setupToken = process.env.INITIAL_SETUP_TOKEN;
+  const setupToken = config.security.initialSetupToken;
 
   // If setup token is not configured, endpoint is disabled
   if (!setupToken || setupToken === "CHANGE_THIS_TO_ENABLE") {

@@ -12,6 +12,20 @@ const withPWA = withPWAInit({
       /^\/sitemap\.xml$/,
       /^\/robots\.txt$/,
     ],
+    // Exclude sitemap.xml and robots.txt from all service worker caching
+    runtimeCaching: [
+      {
+        urlPattern: /^(?!.*(?:sitemap\.xml|robots\.txt)).*\.(?:json|xml|csv)$/i,
+        handler: "NetworkFirst",
+        options: {
+          cacheName: "static-data-assets",
+          expiration: {
+            maxEntries: 32,
+            maxAgeSeconds: 86400,
+          },
+        },
+      },
+    ],
   },
   publicExcludes: ["!sitemap.xml", "!robots.txt"],
 });
@@ -34,6 +48,8 @@ const nextConfig: NextConfig = {
     RESEND_API_KEY: process.env.RESEND_API_KEY,
     CRON_SECRET: process.env.CRON_SECRET,
     INITIAL_SETUP_TOKEN: process.env.INITIAL_SETUP_TOKEN,
+    GOOGLE_MAPS_SERVER_KEY: process.env.GOOGLE_MAPS_SERVER_KEY,
+    NEXT_PUBLIC_GOOGLE_MAPS_CLIENT_KEY: process.env.NEXT_PUBLIC_GOOGLE_MAPS_CLIENT_KEY,
 
     // Future use – uncomment when needed:
     // OPENROUTER_API_KEY: process.env.OPENROUTER_API_KEY,
@@ -67,7 +83,7 @@ const nextConfig: NextConfig = {
               "style-src 'self' 'unsafe-inline'",
               "img-src 'self' data: https: blob:",
               "font-src 'self' data:",
-              "connect-src 'self' https://*.supabase.co https://api.opencagedata.com https://cloud.umami.is",
+              "connect-src 'self' https://*.supabase.co https://maps.googleapis.com https://cloud.umami.is",
               "frame-ancestors 'none'",
               "base-uri 'self'",
               "form-action 'self'",
@@ -113,7 +129,9 @@ const requiredEnvVars = [
   "NEXT_PUBLIC_UMAMI_WEBSITE_ID",
   "RESEND_API_KEY",
   "CRON_SECRET",
-  "INITIAL_SETUP_TOKEN"
+  "INITIAL_SETUP_TOKEN",
+  "GOOGLE_MAPS_SERVER_KEY",
+  "NEXT_PUBLIC_GOOGLE_MAPS_CLIENT_KEY"
 ];
 
 requiredEnvVars.forEach((key) => {

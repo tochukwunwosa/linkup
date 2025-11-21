@@ -12,10 +12,11 @@ export default function UserLocationProvider() {
   const [modalOpen, setModalOpen] = useState(false);
   const [locationError, setLocationError] = useState<string | null>(null);
 
-
   useEffect(() => {
     // Only show modal if permission has not been handled yet
-    const permissionHandled = localStorage.getItem("location-permission-handled");
+    const permissionHandled = localStorage.getItem(
+      "location-permission-handled",
+    );
     if (!permissionHandled) {
       setModalOpen(true);
     }
@@ -29,42 +30,51 @@ export default function UserLocationProvider() {
     navigator.geolocation.getCurrentPosition(
       async (pos) => {
         const { latitude, longitude } = pos.coords;
-        // Use Nominatim for reverse geocoding
+        console.log("Got user coordinates:", { latitude, longitude });
+
+        // Use Google Maps for reverse geocoding
         const geo = await reverseGeocodeLatLng(latitude, longitude);
+        console.log("Reverse geocode result:", geo);
+
         if (geo) {
-          setUserLocation({ city: geo.city, country: geo.country, lat: latitude, lng: longitude });
+          const location = {
+            city: geo.city,
+            country: geo.country,
+            lat: latitude,
+            lng: longitude,
+          };
+          console.log("Setting user location:", location);
+          setUserLocation(location);
+          toast.success(`Location detected: ${geo.city}, ${geo.country}`);
+        } else {
+          console.warn("Reverse geocoding returned null");
+          // Still set location with coordinates even if reverse geocoding fails
+          setUserLocation({
+            city: "",
+            country: "",
+            lat: latitude,
+            lng: longitude,
+          });
         }
       },
       (err) => {
         const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-        const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+        const isSafari = /^((?!chrome|android).)*safari/i.test(
+          navigator.userAgent,
+        );
 
         if (isIOS && isSafari) {
           setLocationError(
-            `Could not get location on iOS Safari.\n\nThis may happen if:\n- You denied permission (check Settings > Privacy > Location Services > Safari Websites)\n- The site is not served over HTTPS\n- You are in Private Browsing mode\n\nError: ${err.message || 'Permission denied'}`
+            `Could not get location on iOS Safari.\n\nThis may happen if:\n- You denied permission (check Settings > Privacy > Location Services > Safari Websites)\n- The site is not served over HTTPS\n- You are in Private Browsing mode\n\nError: ${err.message || "Permission denied"}`,
           );
         } else {
-          toast.error(`Could not get location: ${err.message || 'Permission denied'}`);
+          toast.error(
+            `Could not get location: ${err.message || "Permission denied"}`,
+          );
         }
       },
-      { enableHighAccuracy: true, timeout: 10000 }
+      { enableHighAccuracy: true, timeout: 10000 },
     );
-
-    // Google Geolocation API (commented out)
-    /*
-    const GOOGLE_API_KEY = 'YOUR_GOOGLE_API_KEY';
-    fetch(`https://www.googleapis.com/geolocation/v1/geolocate?key=${GOOGLE_API_KEY}`, {
-      method: 'POST',
-    })
-      .then(res => res.json())
-      .then(async (data) => {
-        const { lat, lng } = data.location;
-        const geo = await reverseGeocodeLatLng(lat, lng);
-        if (geo) {
-          setUserLocation({ city: geo.city, country: geo.country, lat, lng });
-        }
-      });
-    */
   };
 
   const handleDeny = () => {
@@ -79,7 +89,11 @@ export default function UserLocationProvider() {
           <AlertDescription>{locationError}</AlertDescription>
         </Alert>
       )}
-      <LocationPermissionModal open={modalOpen} onAllow={handleAllow} onDeny={handleDeny} />
+      <LocationPermissionModal
+        open={modalOpen}
+        onAllow={handleAllow}
+        onDeny={handleDeny}
+      />
     </>
   );
-} 
+}

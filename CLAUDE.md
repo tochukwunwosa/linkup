@@ -66,8 +66,7 @@ Tech Linkup is a Next.js 15 application for discovering and managing tech events
 
 ### External APIs
 
-- **OpenCage Geocoding API** - Convert addresses to lat/lng and city/country
-- **Google Maps API** - For location features (configured but usage TBD)
+- **Google Maps API** - Geocoding API only (address ↔ coordinates + address suggestions)
 - **Umami Analytics** - Privacy-focused analytics
 - **Resend API** - Transactional email delivery
 
@@ -129,6 +128,9 @@ linkup/
 │ └── use-mobile.ts # Mobile detection
 │
 ├── lib/ # Utility libraries
+│ ├── config/ # Centralized configuration
+│ │ ├── index.ts # Config exports (API keys, env vars)
+│ │ └── README.md # Config usage documentation
 │ ├── supabase/ # Supabase client setup
 │ ├── email/ # Email service & templates
 │ │ ├── emailService.ts # Resend email service
@@ -386,7 +388,7 @@ const { events, observerRef, hasMore, loading } = useInfiniteScrollEvents({ filt
 **Flow**:
 
 1. Admin enters address in event form
-2. On save, serverGeocodeAddress() calls OpenCage API
+2. On save, serverGeocodeAddress() calls Google Maps Geocoding API
 3. Returns: { city, country, lat, lng }
 4. Stored in database with event
 5. Used for proximity sorting and location filtering
@@ -458,7 +460,7 @@ const { events, observerRef, hasMore, loading } = useInfiniteScrollEvents({ filt
 
 - Geocodes address or lat/lng to city/country
 - Rate limited: 20 req/IP/min
-- Uses OpenCage API
+- Uses Google Maps Geocoding API only
 
 **POST /api/admin**:
 
@@ -622,7 +624,7 @@ See `claude-notes/RESEND_SETUP.md` for complete setup instructions including:
 1. **Content Security Policy** (CSP):
    - Configured in next.config.ts
    - Prevents XSS attacks
-   - Allows: self, Supabase, OpenCage, Umami analytics
+   - Allows: self, Supabase, Google Maps, Umami analytics
 
 2. **Rate Limiting** (lib/rate-limit.ts):
    - In-memory store (suitable for single-instance deployments)
@@ -673,15 +675,13 @@ NEXT_PUBLIC_UMAMI_WEBSITE_ID=
 # Site
 NEXT_PUBLIC_SITE_URL=
 
-# Geocoding
-OPENCAGE_API_KEY=
+# Google Maps API (Geocoding only)
+GOOGLE_MAPS_API_KEY=  # Get from https://console.cloud.google.com
+# Required API: Enable "Geocoding API" in Google Cloud Console
 
 # Email Notifications (Resend)
 RESEND_API_KEY=  # Get from https://resend.com
 REPLY_TO_EMAIL=  # Optional: Custom reply-to email address
-
-# Future use
-GOOGLE_MAPS_API_KEY=
 ```
 
 ## UI/UX Patterns
@@ -952,6 +952,64 @@ npx supabase db push
 5. **Accessibility**: ARIA labels and keyboard nav need audit
 6. **Performance**: No image optimization for event images (Cloudinary configured but not used)
 
+## Configuration Management
+
+### Centralized Config System
+
+All environment variables and API keys are managed through a centralized configuration system in `lib/config/`.
+
+**Location**: `lib/config/index.ts`
+
+**Benefits**:
+- Type-safe access to all configuration values
+- Single source of truth for environment variables
+- Clear error messages when required variables are missing
+- Easier refactoring and maintenance
+
+### Usage
+
+```typescript
+import { config } from "@/lib/config";
+
+// Access configuration values
+const apiKey = config.googleMaps.serverKey;
+const supabaseUrl = config.supabase.url;
+const resendKey = config.resend.apiKey;
+
+// Environment checks
+if (config.env.isDevelopment) {
+  // Development-only code
+}
+```
+
+### Configuration Structure
+
+```typescript
+config = {
+  supabase: { url, anonKey, serviceRoleKey },
+  googleMaps: { clientKey, serverKey },
+  resend: { apiKey, replyToEmail },
+  security: { initialSetupToken, cronSecret },
+  site: { url, umamiWebsiteId },
+  env: { isDevelopment, isProduction, isTest }
+}
+```
+
+### Best Practices
+
+**✅ DO**: Use the config object
+```typescript
+import { config } from "@/lib/config";
+const key = config.googleMaps.serverKey;
+```
+
+**❌ DON'T**: Access process.env directly
+```typescript
+const key = process.env.GOOGLE_MAPS_SERVER_KEY; // ❌
+```
+
+**Documentation**: See `lib/config/README.md` for detailed usage instructions.
+
 ## Coding Conventions
 
 ### File Naming
@@ -1037,8 +1095,7 @@ All Claude-generated technical documentation and setup guides should be placed i
 
 ### External APIs
 
-- OpenCage Geocoding: https://opencagedata.com/api
-- Google Maps: https://developers.google.com/maps
+- Google Maps Platform: https://developers.google.com/maps
 - Umami Analytics: https://umami.is
 
 ## Contact & Support

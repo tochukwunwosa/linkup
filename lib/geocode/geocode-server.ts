@@ -1,35 +1,39 @@
 import axios from "axios";
-
-const OPENCAGE_API_KEY = process.env.OPENCAGE_API_KEY;
+import { config } from "@/lib/config";
 
 export async function serverGeocodeAddress(
   address: string
 ): Promise<{ city: string; country: string; lat: number; lng: number } | null> {
   if (!address) return null;
-  if (!OPENCAGE_API_KEY) throw new Error("Missing OpenCage API key");
 
   try {
-    const url = `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(
+    const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
       address
-    )}&key=${OPENCAGE_API_KEY}&language=en`;
+    )}&key=${config.googleMaps.serverKey}`;
 
     const { data } = await axios.get(url);
 
+    if (data.status !== "OK" || !data.results || data.results.length === 0) {
+      return null;
+    }
+
     const result = data.results[0];
-    if (!result) return null;
+    const { lat, lng } = result.geometry.location;
 
-    const components = result.components || {};
-    const geometry = result.geometry || {};
+    // Extract city and country from address_components
+    let city = "";
+    let country = "";
 
-    const city =
-      components.city ||
-      components.town ||
-      components.village ||
-      components.hamlet ||
-      "";
-    const country = components.country || "";
-    const lat = geometry.lat;
-    const lng = geometry.lng;
+    for (const component of result.address_components) {
+      if (component.types.includes("locality")) {
+        city = component.long_name;
+      } else if (component.types.includes("administrative_area_level_2") && !city) {
+        // Fallback to administrative area if no locality
+        city = component.long_name;
+      } else if (component.types.includes("country")) {
+        country = component.long_name;
+      }
+    }
 
     return { city, country, lat, lng };
   } catch (err) {

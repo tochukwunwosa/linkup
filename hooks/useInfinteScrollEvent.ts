@@ -11,6 +11,7 @@ export default function useInfiniteScrollEvents({ filters }: { filters: any }) {
   const [shouldFetchNext, setShouldFetchNext] = useState(false);
   const { setTotalEventsFound, userLocation } = useEventContext();
   const filtersStringRef = useRef<string>("");
+  const userLocationStringRef = useRef<string>("");
   const prevPageRef = useRef<number>(1);
 
   // Much more aggressive prefetching - trigger 1500px before observer
@@ -36,8 +37,33 @@ export default function useInfiniteScrollEvents({ filters }: { filters: any }) {
       setEvents([]);
       setHasMore(true);
       setShouldFetchNext(false);
+      prevPageRef.current = 0; // Reset to force refetch
     }
   }, [filters]);
+
+  // Refetch when userLocation changes (when user grants location permission)
+  useEffect(() => {
+    const userLocationString = JSON.stringify(userLocation);
+    const hasLocationChanged = userLocationString !== userLocationStringRef.current;
+
+    if (hasLocationChanged) {
+      const wasNull = userLocationStringRef.current === "" || userLocationStringRef.current === "null";
+      const isNowAvailable = userLocation !== null;
+
+      // Update the ref
+      userLocationStringRef.current = userLocationString;
+
+      // Refetch if location became available or changed
+      if (isNowAvailable) {
+        console.log("User location detected, re-sorting events by proximity:", userLocation);
+        setPage(1);
+        setEvents([]);
+        setHasMore(true);
+        setShouldFetchNext(false);
+        prevPageRef.current = 0; // Reset to force refetch
+      }
+    }
+  }, [userLocation]);
 
   // Trigger page increment when shouldFetchNext is true
   useEffect(() => {

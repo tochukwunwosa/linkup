@@ -88,15 +88,14 @@ NEXT_PUBLIC_UMAMI_WEBSITE_ID=umami_website_ID  # visit https://umami.is/
 # Site Configuration
 NEXT_PUBLIC_SITE_URL=https://tech-linkup.vercel.app
 
-# OpenCage Geocoding
-OPENCAGE_API_KEY=your_key_here
+# Google Maps API (Geocoding only)
+# Get your API key from https://console.cloud.google.com
+# Required API: Geocoding API (enable in Google Cloud Console)
+GOOGLE_MAPS_API_KEY=your_key_here
 
 # Email Notifications (Resend)
 RESEND_API_KEY=your_resend_api_key  # Get from https://resend.com
 REPLY_TO_EMAIL=your-email@example.com  # Optional
-
-# Google Maps (Future use)
-GOOGLE_MAPS_API_KEY=your_key_here
 ```
 
 See `claude-notes/RESEND_SETUP.md` for complete email setup instructions.

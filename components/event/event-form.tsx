@@ -106,11 +106,11 @@ export function EventForm({ initialData, onSubmit, onCancel }: EventFormProps) {
     startTransition(async () => {
       try {
         if (initialData?.id) {
-          // 👈 Update existing
+          // Update existing
           await updateEventAction(initialData.id, data);
           toast.success("Event updated successfully!");
         } else {
-          // 👈 Create new
+          // Create new
           await createEventAction(data);
           toast.success("Event created successfully!");
         }
@@ -215,8 +215,8 @@ export function EventForm({ initialData, onSubmit, onCancel }: EventFormProps) {
                 <FormControl>
                   <AddressAutocomplete
                     value={field.value}
-                    onChange={(val) => field.onChange(val)}
-                    onSelect={(address, lat, lng) => {
+                    onChangeAction={(val) => field.onChange(val)}
+                    onSelectAction={(address, lat, lng) => {
                       field.onChange(address)
                       form.setValue("lat", lat)
                       form.setValue("lng", lng)

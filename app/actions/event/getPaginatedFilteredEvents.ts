@@ -132,7 +132,9 @@ export async function getPaginatedFilteredEvents({
   }
 
   // Sort by user proximity
-  if (userLocation) {
+  if (userLocation && userLocation.lat && userLocation.lng) {
+    console.log("Sorting events by user proximity:", userLocation);
+
     const userCity = userLocation.city?.toLowerCase();
     const userCountry = userLocation.country?.toLowerCase();
     const userLat = userLocation.lat;
@@ -196,6 +198,10 @@ export async function getPaginatedFilteredEvents({
       ...nearbyEvents,
       ...otherEvents,
     ];
+
+    console.log(`Events sorted by proximity: ${cityEvents.length} in city, ${countryEvents.length} in country, ${nearbyEvents.length} nearby, ${otherEvents.length} others`);
+  } else {
+    console.log("No user location available, showing events in default order");
   }
 
   // Apply pagination

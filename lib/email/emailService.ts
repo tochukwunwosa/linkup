@@ -1,5 +1,6 @@
 import { Resend } from "resend";
 import { render } from "@react-email/components";
+import { config } from "@/lib/config";
 import AdminNotificationEmail from "./templates/AdminNotificationEmail";
 import OrganizerApprovedEmail from "./templates/OrganizerApprovedEmail";
 import OrganizerRejectedEmail from "./templates/OrganizerRejectedEmail";
@@ -14,17 +15,13 @@ import OrganizerConfirmationEmail from "./templates/OrganizerConfirmationEmail";
 let resendClient: Resend | null = null;
 function getResendClient(): Resend {
   if (!resendClient) {
-    const apiKey = process.env.RESEND_API_KEY;
-    if (!apiKey) {
-      throw new Error("RESEND_API_KEY is not configured");
-    }
-    resendClient = new Resend(apiKey);
+    resendClient = new Resend(config.resend.apiKey);
   }
   return resendClient;
 }
 
 const FROM_EMAIL = "Tech Linkup <onboarding@resend.dev>"; // Using Resend's default domain
-const REPLY_TO = process.env.REPLY_TO_EMAIL || "tochukwunwosa28@gmail.com";
+const REPLY_TO = config.resend.replyToEmail;
 
 export interface AdminNotificationParams {
   eventTitle: string;
