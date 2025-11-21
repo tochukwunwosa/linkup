@@ -143,7 +143,7 @@ export default function EventCard({ event }: { event: Event }) {
           variant="outline"
           size="sm"
           onClick={() => addToGoogleCalendar(event)}
-          className="w-full bg-primary text-background hover:!bg-secondary hover:text-background cursor-pointer transition-colors duration-300 ease-in-out"
+          className="w-full sm:flex-1 bg-primary text-background hover:!bg-secondary hover:text-background cursor-pointer transition-colors duration-300 ease-in-out"
           aria-label={`Add ${event.title} to Google Calendar`}
         >
           <span>Add to Calendar</span>
@@ -155,7 +155,7 @@ export default function EventCard({ event }: { event: Event }) {
           <Button
             variant="outline"
             size="sm"
-            className="w-full hover:bg-secondary hover:text-background cursor-pointer transition-colors duration-300 ease-in-out"
+            className="w-full sm:flex-1 hover:bg-secondary hover:text-background cursor-pointer transition-colors duration-300 ease-in-out"
             onClick={() => window.open(event.link, '_blank')}
             aria-label={`Read more about ${event.title}. Opens in new tab`}
           >
