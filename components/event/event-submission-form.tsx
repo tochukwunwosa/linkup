@@ -187,53 +187,6 @@ export function EventSubmissionForm({ onSuccess }: EventSubmissionFormProps) {
 
           <FormField
             control={form.control}
-            name="location"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>
-                  Location <span className="text-destructive">*</span>
-                </FormLabel>
-                <FormControl>
-                  <AddressAutocomplete
-                    value={field.value}
-                    onChangeAction={(val) => field.onChange(val)}
-                    onSelectAction={(address, lat, lng) => {
-                      field.onChange(address);
-                      form.setValue("lat", lat);
-                      form.setValue("lng", lng);
-                    }}
-                  />
-                </FormControl>
-                <FormDescription className="text-xs">Start typing to search for a location</FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="category"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>
-                  Categories <span className="text-destructive">*</span>
-                </FormLabel>
-                <FormControl>
-                  <MultiTagInput
-                    value={field.value}
-                    onChange={(tags) => field.onChange(tags)}
-                    suggestions={SUGGESTED_CATEGORIES}
-                    placeholder="e.g., AI/ML, Web Development, Blockchain"
-                  />
-                </FormControl>
-                <FormDescription className="text-xs">Add at least one category</FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
             name="type"
             render={({ field }) => (
               <FormItem>
@@ -241,7 +194,24 @@ export function EventSubmissionForm({ onSuccess }: EventSubmissionFormProps) {
                   Event Type <span className="text-destructive">*</span>
                 </FormLabel>
                 <FormControl>
-                  <RadioGroup value={field.value} onValueChange={field.onChange} className="flex flex-wrap gap-4 mt-2">
+                  <RadioGroup
+                    value={field.value}
+                    onValueChange={(value) => {
+                      field.onChange(value)
+                      // Auto-set location to "Online" when type is "Online"
+                      if (value === "Online") {
+                        form.setValue("location", "Online")
+                        form.setValue("lat", 0)
+                        form.setValue("lng", 0)
+                      } else if (form.getValues("location") === "Online") {
+                        // Clear location if it was previously "Online"
+                        form.setValue("location", "")
+                        form.setValue("lat", 0)
+                        form.setValue("lng", 0)
+                      }
+                    }}
+                    className="flex flex-wrap gap-4 mt-2"
+                  >
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="In-person" id="in-person" />
                       <FormLabel htmlFor="in-person" className="font-normal cursor-pointer">
@@ -262,6 +232,55 @@ export function EventSubmissionForm({ onSuccess }: EventSubmissionFormProps) {
                     </div>
                   </RadioGroup>
                 </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          {form.watch('type') !== 'Online' && (
+            <FormField
+              control={form.control}
+              name="location"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    Location <span className="text-destructive">*</span>
+                  </FormLabel>
+                  <FormControl>
+                    <AddressAutocomplete
+                      value={field.value}
+                      onChangeAction={(val) => field.onChange(val)}
+                      onSelectAction={(address, lat, lng) => {
+                        field.onChange(address);
+                        form.setValue("lat", lat);
+                        form.setValue("lng", lng);
+                      }}
+                    />
+                  </FormControl>
+                  <FormDescription className="text-xs">Start typing to search for a location</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
+
+          <FormField
+            control={form.control}
+            name="category"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  Categories <span className="text-destructive">*</span>
+                </FormLabel>
+                <FormControl>
+                  <MultiTagInput
+                    value={field.value}
+                    onChange={(tags) => field.onChange(tags)}
+                    suggestions={SUGGESTED_CATEGORIES}
+                    placeholder="e.g., AI/ML, Web Development, Blockchain"
+                  />
+                </FormControl>
+                <FormDescription className="text-xs">Add at least one category</FormDescription>
                 <FormMessage />
               </FormItem>
             )}

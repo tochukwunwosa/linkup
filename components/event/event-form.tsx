@@ -208,47 +208,6 @@ export function EventForm({ initialData, onSubmit, onCancel }: EventFormProps) {
 
           <FormField
             control={form.control}
-            name="location"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Location <span className='text-destructive text-xs'>*</span></FormLabel>
-                <FormControl>
-                  <AddressAutocomplete
-                    value={field.value}
-                    onChangeAction={(val) => field.onChange(val)}
-                    onSelectAction={(address, lat, lng) => {
-                      field.onChange(address)
-                      form.setValue("lat", lat)
-                      form.setValue("lng", lng)
-                    }}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="category"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Categories <span className='text-destructive text-xs'>*</span></FormLabel>
-                <FormControl>
-                  <MultiTagInput
-                    value={field.value}
-                    onChange={(tags) => field.onChange(tags)}
-                    suggestions={SUGGESTED_CATEGORIES}
-                    placeholder="Add categories like AI, Web3, DevOps"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
             name="type"
             render={({ field }) => (
               <FormItem>
@@ -256,7 +215,20 @@ export function EventForm({ initialData, onSubmit, onCancel }: EventFormProps) {
                 <FormControl>
                   <RadioGroup
                     value={field.value}
-                    onValueChange={field.onChange}
+                    onValueChange={(value) => {
+                      field.onChange(value)
+                      // Auto-set location to "Online" when type is "Online"
+                      if (value === "Online") {
+                        form.setValue("location", "Online")
+                        form.setValue("lat", 0)
+                        form.setValue("lng", 0)
+                      } else if (form.getValues("location") === "Online") {
+                        // Clear location if it was previously "Online"
+                        form.setValue("location", "")
+                        form.setValue("lat", 0)
+                        form.setValue("lng", 0)
+                      }
+                    }}
                     className="flex gap-4 mt-2"
                   >
                     <div className="flex items-center space-x-2">
@@ -272,6 +244,49 @@ export function EventForm({ initialData, onSubmit, onCancel }: EventFormProps) {
                       <FormLabel htmlFor="in-person-online" className="font-normal">In-person & Online</FormLabel>
                     </div>
                   </RadioGroup>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          {form.watch('type') !== 'Online' &&
+            <FormField
+              control={form.control}
+              name="location"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Location <span className='text-destructive text-xs'>*</span></FormLabel>
+                  <FormControl>
+                    <AddressAutocomplete
+                      value={field.value}
+                      onChangeAction={(val) => field.onChange(val)}
+                      onSelectAction={(address, lat, lng) => {
+                        field.onChange(address)
+                        form.setValue("lat", lat)
+                        form.setValue("lng", lng)
+                      }}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          }
+
+          <FormField
+            control={form.control}
+            name="category"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Categories <span className='text-destructive text-xs'>*</span></FormLabel>
+                <FormControl>
+                  <MultiTagInput
+                    value={field.value}
+                    onChange={(tags) => field.onChange(tags)}
+                    suggestions={SUGGESTED_CATEGORIES}
+                    placeholder="Add categories like AI, Web3, DevOps"
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
