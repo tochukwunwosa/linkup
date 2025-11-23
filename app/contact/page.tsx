@@ -3,6 +3,20 @@ import Link from "next/link";
 import { ArrowLeft, Mail, MessageSquare, Github } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Contact Us - LinkUp",
+  description: "Get in touch with the LinkUp team. Have questions, feedback, or want to collaborate? We'd love to hear from you.",
+  alternates: {
+    canonical: "/contact",
+  },
+  openGraph: {
+    title: "Contact Us - LinkUp",
+    description: "Get in touch with the LinkUp team. Have questions, feedback, or want to collaborate? We'd love to hear from you.",
+    url: "/contact",
+  },
+};
 
 export default function ContactPage() {
   return (

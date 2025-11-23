@@ -2,6 +2,20 @@ import React from "react";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "About Us - LinkUp",
+  description: "Learn about LinkUp, Nigeria's community-driven platform for discovering tech events, conferences, meetups, and workshops across all 36 states.",
+  alternates: {
+    canonical: "/about",
+  },
+  openGraph: {
+    title: "About Us - LinkUp",
+    description: "Learn about LinkUp, Nigeria's community-driven platform for discovering tech events, conferences, meetups, and workshops across all 36 states.",
+    url: "/about",
+  },
+};
 
 export default function AboutPage() {
   return (

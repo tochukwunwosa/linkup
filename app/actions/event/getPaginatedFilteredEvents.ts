@@ -17,6 +17,7 @@ type Filters = {
   date: string;
   city: string;
   country: string;
+  search: string;
 };
 
 type UserLocation = {
@@ -72,6 +73,27 @@ export async function getPaginatedFilteredEvents({
 
   // Apply all other filters in-memory
   let filteredResults = results;
+
+  // Global search filter (searches only title and categories/tags)
+  if (filters.search && filters.search.trim() !== "") {
+    const searchTerm = filters.search.toLowerCase().trim();
+    filteredResults = filteredResults.filter((e) => {
+      try {
+        // Search in title
+        const titleMatch = e.title ? e.title.toLowerCase().includes(searchTerm) : false;
+
+        // Search in categories (tags)
+        const categoryMatch = e.category && Array.isArray(e.category)
+          ? e.category.some((cat) => cat && cat.toLowerCase().includes(searchTerm))
+          : false;
+
+        return titleMatch || categoryMatch;
+      } catch (error) {
+        console.error("Error filtering event:", e.id, error);
+        return false;
+      }
+    });
+  }
 
   // Format filter
   if (filters.format !== "all") {

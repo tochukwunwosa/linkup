@@ -29,6 +29,7 @@ export function EventProvider({ children }: { children: React.ReactNode }) {
     date: "all",
     city: "",
     country: "",
+    search: "",
   });
 
   const [userLocation, setUserLocation] = useState<UserLocation | null>(null);

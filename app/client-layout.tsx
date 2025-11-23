@@ -7,6 +7,7 @@ import UserLocationProvider from "@/components/location/UserLocationProvider";
 import { EventProvider } from "@/context/EventContext";
 import { EventUrlSync } from "@/context/EventUrlSync";
 import { PWAInstallPrompt } from "@/components/pwa/install-prompt";
+import { QueryProvider } from "@/components/providers/query-provider";
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -14,18 +15,20 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   const isAdminRoute = pathname.startsWith("/admin");
 
   return (
-    <EventProvider>
-      {!is404 && (
-        <Suspense fallback={null}>
-          <EventUrlSync />
-        </Suspense>
-      )}
-      {!isAdminRoute && <UserLocationProvider />}
-      <div className="">
-        {children}
-      </div>
-      <Toaster richColors />
-      {!isAdminRoute && <PWAInstallPrompt />}
-    </EventProvider>
+    <QueryProvider>
+      <EventProvider>
+        {!is404 && (
+          <Suspense fallback={null}>
+            <EventUrlSync />
+          </Suspense>
+        )}
+        {!isAdminRoute && <UserLocationProvider />}
+        <div className="">
+          {children}
+        </div>
+        <Toaster richColors />
+        {!isAdminRoute && <PWAInstallPrompt />}
+      </EventProvider>
+    </QueryProvider>
   );
 }

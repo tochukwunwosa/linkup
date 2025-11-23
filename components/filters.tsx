@@ -1,32 +1,69 @@
 "use client";
 
-import { useState } from "react";
-import { Filter, ChevronDown, X } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Filter, ChevronDown, X, Search, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { useEventContext } from "@/context/EventContext";
-import MultiTagInput from "./ui/multi-tag-input";
 import { NigerianStatesCombobox } from "./NigerianStatesCombobox";
-import { SUGGESTED_CATEGORIES } from "@/app/constants/categories";
+import { useDebouncedCallback } from "@/hooks/use-debounce";
 
 export default function Filters() {
   const { filters, setFilters } = useEventContext();
   const [showMobileFilters, setShowMobileFilters] = useState(false);
+  const [searchValue, setSearchValue] = useState(filters.search || "");
+  const [isSearching, setIsSearching] = useState(false);
+
+  // Debounced search to avoid too many API calls while typing
+  const debouncedSearch = useDebouncedCallback((value: string) => {
+    setFilters({ search: value });
+    setIsSearching(false);
+  }, 500);
+
+  const handleSearchChange = (value: string) => {
+    setSearchValue(value);
+    if (value.trim() === "") {
+      // If empty, update immediately without debouncing
+      setFilters({ search: "" });
+      setIsSearching(false);
+    } else {
+      setIsSearching(true);
+      debouncedSearch(value);
+    }
+  };
+
+  // Sync searchValue with filters.search when filters are cleared externally
+  useEffect(() => {
+    if (filters.search === "" && searchValue !== "") {
+      setSearchValue("");
+      setIsSearching(false);
+    }
+  }, [filters.search, searchValue]);
+
+  const handleClearSearch = () => {
+    setSearchValue("");
+    setFilters({ search: "" });
+    setIsSearching(false);
+  };
 
   const hasActiveFilters =
-    filters.category.length > 0 ||
+    filters.search !== "" ||
     filters.format !== "all" ||
     filters.location !== "all" ||
     filters.date !== "all";
 
   const clearFilters = () => {
+    setSearchValue("");
+    setIsSearching(false);
     setFilters({
       category: [],
       format: "all",
       location: "all",
       date: "all",
       city: "",
-      country: ""
+      country: "",
+      search: ""
     });
   };
 
@@ -41,14 +78,30 @@ export default function Filters() {
               <span className="text-sm font-medium text-gray-700">Filter by:</span>
             </div>
 
-            {/* Multi-tag input for category */}
-            <div className="min-w-[180px]">
-              <MultiTagInput
-                value={filters.category}
-                onChange={(tags) => setFilters({ category: tags })}
-                suggestions={SUGGESTED_CATEGORIES}
-                placeholder="Search by categories"
+            {/* Global Search Input */}
+            <div className="relative min-w-[280px] flex-1 max-w-md">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <Input
+                type="text"
+                placeholder="Search events by title or category..."
+                value={searchValue}
+                onChange={(e) => handleSearchChange(e.target.value)}
+                className="pl-9 pr-9 h-9"
               />
+              <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1">
+                {isSearching && searchValue && (
+                  <Loader2 className="h-4 w-4 text-gray-400 animate-spin" />
+                )}
+                {searchValue && !isSearching && (
+                  <button
+                    onClick={handleClearSearch}
+                    className="text-gray-400 hover:text-gray-600"
+                    aria-label="Clear search"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                )}
+              </div>
             </div>
 
             <Select value={filters.format} onValueChange={(value) => setFilters({ format: value })}>
@@ -95,9 +148,36 @@ export default function Filters() {
         </div>
       </div>
 
-      {/* Mobile Filters (unchanged except category tag input added) */}
-      <div className="relative md:hidden">
-        <div className="px-4 py-3 w-full">
+      {/* Mobile Filters */}
+      <div className="md:hidden">
+        <div className="px-4 py-3 w-full space-y-3">
+          {/* Always visible search input */}
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <Input
+              type="text"
+              placeholder="Search events by title or category..."
+              value={searchValue}
+              onChange={(e) => handleSearchChange(e.target.value)}
+              className="pl-9 pr-9 h-10"
+            />
+            <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1">
+              {isSearching && searchValue && (
+                <Loader2 className="h-4 w-4 text-gray-400 animate-spin" />
+              )}
+              {searchValue && !isSearching && (
+                <button
+                  onClick={handleClearSearch}
+                  className="text-gray-400 hover:text-gray-600"
+                  aria-label="Clear search"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* More filters button */}
           <Button
             variant="outline"
             onClick={() => setShowMobileFilters(!showMobileFilters)}
@@ -105,8 +185,8 @@ export default function Filters() {
           >
             <div className="flex items-center gap-2">
               <Filter className="h-4 w-4" />
-              <span>Filters</span>
-              {hasActiveFilters && (
+              <span>More Filters</span>
+              {(filters.format !== "all" || filters.location !== "all" || filters.date !== "all") && (
                 <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">Active</span>
               )}
             </div>
@@ -115,14 +195,20 @@ export default function Filters() {
         </div>
 
         {showMobileFilters && (
-          <div className="absolute w-full px-4 pb-4 space-y-3 bg-white border min-h-[70vh]">
+          <div className="px-4 pb-4 space-y-3 bg-white border-t">
             <div className="flex items-center justify-between pt-3">
               <span className="text-sm font-medium text-gray-700">Filter Options</span>
-              {hasActiveFilters && (
+              {(filters.format !== "all" || filters.location !== "all" || filters.date !== "all") && (
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={clearFilters}
+                  onClick={() => {
+                    setFilters({
+                      format: "all",
+                      location: "all",
+                      date: "all"
+                    });
+                  }}
                   className="text-gray-500 hover:text-gray-700 h-8 px-2 transition-colors duration-300 ease-in-out"
                 >
                   <X className="h-3 w-3 mr-1" />
@@ -132,18 +218,6 @@ export default function Filters() {
             </div>
 
             <div className="space-y-3">
-              <div>
-                <label className="text-xs font-medium text-gray-600 uppercase tracking-wide mb-1 block">
-                  Categories
-                </label>
-                <MultiTagInput
-                  value={filters.category}
-                  onChange={(tags) => setFilters({ category: tags })}
-                  suggestions={SUGGESTED_CATEGORIES}
-                  placeholder="Add categories"
-                />
-              </div>
-
               <div>
                 <label className="text-xs font-medium text-gray-600 uppercase tracking-wide mb-1 block">
                   Format

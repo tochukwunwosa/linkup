@@ -13,7 +13,7 @@ interface EventsGridProps {
 }
 
 export default function EventsGrid({ title }: EventsGridProps) {
-  const { filters } = useEventContext();
+  const { filters, setFilters } = useEventContext();
 
   const {
     events,
@@ -29,10 +29,6 @@ export default function EventsGrid({ title }: EventsGridProps) {
           <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
             {title}
           </h2>
-          {/* <p className="text-muted-foreground text-xs">
-            Showing {events.length} of {totalEventsFound}{" "}
-            {totalEventsFound === 1 ? "event" : "events"} found
-          </p> */}
         </div>
 
         {loading && events.length === 0 ? (
@@ -66,16 +62,32 @@ export default function EventsGrid({ title }: EventsGridProps) {
             )}
           </>
         ) : (
-          <div className="text-center py-12">
-            <div className="text-gray-400 mb-4">
-              <Calendar className="h-16 w-16 mx-auto" />
+          <div className="text-center py-16">
+            <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gray-100 mb-6">
+              <Calendar className="h-10 w-10 text-gray-400" />
             </div>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">
+            <h3 className="text-xl font-semibold text-gray-900 mb-3">
               No events found
             </h3>
-            <p className="text-gray-600">
-              Try adjusting your filters to see more events.
+            <p className="text-gray-600 mb-6 max-w-md mx-auto">
+              We couldn&apos;t find any events matching your filters. Try adjusting your search or filters to discover more events.
             </p>
+            <button
+              onClick={() => {
+                setFilters({
+                  category: [],
+                  format: "all",
+                  location: "all",
+                  date: "all",
+                  city: "",
+                  country: "",
+                  search: ""
+                });
+              }}
+              className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
+            >
+              Clear all filters
+            </button>
           </div>
         )}
       </div>

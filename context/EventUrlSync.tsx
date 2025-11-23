@@ -30,6 +30,7 @@ export function EventUrlSync() {
       date: searchParams.get("date") || "all",
       city: searchParams.get("city") || "",
       country: searchParams.get("country") || "",
+      search: searchParams.get("search") || "",
     };
 
     setFiltersSafe(newFilters);

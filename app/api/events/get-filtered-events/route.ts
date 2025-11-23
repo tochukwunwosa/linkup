@@ -19,6 +19,7 @@ export async function GET(req: Request) {
     date: searchParams.get("date") || "all",
     city: searchParams.get("city") || "",
     country: searchParams.get("country") || "",
+    search: searchParams.get("search") || "",
   };
 
   // user location (for sorting by distance)

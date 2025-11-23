@@ -33,6 +33,7 @@ export default function useInfiniteScrollEvents({ filters }: { filters: any }) {
     const filtersString = JSON.stringify(filters);
     if (filtersString !== filtersStringRef.current) {
       filtersStringRef.current = filtersString;
+      setLoading(true); // Set loading immediately to prevent flash
       setPage(1);
       setEvents([]);
       setHasMore(true);
@@ -56,6 +57,7 @@ export default function useInfiniteScrollEvents({ filters }: { filters: any }) {
       // Refetch if location became available or changed
       if (isNowAvailable) {
         console.log("User location detected, re-sorting events by proximity:", userLocation);
+        setLoading(true); // Set loading immediately
         setPage(1);
         setEvents([]);
         setHasMore(true);
@@ -122,15 +124,21 @@ export default function useInfiniteScrollEvents({ filters }: { filters: any }) {
         if (filters.country && filters.country.trim() !== "") {
           params.set("country", filters.country);
         }
+        if (filters.search && filters.search.trim() !== "") {
+          params.set("search", filters.search);
+        }
 
         console.log("Fetching page:", page, "with params:", params.toString());
 
         const res = await fetch(`/api/events?${params.toString()}`);
-        const json = await res.json();
-
+        
         if (!res.ok) {
-          throw new Error(json.message || "Failed to fetch events");
+          const errorText = await res.text();
+          console.error("API Error Response:", res.status, errorText);
+          throw new Error(`Failed to fetch events: ${res.status} ${errorText}`);
         }
+        
+        const json = await res.json();
 
         setEvents((prev) => (page === 1 ? json.data : [...prev, ...json.data]));
         setHasMore(json.hasMore);

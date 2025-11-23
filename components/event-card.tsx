@@ -9,17 +9,26 @@ import { addToGoogleCalendar, convertWATToLocalTime, formatDateRange, isLiveEven
 // import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { LiveEventBadge } from '@/components/live-event-badge'
 import { getCurrencySymbol } from '@/lib/format-currency'
+import { generateEventSchema } from '@/lib/structured-data'
 
 export default function EventCard({ event }: { event: Event }) {
   const { wat, local, userZone } = convertWATToLocalTime(event.start_date, event.time)
+  const eventSchema = generateEventSchema(event)
 
   return (
-    <Card
-      key={event.id}
-      className="max-w-md w-full h-full flex flex-col justify-between rounded-xl border border-gray-200 shadow-sm hover:shadow-lg transition-shadow duration-200 overflow-hidden"
-      role="article"
-      aria-label={`Event: ${event.title}`}
-    >
+    <>
+      {/* JSON-LD Schema for SEO */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(eventSchema) }}
+      />
+      
+      <Card
+        key={event.id}
+        className="max-w-md w-full h-full flex flex-col justify-between rounded-xl border border-gray-200 shadow-sm hover:shadow-lg transition-shadow duration-200 overflow-hidden"
+        role="article"
+        aria-label={`Event: ${event.title}`}
+      >
       <CardHeader className="p-4">
         <div className="flex items-start flex-wrap">
           <div>
@@ -164,6 +173,7 @@ export default function EventCard({ event }: { event: Event }) {
           </Button>
         )}
       </CardFooter>
-    </Card>
+      </Card>
+    </>
   )
 }

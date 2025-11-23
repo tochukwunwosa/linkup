@@ -5,6 +5,7 @@ export type Filters = {
   date: string;
   city: string;
   country: string;
+  search: string;
 };
 
 // Helper function to build URL params
@@ -21,6 +22,7 @@ export const buildUrlParams = (currentFilters: Filters) => {
   if (currentFilters.date !== "all") params.set("date", currentFilters.date);
   if (currentFilters.city) params.set("city", currentFilters.city);
   if (currentFilters.country) params.set("country", currentFilters.country);
+  if (currentFilters.search) params.set("search", currentFilters.search);
 
   return params.toString();
 };
