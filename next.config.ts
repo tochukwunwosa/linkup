@@ -167,16 +167,26 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  async redirects() {
+      return [
+        {
+          source: '/:path*',
+          has: [
+            {
+              type: 'host',
+              value: 'www.techlinkup.xyz',
+            },
+            {
+              type: 'host',
+              value: 'tech-linkup.vercel.app',
+            }
+          ],
+          destination: 'https://techlinkup.xyz/:path*',
+          permanent: true, // 301 redirect
+        },
+      ];
+    },
 };
-
-// Future experimental config (disabled for MVP)
-// const experimentalConfig = {
-//   experimental: {
-//     serverActions: {
-//       bodySizeLimit: "2mb",
-//     },
-//   },
-// };
 
 // Required environment variables for MVP
 const requiredEnvVars = [
