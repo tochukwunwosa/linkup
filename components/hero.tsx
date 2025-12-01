@@ -17,7 +17,12 @@ export default function Hero() {
 
   // Animate stats efficiently
   useEffect(() => {
-    const animateValue = (start: number, end: number, duration: number, setter: (val: number) => void) => {
+    const animateValue = (
+      start: number,
+      end: number,
+      duration: number,
+      setter: (val: number) => void,
+    ) => {
       const startTime = performance.now();
 
       const step = (currentTime: number) => {
@@ -31,30 +36,31 @@ export default function Hero() {
     };
 
     const eventCount = totalEventsFound || 0;
-    animateValue(0, eventCount, 1500, (val) => setStats(prev => ({ ...prev, events: val })));
-    animateValue(0, 15, 1500, (val) => setStats(prev => ({ ...prev, cities: val })));
-    animateValue(0, 1000, 2000, (val) => setStats(prev => ({ ...prev, community: val })));
+    animateValue(0, eventCount, 1500, (val) =>
+      setStats((prev) => ({ ...prev, events: val })),
+    );
+    animateValue(0, 15, 1500, (val) =>
+      setStats((prev) => ({ ...prev, cities: val })),
+    );
 
     return () => {
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
       }
     };
-
   }, [totalEventsFound]);
 
   // Scroll to events when filter changes
   useEffect(() => {
     if (!filters.location) return;
-  
+
     const timer = setTimeout(() => {
       const eventsSection = document.getElementById("events");
       eventsSection?.scrollIntoView({ behavior: "smooth", block: "start" });
     }, 300);
-  
+
     return () => clearTimeout(timer);
   }, [filters.location]);
-
 
   const handleStateChange = (value: string) => {
     setLoading(true);
@@ -99,7 +105,8 @@ export default function Hero() {
 
         {/* Subheading */}
         <p className="text-sm sm:text-base md:text-lg text-gray-200 mb-10 max-w-2xl mx-auto animate-fade-in-up delay-200">
-          Join thousands of tech enthusiasts discovering conferences, meetups, and workshops across Nigeria.
+          Join thousands of tech enthusiasts discovering conferences, meetups,
+          and workshops across Nigeria.
         </p>
 
         {/* Search */}
@@ -147,7 +154,8 @@ export default function Hero() {
         <div className="flex flex-wrap justify-center gap-8 sm:gap-12 text-white animate-fade-in-up delay-500">
           <div className="text-center">
             <div className="text-4xl sm:text-5xl font-bold mb-1">
-              {stats.events}{stats.events > 0 ? '+' : ""}
+              {stats.events}
+              {stats.events > 0 ? "+" : ""}
             </div>
             <div className="text-sm text-gray-300">Active Events</div>
           </div>
@@ -156,12 +164,6 @@ export default function Hero() {
               {stats.cities}+
             </div>
             <div className="text-sm text-gray-300">Cities</div>
-          </div>
-          <div className="text-center">
-            <div className="text-4xl sm:text-5xl font-bold mb-1">
-              {stats.community > 0 ? `${stats.community}+` : 0}
-            </div>
-            <div className="text-sm text-gray-300">Community Members</div>
           </div>
         </div>
       </div>
