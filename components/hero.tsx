@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useEventContext } from "@/context/EventContext";
 import { NigerianStatesCombobox } from "@/components/NigerianStatesCombobox";
 import { Button } from "@/components/ui/button";
@@ -11,81 +11,76 @@ import Image from "next/image";
 export default function Hero() {
   const { filters, setFilters, totalEventsFound } = useEventContext();
   const [loading, setLoading] = useState(false);
-  const [stats, setStats] = useState({ events: 0, cities: 0, community: 0 });
+  const [stats, setStats] = useState({
+    events: 0,
+    cities: 0,
+    community: 0,
+  });
 
-  const animationRef = useRef<number>(0);
-
-  // Animate stats efficiently
+  // Animate stats when totalEventsFound changes
   useEffect(() => {
     const animateValue = (
       start: number,
       end: number,
       duration: number,
-      setter: (val: number) => void,
+      setter: (val: number) => void
     ) => {
-      const startTime = performance.now();
-
-      const step = (currentTime: number) => {
-        const progress = Math.min((currentTime - startTime) / duration, 1);
-        setter(Math.floor(start + progress * (end - start)));
-        if (progress < 1) {
-          animationRef.current = requestAnimationFrame(step);
-        }
+      const startTime = Date.now();
+      const animate = () => {
+        const now = Date.now();
+        const progress = Math.min((now - startTime) / duration, 1);
+        const current = Math.floor(progress * (end - start) + start);
+        setter(current);
+        if (progress < 1) requestAnimationFrame(animate);
       };
-      animationRef.current = requestAnimationFrame(step);
+      animate();
     };
 
     const eventCount = totalEventsFound || 0;
+
     animateValue(0, eventCount, 1500, (val) =>
-      setStats((prev) => ({ ...prev, events: val })),
+      setStats((prev) => ({ ...prev, events: val }))
     );
     animateValue(0, 15, 1500, (val) =>
-      setStats((prev) => ({ ...prev, cities: val })),
+      setStats((prev) => ({ ...prev, cities: val }))
     );
-
-    return () => {
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-      }
-    };
   }, [totalEventsFound]);
 
-  // Scroll to events when filter changes
-  useEffect(() => {
-    if (!filters.location) return;
+   const handleStateChange = (value: string) => {
+    // Prevent scroll on first load when combobox initializes
+    if (value === filters.location) return;
 
-    const timer = setTimeout(() => {
-      const eventsSection = document.getElementById("events");
-      eventsSection?.scrollIntoView({ behavior: "smooth", block: "start" });
-    }, 300);
-
-    return () => clearTimeout(timer);
-  }, [filters.location]);
-
-  const handleStateChange = (value: string) => {
     setLoading(true);
     setFilters({ location: value });
-    setLoading(false);
+
+    setTimeout(() => {
+      const eventsSection = document.getElementById("events");
+      if (eventsSection) {
+        eventsSection.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+      setLoading(false);
+    }, 800);
   };
 
   const scrollToEvents = () => {
     const eventsSection = document.getElementById("events");
-    eventsSection?.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (eventsSection) {
+      eventsSection.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
   };
 
   return (
     <section className="relative w-full min-h-[600px] flex items-center justify-center text-center overflow-hidden bg-white">
-      {/* LCP Background Image */}
+      {/* Background Image */}
       <Image
         src="/assets/images/wceu.webp"
         alt="Tech event background"
         fill
         priority
-        fetchPriority="high"
         quality={85}
         sizes="100vw"
         placeholder="blur"
-        blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDA..."
+        blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAb/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
         className="object-cover object-center"
       />
       <div className="absolute inset-0 bg-black/70" />
@@ -109,7 +104,7 @@ export default function Hero() {
           and workshops across Nigeria.
         </p>
 
-        {/* Search */}
+        {/* Filters */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-10 animate-fade-in-up delay-300">
           <NigerianStatesCombobox
             className="w-full sm:w-auto sm:min-w-[300px]"
@@ -139,6 +134,7 @@ export default function Hero() {
               Submit Your Event
             </Button>
           </Link>
+
           <Link href="/my-submissions">
             <Button
               size="lg"
@@ -159,6 +155,7 @@ export default function Hero() {
             </div>
             <div className="text-sm text-gray-300">Active Events</div>
           </div>
+
           <div className="text-center">
             <div className="text-4xl sm:text-5xl font-bold mb-1">
               {stats.cities}+
