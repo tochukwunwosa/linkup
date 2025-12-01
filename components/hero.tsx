@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useEventContext } from "@/context/EventContext";
 import { NigerianStatesCombobox } from "@/components/NigerianStatesCombobox";
 import { Button } from "@/components/ui/button";
@@ -11,78 +11,75 @@ import Image from "next/image";
 export default function Hero() {
   const { filters, setFilters, totalEventsFound } = useEventContext();
   const [loading, setLoading] = useState(false);
-  const [stats, setStats] = useState({
-    events: 0,
-    cities: 0,
-    community: 0,
-  });
+  const [stats, setStats] = useState({ events: 0, cities: 0, community: 0 });
 
-  // Animate stats on mount
+  const animationRef = useRef<number>(0);
+
+  // Animate stats efficiently
   useEffect(() => {
-    const animateValue = (
-      start: number,
-      end: number,
-      duration: number,
-      setter: (val: number) => void
-    ) => {
-      const startTime = Date.now();
-      const animate = () => {
-        const now = Date.now();
-        const progress = Math.min((now - startTime) / duration, 1);
-        const current = Math.floor(progress * (end - start) + start);
-        setter(current);
+    const animateValue = (start: number, end: number, duration: number, setter: (val: number) => void) => {
+      const startTime = performance.now();
+
+      const step = (currentTime: number) => {
+        const progress = Math.min((currentTime - startTime) / duration, 1);
+        setter(Math.floor(start + progress * (end - start)));
         if (progress < 1) {
-          requestAnimationFrame(animate);
+          animationRef.current = requestAnimationFrame(step);
         }
       };
-      animate();
+      animationRef.current = requestAnimationFrame(step);
     };
 
-    // Use actual total from context, fallback to 50+ if none
     const eventCount = totalEventsFound || 0;
-    animateValue(0, eventCount, 1500, (val) =>
-      setStats((prev) => ({ ...prev, events: val }))
-    );
-    animateValue(0, 15, 1500, (val) =>
-      setStats((prev) => ({ ...prev, cities: val }))
-    );
-    animateValue(0, 1000, 2000, (val) =>
-      setStats((prev) => ({ ...prev, community: val }))
-    );
+    animateValue(0, eventCount, 1500, (val) => setStats(prev => ({ ...prev, events: val })));
+    animateValue(0, 15, 1500, (val) => setStats(prev => ({ ...prev, cities: val })));
+    animateValue(0, 1000, 2000, (val) => setStats(prev => ({ ...prev, community: val })));
+
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+    };
+
   }, [totalEventsFound]);
+
+  // Scroll to events when filter changes
+  useEffect(() => {
+    if (!filters.location) return;
+  
+    const timer = setTimeout(() => {
+      const eventsSection = document.getElementById("events");
+      eventsSection?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 300);
+  
+    return () => clearTimeout(timer);
+  }, [filters.location]);
+
 
   const handleStateChange = (value: string) => {
     setLoading(true);
     setFilters({ location: value });
-
-    setTimeout(() => {
-      const eventsSection = document.getElementById("events");
-      if (eventsSection) {
-        eventsSection.scrollIntoView({ behavior: "smooth", block: "start" });
-      }
-      setLoading(false);
-    }, 800);
+    setLoading(false);
   };
 
   const scrollToEvents = () => {
     const eventsSection = document.getElementById("events");
-    if (eventsSection) {
-      eventsSection.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
+    eventsSection?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
   return (
     <section className="relative w-full min-h-[600px] flex items-center justify-center text-center overflow-hidden bg-white">
-      {/* Background Image with Dark Overlay */}
+      {/* LCP Background Image */}
       <Image
         src="/assets/images/wceu.webp"
         alt="Tech event background"
         fill
         priority
+        fetchPriority="high"
         quality={85}
         sizes="100vw"
         placeholder="blur"
-        blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAb/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
+        blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDA..."
         className="object-cover object-center"
       />
       <div className="absolute inset-0 bg-black/70" />
@@ -93,7 +90,7 @@ export default function Hero() {
           <span className="font-medium">Community-Driven Platform</span>
         </div>
 
-        {/* Main Heading */}
+        {/* Heading */}
         <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6 text-white animate-fade-in-up">
           Discover Tech Events
           <br />
@@ -102,11 +99,10 @@ export default function Hero() {
 
         {/* Subheading */}
         <p className="text-sm sm:text-base md:text-lg text-gray-200 mb-10 max-w-2xl mx-auto animate-fade-in-up delay-200">
-          Join thousands of tech enthusiasts discovering conferences, meetups,
-          and workshops across Nigeria.
+          Join thousands of tech enthusiasts discovering conferences, meetups, and workshops across Nigeria.
         </p>
 
-        {/* Search Input */}
+        {/* Search */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-10 animate-fade-in-up delay-300">
           <NigerianStatesCombobox
             className="w-full sm:w-auto sm:min-w-[300px]"
@@ -147,7 +143,7 @@ export default function Hero() {
           </Link>
         </div>
 
-        {/* Stats - Simple animated numbers */}
+        {/* Stats */}
         <div className="flex flex-wrap justify-center gap-8 sm:gap-12 text-white animate-fade-in-up delay-500">
           <div className="text-center">
             <div className="text-4xl sm:text-5xl font-bold mb-1">
@@ -155,12 +151,17 @@ export default function Hero() {
             </div>
             <div className="text-sm text-gray-300">Active Events</div>
           </div>
-
           <div className="text-center">
             <div className="text-4xl sm:text-5xl font-bold mb-1">
               {stats.cities}+
             </div>
             <div className="text-sm text-gray-300">Cities</div>
+          </div>
+          <div className="text-center">
+            <div className="text-4xl sm:text-5xl font-bold mb-1">
+              {stats.community > 0 ? `${stats.community}+` : 0}
+            </div>
+            <div className="text-sm text-gray-300">Community Members</div>
           </div>
         </div>
       </div>

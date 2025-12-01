@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { Button } from './ui/button';
 import { Menu, X, Plus } from 'lucide-react';
 import { Sheet, SheetContent, SheetTrigger } from './ui/sheet';
+import Image from 'next/image';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -22,8 +23,8 @@ export default function Navbar() {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex items-center">
-            <Link href="/" className="font-bold text-xl text-primary">
-              Tech LinkUp
+            <Link href="/" className="text-foreground">
+              <Image src="/logo.svg" alt="Tech LinkUp Logo" width={32} height={32} />            
             </Link>
           </div>
 

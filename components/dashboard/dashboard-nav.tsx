@@ -52,16 +52,7 @@ export function DashboardNav({isSuperAdmin}: {isSuperAdmin: boolean}) {
     <>
       <SidebarHeader className="border-b border-border/40">
         <Link href="/admin/dashboard" className={cn("h-12 flex items-center gap-2", isCollapsed ? "justify-center px-0" : "px-2")}>
-          {!isCollapsed
-            ?
-            <div className="w-24 flex items-center">
-              <Image src={'/assets/logo/linkup-logo-80x35.svg'} width={177} height={72} alt='LinkUp logo.' priority/>
-            </div>
-            :
-            <div className="size-8 flex items-center">
-              <Image src={'/assets/logo/linkup-logo.svg'} width={80} height={35} alt='LinkUp logo.' priority/>
-            </div>
-          }
+          <Image src={'/logo.svg'} width={32} height={72} alt='LinkUp logo.' priority/>
         </Link>
       </SidebarHeader>
 
