@@ -86,7 +86,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key_here
 NEXT_PUBLIC_UMAMI_WEBSITE_ID=umami_website_ID  # visit https://umami.is/
 
 # Site Configuration
-NEXT_PUBLIC_SITE_URL=https://tech-linkup.vercel.app
+NEXT_PUBLIC_SITE_URL=https://techlinkup.xyz
 
 # Google Maps API (Geocoding only)
 # Get your API key from https://console.cloud.google.com

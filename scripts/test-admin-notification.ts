@@ -62,7 +62,7 @@ async function testAdminNotification() {
     eventLocation: "Lagos, Nigeria",
     eventWebsite: "https://example.com",
     trackingId: "EVT-TEST1234",
-    submissionUrl: "https://tech-linkup.vercel.app/admin/dashboard/submissions",
+    submissionUrl: "https://techlinkup.xyz/admin/dashboard/submissions",
     adminEmail: testEmail,
   });
 

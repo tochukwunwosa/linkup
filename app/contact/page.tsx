@@ -9,12 +9,12 @@ export const metadata: Metadata = {
   title: "Contact Us - LinkUp",
   description: "Get in touch with the LinkUp team. Have questions, feedback, or want to collaborate? We'd love to hear from you.",
   alternates: {
-    canonical: "/contact",
+    canonical: "https://techlinkup.xyz/contact",
   },
   openGraph: {
     title: "Contact Us - LinkUp",
     description: "Get in touch with the LinkUp team. Have questions, feedback, or want to collaborate? We'd love to hear from you.",
-    url: "/contact",
+    url: "https://techlinkup.xyz/contact",
   },
 };
 

@@ -8,14 +8,15 @@ export const metadata: Metadata = {
   title: "About Us - LinkUp",
   description: "Learn about LinkUp, Nigeria's community-driven platform for discovering tech events, conferences, meetups, and workshops across all 36 states.",
   alternates: {
-    canonical: "/about",
+    canonical: "https://techlinkup.xyz/about",
   },
   openGraph: {
     title: "About Us - LinkUp",
     description: "Learn about LinkUp, Nigeria's community-driven platform for discovering tech events, conferences, meetups, and workshops across all 36 states.",
-    url: "/about",
+    url: "https://techlinkup.xyz/linkup-og-image-1200x600.webp",
   },
 };
+
 
 export default function AboutPage() {
   return (

@@ -15,8 +15,8 @@ export function generateOrganizationSchema() {
     "@type": "Organization",
     name: "LinkUp",
     alternateName: "Tech LinkUp",
-    url: process.env.NEXT_PUBLIC_SITE_URL || "https://tech-linkup.vercel.app",
-    logo: `${process.env.NEXT_PUBLIC_SITE_URL || "https://tech-linkup.vercel.app"}/assets/Logo/linkup-logo.png`,
+    url: process.env.NEXT_PUBLIC_SITE_URL || "https://techlinkup.xyz",
+    logo: `${process.env.NEXT_PUBLIC_SITE_URL || "https://techlinkup.xyz"}/assets/Logo/linkup-logo.png`,
     description:
       "Community-driven platform for discovering and connecting with tech events across Nigeria",
     address: {
@@ -36,7 +36,7 @@ export function generateOrganizationSchema() {
  */
 export function generateWebSiteSchema() {
   const siteUrl =
-    process.env.NEXT_PUBLIC_SITE_URL || "https://tech-linkup.vercel.app";
+    process.env.NEXT_PUBLIC_SITE_URL || "https://techlinkup.xyz";
 
   return {
     "@context": "https://schema.org",
@@ -62,7 +62,7 @@ export function generateWebSiteSchema() {
  */
 export function generateEventSchema(event: EventType) {
   const siteUrl =
-    process.env.NEXT_PUBLIC_SITE_URL || "https://tech-linkup.vercel.app";
+    process.env.NEXT_PUBLIC_SITE_URL || "https://techlinkup.xyz";
 
   // Determine event attendance mode
   let eventAttendanceMode = "https://schema.org/OfflineEventAttendanceMode";
@@ -230,7 +230,7 @@ export function generateEventSchema(event: EventType) {
  */
 export function generateEventListSchema(events: EventType[]) {
   const siteUrl =
-    process.env.NEXT_PUBLIC_SITE_URL || "https://tech-linkup.vercel.app";
+    process.env.NEXT_PUBLIC_SITE_URL || "https://techlinkup.xyz";
 
   return {
     "@context": "https://schema.org",

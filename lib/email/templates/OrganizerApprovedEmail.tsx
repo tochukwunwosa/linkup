@@ -26,7 +26,7 @@ export const OrganizerApprovedEmail = ({
   eventDate = "March 15, 2025",
   eventLocation = "Lagos, Nigeria",
   trackingId = "EVT-A1B2C3D4",
-  eventUrl = "https://tech-linkup.vercel.app",
+  eventUrl = "https://techlinkup.xyz",
 }: OrganizerApprovedEmailProps) => {
   return (
     <Html>

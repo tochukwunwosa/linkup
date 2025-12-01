@@ -18,7 +18,7 @@ const Footer = dynamic(() => import("@/components/footer"), {
 export default function LinkUpLanding() {
   // Generate breadcrumb schema for homepage
   const siteUrl =
-    process.env.NEXT_PUBLIC_SITE_URL || "https://tech-linkup.vercel.app";
+    process.env.NEXT_PUBLIC_SITE_URL || "https://techlinkup.xyz";
 
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: "Home", url: siteUrl },

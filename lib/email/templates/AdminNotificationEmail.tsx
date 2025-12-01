@@ -30,7 +30,7 @@ export const AdminNotificationEmail = ({
   eventLocation = "Lagos, Nigeria",
   eventWebsite = "https://www.eventtribe.com",
   trackingId = "EVT-A1B2C3D4",
-  submissionUrl = "https://tech-linkup.vercel.app/admin/dashboard/submissions",
+  submissionUrl = "https://techlinkup.xyz/admin/dashboard/submissions",
 }: AdminNotificationEmailProps) => {
   return (
     <Html>

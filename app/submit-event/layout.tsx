@@ -4,12 +4,12 @@ export const metadata: Metadata = {
   title: "Submit Your Event - LinkUp",
   description: "Share your tech event with the Nigerian tech community. Submit conferences, meetups, workshops, and hackathons to Tech Linkup.",
   alternates: {
-    canonical: "/submit-event",
+    canonical: "https://techlinkup.xyz/submit-event",
   },
   openGraph: {
     title: "Submit Your Event - LinkUp",
     description: "Share your tech event with the Nigerian tech community. Submit conferences, meetups, workshops, and hackathons to Tech Linkup.",
-    url: "/submit-event",
+    url: "https://techlinkup.xyz/linkup-og-image-1200x600.webp",
   },
 };
 

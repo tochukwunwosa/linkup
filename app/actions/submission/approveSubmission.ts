@@ -114,7 +114,7 @@ export async function approveSubmissionAction(submissionId: string) {
     revalidatePath("/");
 
     // Send email notification to organizer (async, don't block the response)
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://tech-linkup.vercel.app";
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://techlinkup.xyz";
     const eventDate = new Date(submission.start_date).toLocaleDateString("en-US", {
       month: "long",
       day: "numeric",

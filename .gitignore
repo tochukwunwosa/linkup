@@ -54,3 +54,6 @@ next-env.d.ts
 /public/fallback-*.js.map
 sw.js
 sw.js.map
+
+//claude notes
+claude-notes

@@ -23,9 +23,9 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
           </Suspense>
         )}
         {!isAdminRoute && <UserLocationProvider />}
-        <div className="">
+        <main id="main-content">
           {children}
-        </div>
+        </main>
         <Toaster richColors />
         {!isAdminRoute && <PWAInstallPrompt />}
       </EventProvider>

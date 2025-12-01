@@ -86,7 +86,7 @@ export async function submitEventAction(formData: unknown) {
     revalidatePath("/admin/dashboard/submissions");
 
     // Send email notifications (async, don't block the response)
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://tech-linkup.vercel.app";
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://techlinkup.xyz";
     const eventDate = new Date(data.start_date).toLocaleDateString("en-US", {
       month: "long",
       day: "numeric",
