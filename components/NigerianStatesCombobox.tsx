@@ -17,7 +17,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
-import { nigerianStates } from "@/app/constants/nigeria-states";
+import { nigerianStates } from "@/constants/nigeria-states";
 
 interface NigerianStatesComboboxProps {
   value: string;

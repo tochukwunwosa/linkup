@@ -20,7 +20,7 @@ import MultiTagInput from "../ui/multi-tag-input"
 import { CURRENCY_LIST } from '@/lib/format-currency'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import AddressAutocomplete from "../address-autocomplete"
-import { SUGGESTED_CATEGORIES } from "@/app/constants/categories"
+import { SUGGESTED_CATEGORIES } from "@/constants/categories"
 import {
   Form,
   FormControl,
