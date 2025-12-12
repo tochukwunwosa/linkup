@@ -7,12 +7,21 @@ import EventCard from "./event-card";
 import { SkeletonGrid } from "./event-card-skeleton-grid";
 import useInfiniteScrollEvents from "@/hooks/useInfinteScrollEvent";
 import { useEventContext } from "@/context/EventContext";
+import { Event } from "@/lib/validations/event";
 
 interface EventsGridProps {
   title: string;
+  initialEvents?: Event[];
+  initialTotal?: number;
+  initialHasMore?: boolean;
 }
 
-export default function EventsGrid({ title }: EventsGridProps) {
+export default function EventsGrid({
+  title,
+  initialEvents = [],
+  initialTotal = 0,
+  initialHasMore = true
+}: EventsGridProps) {
   const { filters, setFilters } = useEventContext();
 
   const {
@@ -20,7 +29,12 @@ export default function EventsGrid({ title }: EventsGridProps) {
     observerRef,
     loading,
     hasMore
-  } = useInfiniteScrollEvents({ filters });
+  } = useInfiniteScrollEvents({
+    filters,
+    initialEvents,
+    initialTotal,
+    initialHasMore
+  });
 
   return (
     <section id="events" className="mb-12">

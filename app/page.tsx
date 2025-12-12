@@ -1,21 +1,9 @@
-"use client";
-
-import dynamic from "next/dynamic";
-import Navbar from "@/components/navbar";
-import Hero from "@/components/hero";
-import Filters from "@/components/filters";
 import JsonLd from "@/components/JsonLd";
 import { generateBreadcrumbSchema } from "@/lib/structured-data";
+import { getPaginatedFilteredEvents } from "@/app/actions/event/getPaginatedFilteredEvents";
+import HomeClient from "@/components/home-client";
 
-// Lazy load below-the-fold components
-const UpcomingEvents = dynamic(() => import("@/components/upcoming-events"), {
-  ssr: true,
-});
-const Footer = dynamic(() => import("@/components/footer"), {
-  ssr: true,
-});
-
-export default function LinkUpLanding() {
+export default async function LinkUpLanding() {
   // Generate breadcrumb schema for homepage
   const siteUrl =
     process.env.NEXT_PUBLIC_SITE_URL || "https://techlinkup.xyz";
@@ -24,23 +12,32 @@ export default function LinkUpLanding() {
     { name: "Home", url: siteUrl },
   ]);
 
+  // Fetch initial events server-side for SEO
+  const { data, hasMore, total } = await getPaginatedFilteredEvents({
+    page: 1,
+    limit: 9,
+    filters: {
+      category: [],
+      format: "all",
+      location: "all",
+      date: "all",
+      city: "",
+      country: "",
+      search: "",
+    },
+    userLocation: null,
+  });
+
   return (
-    <div className=" bg-gray-50 overflow-visible">
+    <div className="bg-gray-50 overflow-visible">
       {/* Add structured data for homepage */}
       <JsonLd data={breadcrumbSchema} id="breadcrumb" />
 
-      <Navbar />
-
-      {/* Hero */}
-      <Hero />
-
-      {/* Filters */}
-      <Filters />
-
-      {/* Always render upcoming */}
-      <UpcomingEvents />
-
-      <Footer />
+      <HomeClient
+        initialEvents={data}
+        initialTotal={total}
+        initialHasMore={hasMore}
+      />
     </div>
   );
 }

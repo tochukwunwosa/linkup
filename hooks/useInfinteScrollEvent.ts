@@ -3,16 +3,27 @@ import { Event } from "@/lib/validations/event";
 import { useInView } from "react-intersection-observer";
 import { useEventContext } from "@/context/EventContext";
 
-export default function useInfiniteScrollEvents({ filters }: { filters: any }) {
-  const [events, setEvents] = useState<Event[]>([]);
-  const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
+export default function useInfiniteScrollEvents({
+  filters,
+  initialEvents = [],
+  initialTotal = 0,
+  initialHasMore = true
+}: {
+  filters: any;
+  initialEvents?: Event[];
+  initialTotal?: number;
+  initialHasMore?: boolean;
+}) {
+  const [events, setEvents] = useState<Event[]>(initialEvents);
+  const [page, setPage] = useState(initialEvents.length > 0 ? 2 : 1); // Start at page 2 if we have initial data
+  const [hasMore, setHasMore] = useState(initialHasMore);
   const [loading, setLoading] = useState(false);
   const [shouldFetchNext, setShouldFetchNext] = useState(false);
   const { setTotalEventsFound, userLocation } = useEventContext();
   const filtersStringRef = useRef<string>("");
   const userLocationStringRef = useRef<string>("");
-  const prevPageRef = useRef<number>(1);
+  const prevPageRef = useRef<number>(initialEvents.length > 0 ? 1 : 0); // Set to 1 if we have initial data
+  const [isInitialized, setIsInitialized] = useState(initialEvents.length > 0);
 
   // Much more aggressive prefetching - trigger 1500px before observer
   const { ref: observerRef, inView } = useInView({
@@ -20,6 +31,13 @@ export default function useInfiniteScrollEvents({ filters }: { filters: any }) {
     threshold: 0,
     rootMargin: "1500px", // Start loading much earlier
   });
+
+  // Set initial total count if provided
+  useEffect(() => {
+    if (isInitialized && initialTotal > 0) {
+      setTotalEventsFound(initialTotal);
+    }
+  }, [isInitialized, initialTotal, setTotalEventsFound]);
 
   // Load more when triggered
   useEffect(() => {

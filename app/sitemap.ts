@@ -1,9 +1,9 @@
 import { MetadataRoute } from "next";
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+export default function sitemap(): MetadataRoute.Sitemap {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://techlinkup.xyz";
 
-  const routes: MetadataRoute.Sitemap = [
+  return [
     {
       url: siteUrl,
       lastModified: new Date(),
@@ -35,6 +35,4 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.6,
     },
   ];
-
-  return routes;
 }
