@@ -114,7 +114,7 @@ export function SubmissionsTable({ submissions, onApprove, onReject }: Submissio
       </div>
 
       {/* Sticky Pagination */}
-      <div className="sticky bottom-0 z-50 pt-4 border-t">
+      <div className="sticky bg-white bottom-0 z-50 pt-4 border-t">
         <div className="flex items-center justify-between">
           <div className="flex-1 text-sm text-muted-foreground">
             {table.getFilteredSelectedRowModel().rows.length} of {table.getFilteredRowModel().rows.length} row(s)
