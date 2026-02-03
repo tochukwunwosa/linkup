@@ -98,22 +98,12 @@ const nextConfig: NextConfig = {
     return config;
   },
   env: {
+    // Only expose NEXT_PUBLIC_ variables here - server secrets are accessed via process.env directly
     NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
     NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
     NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
     NEXT_PUBLIC_UMAMI_WEBSITE_ID: process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID,
-    RESEND_API_KEY: process.env.RESEND_API_KEY,
-    CRON_SECRET: process.env.CRON_SECRET,
-    INITIAL_SETUP_TOKEN: process.env.INITIAL_SETUP_TOKEN,
-    GOOGLE_MAPS_SERVER_KEY: process.env.GOOGLE_MAPS_SERVER_KEY,
     NEXT_PUBLIC_GOOGLE_MAPS_CLIENT_KEY: process.env.NEXT_PUBLIC_GOOGLE_MAPS_CLIENT_KEY,
-
-    // Future use – uncomment when needed:
-    // OPENROUTER_API_KEY: process.env.OPENROUTER_API_KEY,
-    // NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
-    // NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET: process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET,
-    // CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET,
-    // NEXT_PUBLIC_CLOUDINARY_API_KEY: process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY,
   },
   async headers() {
     return [
@@ -133,6 +123,22 @@ const nextConfig: NextConfig = {
             value: "strict-origin-when-cross-origin",
           },
           {
+            key: "Strict-Transport-Security",
+            value: "max-age=31536000; includeSubDomains; preload",
+          },
+          {
+            key: "Cross-Origin-Opener-Policy",
+            value: "same-origin",
+          },
+          {
+            key: "Permissions-Policy",
+            value: "camera=(), microphone=(), geolocation=(self)",
+          },
+          {
+            key: "X-Permitted-Cross-Domain-Policies",
+            value: "none",
+          },
+          {
             key: "Content-Security-Policy",
             value: [
               "default-src 'self'",
@@ -144,6 +150,7 @@ const nextConfig: NextConfig = {
               "frame-ancestors 'none'",
               "base-uri 'self'",
               "form-action 'self'",
+              "upgrade-insecure-requests",
             ].join("; "),
           },
         ],

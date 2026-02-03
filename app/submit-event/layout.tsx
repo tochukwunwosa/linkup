@@ -9,7 +9,15 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Submit Your Event - LinkUp",
     description: "Share your tech event with the Nigerian tech community. Submit conferences, meetups, workshops, and hackathons to Tech Linkup.",
-    url: "https://techlinkup.xyz/linkup-og-image-1200x600.webp",
+    url: "https://techlinkup.xyz/submit-event",
+    images: [
+      {
+        url: "/linkup-og-image-1200x600.webp",
+        width: 1200,
+        height: 630,
+        alt: "Submit Your Event to LinkUp",
+      },
+    ],
   },
 };
 

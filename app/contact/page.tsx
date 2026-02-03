@@ -135,6 +135,16 @@ export default function ContactPage() {
           <span className="font-semibold">Response time:</span> We typically respond within 24-48 hours during business days.
         </p>
       </div>
+
+      {/* Additional Links */}
+      <div className="mt-8 text-center text-sm text-gray-600">
+        <p>
+          Want to learn more about us? Visit our <Link href="/about" className="text-blue-600 hover:underline">About page</Link>.
+        </p>
+        <p className="mt-2">
+          Already submitted an event? <Link href="/my-submissions" className="text-blue-600 hover:underline">Track your submissions</Link>.
+        </p>
+      </div>
     </main>
   );
 }

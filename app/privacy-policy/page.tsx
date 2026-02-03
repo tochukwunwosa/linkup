@@ -2,6 +2,28 @@ import React from "react";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Privacy Policy - LinkUp",
+  description: "Read LinkUp's privacy policy to understand how we collect, use, and protect your data on our tech event discovery platform.",
+  alternates: {
+    canonical: "https://techlinkup.xyz/privacy-policy",
+  },
+  openGraph: {
+    title: "Privacy Policy - LinkUp",
+    description: "Read LinkUp's privacy policy to understand how we collect, use, and protect your data.",
+    url: "https://techlinkup.xyz/privacy-policy",
+    images: [
+      {
+        url: "/linkup-og-image-1200x600.webp",
+        width: 1200,
+        height: 630,
+        alt: "LinkUp Privacy Policy",
+      },
+    ],
+  },
+};
 
 export default function PrivacyPolicyPage() {
   return (
@@ -92,9 +114,18 @@ export default function PrivacyPolicyPage() {
 
       <h2 className="text-xl font-semibold mt-10 mb-4">Questions?</h2>
       <p className="mb-6">
-        Feel free to reach out to us directly. We’re here to build something
+        Feel free to reach out to us directly. We&apos;re here to build something
         good — not sneak around with your information.
       </p>
+
+      <div className="mt-8 pt-8 border-t border-gray-200 text-sm text-gray-600">
+        <p>
+          Also see our <Link href="/terms-of-use" className="text-blue-600 hover:underline">Terms of Use</Link> for platform guidelines.
+        </p>
+        <p className="mt-2">
+          Have questions? <Link href="/contact" className="text-blue-600 hover:underline">Contact us</Link>.
+        </p>
+      </div>
     </main>
   );
 }

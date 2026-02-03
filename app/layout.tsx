@@ -27,6 +27,13 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        {/* Preconnect to external services for faster loading */}
+        <link rel="preconnect" href="https://cloud.umami.is" />
+        <link rel="dns-prefetch" href="https://cloud.umami.is" />
+        <link rel="preconnect" href={process.env.NEXT_PUBLIC_SUPABASE_URL} />
+        <link rel="dns-prefetch" href={process.env.NEXT_PUBLIC_SUPABASE_URL} />
+        <link rel="preconnect" href="https://maps.googleapis.com" />
+        <link rel="dns-prefetch" href="https://maps.googleapis.com" />
         {/* Organization Schema */}
         <Script
           id="organization-schema"

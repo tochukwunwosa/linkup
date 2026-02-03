@@ -18,6 +18,18 @@ export default function Footer() {
           </div>
           <nav className="flex flex-wrap gap-4 text-sm text-muted-foreground">
             <Link
+              href="/submit-event"
+              className="hover:text-primary transition-colors duration-300 ease-in-out"
+            >
+              Submit Event
+            </Link>
+            <Link
+              href="/my-submissions"
+              className="hover:text-primary transition-colors duration-300 ease-in-out"
+            >
+              Track Submissions
+            </Link>
+            <Link
               href="/about"
               className="hover:text-primary transition-colors duration-300 ease-in-out"
             >

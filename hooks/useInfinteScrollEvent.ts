@@ -25,11 +25,11 @@ export default function useInfiniteScrollEvents({
   const prevPageRef = useRef<number>(initialEvents.length > 0 ? 1 : 0); // Set to 1 if we have initial data
   const [isInitialized, setIsInitialized] = useState(initialEvents.length > 0);
 
-  // Much more aggressive prefetching - trigger 1500px before observer
+  // Prefetch when user scrolls near the bottom - balanced for performance
   const { ref: observerRef, inView } = useInView({
     triggerOnce: false,
     threshold: 0,
-    rootMargin: "1500px", // Start loading much earlier
+    rootMargin: "600px", // Start loading 600px before reaching bottom
   });
 
   // Set initial total count if provided
@@ -74,7 +74,6 @@ export default function useInfiniteScrollEvents({
 
       // Refetch if location became available or changed
       if (isNowAvailable) {
-        console.log("User location detected, re-sorting events by proximity:", userLocation);
         setLoading(true); // Set loading immediately
         setPage(1);
         setEvents([]);
@@ -146,7 +145,6 @@ export default function useInfiniteScrollEvents({
           params.set("search", filters.search);
         }
 
-        console.log("Fetching page:", page, "with params:", params.toString());
 
         const res = await fetch(`/api/events?${params.toString()}`);
         

@@ -13,7 +13,15 @@ export const metadata: Metadata = {
   openGraph: {
     title: "About Us - LinkUp",
     description: "Learn about LinkUp, Nigeria's community-driven platform for discovering tech events, conferences, meetups, and workshops across all 36 states.",
-    url: "https://techlinkup.xyz/linkup-og-image-1200x600.webp",
+    url: "https://techlinkup.xyz/about",
+    images: [
+      {
+        url: "/linkup-og-image-1200x600.webp",
+        width: 1200,
+        height: 630,
+        alt: "LinkUp - Discover Tech Events in Nigeria",
+      },
+    ],
   },
 };
 
@@ -124,6 +132,9 @@ export default function AboutPage() {
             </Button>
           </Link>
         </div>
+        <p className="text-gray-500 text-sm mt-6">
+          Have questions? <Link href="/contact" className="text-blue-600 hover:underline">Get in touch</Link> with our team.
+        </p>
       </div>
     </main>
   );

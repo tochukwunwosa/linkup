@@ -137,6 +137,13 @@ export default function MySubmissionsPage() {
         </CardContent>
       </Card>
 
+      {/* CTA for new submissions */}
+      <div className="mb-8 p-4 bg-muted/50 rounded-lg text-center">
+        <p className="text-sm text-muted-foreground">
+          Have a new event to share? <Link href="/submit-event" className="text-blue-600 hover:underline font-medium">Submit your event</Link> to the community.
+        </p>
+      </div>
+
       {/* Results */}
       {searched && (
         <div className="space-y-4">

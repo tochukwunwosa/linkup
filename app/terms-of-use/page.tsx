@@ -2,6 +2,28 @@ import React from "react";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Terms of Use - LinkUp",
+  description: "Read LinkUp's terms of use to understand the guidelines for using our tech event discovery platform.",
+  alternates: {
+    canonical: "https://techlinkup.xyz/terms-of-use",
+  },
+  openGraph: {
+    title: "Terms of Use - LinkUp",
+    description: "Read LinkUp's terms of use to understand the guidelines for using our platform.",
+    url: "https://techlinkup.xyz/terms-of-use",
+    images: [
+      {
+        url: "/linkup-og-image-1200x600.webp",
+        width: 1200,
+        height: 630,
+        alt: "LinkUp Terms of Use",
+      },
+    ],
+  },
+};
 
 export default function TermsOfUsePage() {
   return (
@@ -78,8 +100,17 @@ export default function TermsOfUsePage() {
       <h2 className="text-xl font-semibold mt-10 mb-4">Updates to These Terms</h2>
       <p className="mb-6">
         These terms will likely change as the platform grows. If something major
-        shifts, we’ll make it clear before the changes go live.
+        shifts, we&apos;ll make it clear before the changes go live.
       </p>
+
+      <div className="mt-8 pt-8 border-t border-gray-200 text-sm text-gray-600">
+        <p>
+          Also see our <Link href="/privacy-policy" className="text-blue-600 hover:underline">Privacy Policy</Link> to understand how we handle your data.
+        </p>
+        <p className="mt-2">
+          Have questions? <Link href="/contact" className="text-blue-600 hover:underline">Contact us</Link>.
+        </p>
+      </div>
     </main>
   );
 }
