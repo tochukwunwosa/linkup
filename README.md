@@ -34,7 +34,7 @@ To create a thriving and connected tech ecosystem, where individuals and organiz
 ## 🛠 Features
 
 - **Event Discovery**: Browse tech events by location, category, date, and tags.
-- **State/Location Filter**: Select state (e.g. in Nigeria) and view events in that location.
+- **State/Location Filter**: Select state (e.g. in Kano) and view events in that location.
 - **Search & Pagination**: Search by keywords, filter, and paginate results.
 - **Event Cards**: Display event information including title, category, date & time, location, price, link, and calendar integration.
 - **Event Submission**: Public event submission with admin approval workflow and tracking IDs.
