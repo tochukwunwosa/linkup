@@ -183,13 +183,20 @@ const nextConfig: NextConfig = {
               type: 'host',
               value: 'www.techlinkup.xyz',
             },
+          ],
+          destination: 'https://techlinkup.xyz/:path*',
+          permanent: true,
+        },
+        {
+          source: '/:path*',
+          has: [
             {
               type: 'host',
               value: 'tech-linkup.vercel.app',
-            }
+            },
           ],
           destination: 'https://techlinkup.xyz/:path*',
-          permanent: true, // 301 redirect
+          permanent: true,
         },
       ];
     },
