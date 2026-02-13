@@ -108,7 +108,8 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       {
-        source: "/(.*)",
+        // Exclude sitemap.xml and robots.txt from security headers
+        source: "/((?!sitemap\\.xml|robots\\.txt).*)",
         headers: [
           {
             key: "X-Content-Type-Options",
@@ -152,6 +153,32 @@ const nextConfig: NextConfig = {
               "form-action 'self'",
               "upgrade-insecure-requests",
             ].join("; "),
+          },
+        ],
+      },
+      {
+        source: "/sitemap.xml",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=3600, s-maxage=86400, stale-while-revalidate=43200",
+          },
+          {
+            key: "X-Content-Type-Options",
+            value: "nosniff",
+          },
+        ],
+      },
+      {
+        source: "/robots.txt",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=3600, s-maxage=86400, stale-while-revalidate=43200",
+          },
+          {
+            key: "X-Content-Type-Options",
+            value: "nosniff",
           },
         ],
       },
