@@ -16,7 +16,8 @@
       "mcp__supabase__list_tables",
       "mcp__supabase__get_advisors",
       "Bash(npx playwright:*)",
-      "WebFetch(domain:techlinkup.xyz)"
+      "WebFetch(domain:techlinkup.xyz)",
+      "Bash(curl:*)"
     ]
   },
   "enabledMcpjsonServers": [
