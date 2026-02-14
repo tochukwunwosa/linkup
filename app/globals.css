@@ -87,9 +87,13 @@
   }
 
   html {
-    @apply scroll-smooth ;
+    @apply scroll-smooth;
   }
 
+  /* iOS safe area support for PWA standalone mode */
+  body {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
 }
 
 

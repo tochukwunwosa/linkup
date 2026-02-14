@@ -15,9 +15,7 @@ export async function getSubmissionByTrackingId(trackingId: string) {
     const supabase = await createClient();
 
     const { data: submission, error } = await supabase
-      .from("event_submissions")
-      .select("*")
-      .eq("tracking_id", trackingId.toUpperCase())
+      .rpc("get_submission_by_tracking_id", { p_tracking_id: trackingId })
       .single();
 
     if (error || !submission) {

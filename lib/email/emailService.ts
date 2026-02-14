@@ -225,17 +225,14 @@ export async function sendOrganizerRejectedNotification(params: OrganizerRejecte
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function getAdminEmails(supabase: any): Promise<string[]> {
   try {
-    const { data: admins, error } = await supabase
-      .from("admins")
-      .select("email")
-      .order("created_at", { ascending: true });
+    const { data, error } = await supabase.rpc("get_admin_emails");
 
     if (error) {
       console.error("Error fetching admin emails:", error);
       return [];
     }
 
-    return admins?.map((admin: { email: string }) => admin.email) || [];
+    return data?.map((row: { email: string }) => row.email) || [];
   } catch (error) {
     console.error("Error in getAdminEmails:", error);
     return [];

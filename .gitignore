@@ -57,3 +57,10 @@ sw.js.map
 
 //claude notes
 claude-notes
+
+# Claude
+.claude/settings.json
+.settings/
+# MCP
+.mcp*
+.mcp.json

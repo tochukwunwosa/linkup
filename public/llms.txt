@@ -1,0 +1,42 @@
+# LinkUp (Tech LinkUp)
+
+> LinkUp is a community-driven platform for discovering tech events across Nigeria. It aggregates conferences, meetups, workshops, hackathons, and networking events from all 36 states.
+
+## About
+
+LinkUp helps the Nigerian tech community find and share tech events. Organizers can submit events for free, and users can browse upcoming events by category, location, date, and type (online, in-person, or hybrid).
+
+Website: https://techlinkup.xyz
+
+## Key Pages
+
+- Homepage (event discovery): https://techlinkup.xyz
+- Submit an Event: https://techlinkup.xyz/submit-event
+- Track Submissions: https://techlinkup.xyz/my-submissions
+- About: https://techlinkup.xyz/about
+- Contact: https://techlinkup.xyz/contact
+
+## Event Categories
+
+Events are organized into categories including: AI/ML, Web Development, Mobile Development, Cloud Computing, Cybersecurity, Data Science, Blockchain/Web3, DevOps, UI/UX Design, Product Management, Startup/Entrepreneurship, and General Tech.
+
+## Event Types
+
+- In-person events
+- Online events
+- Hybrid (In-person & Online)
+
+## Coverage
+
+All 36 Nigerian states and the FCT, with major tech hubs in Lagos, Abuja, Port Harcourt, Ibadan, Enugu, Kano, and Benin City.
+
+## For Organizers
+
+Event organizers can submit their tech events through the submission form. Each submission receives a tracking ID for status updates. Events are reviewed by admins before being published.
+
+## Technical Details
+
+- Built with Next.js and hosted on Vercel
+- Data stored in Supabase (PostgreSQL)
+- Progressive Web App (PWA) with offline support
+- Open to the Nigerian tech community

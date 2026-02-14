@@ -15,10 +15,7 @@ export async function getSubmissionsByEmail(email: string) {
     const supabase = await createClient();
 
     const { data: submissions, error } = await supabase
-      .from("event_submissions")
-      .select("*")
-      .eq("organizer_email", email.toLowerCase().trim())
-      .order("submitted_at", { ascending: false });
+      .rpc("get_submissions_by_email", { p_email: email });
 
     if (error) {
       console.error("Error fetching submissions by email:", error);

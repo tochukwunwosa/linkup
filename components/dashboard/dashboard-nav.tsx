@@ -59,21 +59,21 @@ export function DashboardNav({isSuperAdmin}: {isSuperAdmin: boolean}) {
       <div className='pt-4'>
         <SidebarMenu>
           {navItems.map((item) => (
-            (!item.requiresSuperAdmin || (item.requiresSuperAdmin && isSuperAdmin)) && (
+            (!item.requiresSuperAdmin || isSuperAdmin) && (
               <SidebarMenuItem key={item.href + item.title}>
                 <SidebarMenuButton
                   asChild
                   isActive={pathname === item.href}
                   tooltip={item.title}
                   className={cn(
-                    "w-fit group flex items-center gap-2 rounded-md px-3 py-2 transition-colors",
+                    "w-fit flex items-center gap-2 rounded-md px-3 py-2 transition-colors hover:[&>svg]:scale-110",
                     pathname === item.href
                       ? "text-white shadow-sm"
                       : "text-primary hover:text-foreground"
                   )}
                 >
-                  <Link href={item.href}>
-                    <item.icon className="size-5 transition-transform group-hover:scale-110" />
+                  <Link href={item.href} className="flex items-center gap-2">
+                    <item.icon className="size-5 transition-transform" />
                     <span>{item.title}</span>
                   </Link>
                 </SidebarMenuButton>
@@ -81,6 +81,7 @@ export function DashboardNav({isSuperAdmin}: {isSuperAdmin: boolean}) {
             )
           ))}
         </SidebarMenu>
+
       </div>
     </>
   )

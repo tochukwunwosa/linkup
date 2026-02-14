@@ -163,10 +163,6 @@ const nextConfig: NextConfig = {
             key: "Cache-Control",
             value: "public, max-age=3600, s-maxage=86400, stale-while-revalidate=43200",
           },
-          {
-            key: "X-Content-Type-Options",
-            value: "nosniff",
-          },
         ],
       },
       {

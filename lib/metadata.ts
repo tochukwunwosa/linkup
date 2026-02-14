@@ -4,7 +4,7 @@ const APP_NAME = "LinkUp";
 const APP_DEFAULT_TITLE = "LinkUp - Community-Driven Tech Event Discovery in Nigeria";
 const APP_TITLE_TEMPLATE = "%s | LinkUp";
 const APP_DESCRIPTION =
-  "Discover and connect with tech events across Nigeria through our community-driven platform.";
+  "Discover tech events across Nigeria — conferences, meetups, hackathons, and workshops in Lagos, Abuja, and all 36 states. Submit your event for free.";
 
 export const APP_KEYWORDS = [
   // Core keywords
@@ -151,6 +151,9 @@ export const siteConfig: Metadata = {
   },
   description: APP_DESCRIPTION,
   keywords: APP_KEYWORDS,
+  alternates: {
+    canonical: "/",
+  },
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
