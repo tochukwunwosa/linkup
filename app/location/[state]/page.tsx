@@ -10,12 +10,9 @@ import { locationMeta, getLocationMeta } from "@/constants/location-meta";
 import { Event } from "@/lib/validations/event";
 
 export const revalidate = 3600; // refresh every hour
+export const dynamic = "force-dynamic"; // always fetch fresh data
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://techlinkup.xyz";
-
-export async function generateStaticParams() {
-  return locationMeta.map((l) => ({ state: l.slug }));
-}
 
 export async function generateMetadata({
   params,
@@ -53,12 +50,17 @@ export default async function LocationPage({
   if (!meta) return notFound();
 
   const supabase = await createClient();
-  const { data: events } = await supabase
+  const { data, error } = await supabase
     .from("public_events")
     .select("*")
-    .ilike("location", `%${meta.searchTerm}%`)
-    .order("start_date", { ascending: true })
-    .returns<Event[]>();
+    .or(`location.ilike.*${meta.searchTerm}*,city.ilike.*${meta.searchTerm}*`)
+    .order("start_date", { ascending: true });
+
+  if (error) {
+    console.error(`[location/${meta.slug}] Error fetching events:`, error);
+  }
+
+  const events = (data ?? []) as Event[];
 
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: "Home", url: siteUrl },

@@ -1,7 +1,6 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import Navbar from "@/components/navbar";
 import Hero from "@/components/hero";
 import Filters from "@/components/filters";
 import { Event } from "@/lib/validations/event";
@@ -26,23 +25,16 @@ export default function HomeClient({
   initialHasMore,
 }: HomeClientProps) {
   return (
-    <div className="bg-gray-50 overflow-visible">
-      <Navbar />
-
-      {/* Hero */}
+    <div className=" ">
       <Hero />
 
-      {/* Filters */}
       <Filters />
 
-      {/* Always render upcoming */}
       <UpcomingEvents
         initialEvents={initialEvents}
         initialTotal={initialTotal}
         initialHasMore={initialHasMore}
       />
-
-      <Footer />
     </div>
   );
 }

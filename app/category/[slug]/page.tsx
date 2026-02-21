@@ -10,12 +10,9 @@ import { categoryMeta, getCategoryMeta } from "@/constants/category-meta";
 import { Event } from "@/lib/validations/event";
 
 export const revalidate = 3600; // refresh every hour
+export const dynamic = "force-dynamic"; // always fetch fresh data
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://techlinkup.xyz";
-
-export async function generateStaticParams() {
-  return categoryMeta.map((c) => ({ slug: c.slug }));
-}
 
 export async function generateMetadata({
   params,
@@ -55,8 +52,12 @@ export default async function CategoryPage({
   const supabase = await createClient();
 
   // Use the existing RPC for case-insensitive category search
-  const { data: rawEvents } = await supabase
+  const { data: rawEvents, error } = await supabase
     .rpc("search_events_by_categories", { keywords: meta.dbKeywords });
+
+  if (error) {
+    console.error(`[category/${meta.slug}] Error fetching events:`, error);
+  }
 
   const events = (rawEvents ?? []) as Event[];
 
