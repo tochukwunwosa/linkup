@@ -8,6 +8,7 @@ import { EventProvider } from "@/context/EventContext";
 import { EventUrlSync } from "@/context/EventUrlSync";
 import { PWAInstallPrompt } from "@/components/pwa/install-prompt";
 import { QueryProvider } from "@/components/providers/query-provider";
+import Footer from "@/components/footer";
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -26,6 +27,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
         <main id="main-content">
           {children}
         </main>
+        {!isAdminRoute && <Footer />}
         <Toaster richColors />
         {!isAdminRoute && <PWAInstallPrompt />}
       </EventProvider>
