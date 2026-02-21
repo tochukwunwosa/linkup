@@ -5,21 +5,21 @@ import { Button } from "@/components/ui/button";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "About Us - LinkUp",
-  description: "Learn about LinkUp, Nigeria's community-driven platform for discovering tech events, conferences, meetups, and workshops across all 36 states.",
+  title: "About Us - TechLinkUp",
+  description: "Learn about TechLinkUp, Nigeria's community-driven platform for discovering tech events, conferences, meetups, and workshops across all 36 states.",
   alternates: {
     canonical: "https://techlinkup.xyz/about",
   },
   openGraph: {
-    title: "About Us - LinkUp",
-    description: "Learn about LinkUp, Nigeria's community-driven platform for discovering tech events, conferences, meetups, and workshops across all 36 states.",
+    title: "About Us - TechLinkUp",
+    description: "Learn about TechLinkUp, Nigeria's community-driven platform for discovering tech events, conferences, meetups, and workshops across all 36 states.",
     url: "https://techlinkup.xyz/about",
     images: [
       {
         url: "/linkup-og-image-1200x600.webp",
         width: 1200,
         height: 630,
-        alt: "LinkUp - Discover Tech Events in Nigeria",
+        alt: "TechLinkUp - Discover Tech Events in Nigeria",
       },
     ],
   },
@@ -36,7 +36,7 @@ export default function AboutPage() {
         </Button>
       </Link>
 
-      <h1 className="text-4xl font-bold mb-4 text-gray-900">About LinkUp</h1>
+      <h1 className="text-4xl font-bold mb-4 text-gray-900">About TechLinkUp</h1>
       <p className="text-lg text-gray-600 mb-12">
         Connecting Nigeria&apos;s tech community, one event at a time.
       </p>
@@ -45,7 +45,7 @@ export default function AboutPage() {
       <div className="mb-12">
         <h2 className="text-2xl font-bold text-gray-900 mb-4">Our Mission</h2>
         <p className="text-gray-700 leading-relaxed mb-4">
-          LinkUp is a <strong>community-driven platform</strong> built to help tech enthusiasts,
+          TechLinkUp is a <strong>community-driven platform</strong> built to help tech enthusiasts,
           developers, designers, and innovators across Nigeria discover and connect through events.
           We believe that the best way to grow a thriving tech ecosystem is by bringing people together—whether
           it&apos;s at conferences, meetups, workshops, or hackathons.
@@ -99,13 +99,13 @@ export default function AboutPage() {
       <div className="mb-12 pb-12 border-b border-gray-200">
         <h2 className="text-2xl font-bold text-gray-900 mb-4">Our Story</h2>
         <p className="text-gray-700 leading-relaxed mb-4">
-          LinkUp was born out of a simple frustration: it was too hard to find tech events
+          TechLinkUp was born out of a simple frustration: it was too hard to find tech events
           happening across Nigeria. Events were scattered across social media, WhatsApp groups,
           and word-of-mouth—there was no single, reliable source.
         </p>
         <p className="text-gray-700 leading-relaxed mb-4">
           We set out to change that by building a platform where the community could come together
-          to share and discover events. Today, LinkUp serves thousands of tech enthusiasts across
+          to share and discover events. Today, TechLinkUp serves thousands of tech enthusiasts across
           Nigeria, helping them find conferences, meetups, workshops, and more.
         </p>
         <p className="text-gray-700 leading-relaxed">
@@ -118,7 +118,7 @@ export default function AboutPage() {
       <div className="text-center">
         <h2 className="text-2xl font-bold text-gray-900 mb-3">Join the Community</h2>
         <p className="text-gray-600 mb-6">
-          Whether you&apos;re organizing events or just looking to attend, LinkUp is built for you.
+          Whether you&apos;re organizing events or just looking to attend, TechLinkUp is built for you.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link href="/submit-event">

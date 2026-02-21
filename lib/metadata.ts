@@ -1,8 +1,8 @@
 import type { Metadata, Viewport } from "next";
 
-const APP_NAME = "LinkUp";
-const APP_DEFAULT_TITLE = "LinkUp - Community-Driven Tech Event Discovery in Nigeria";
-const APP_TITLE_TEMPLATE = "%s | LinkUp";
+const APP_NAME = "TechLinkUp";
+const APP_DEFAULT_TITLE = "TechLinkUp - Community-Driven Tech Event Discovery in Nigeria";
+const APP_TITLE_TEMPLATE = "%s | TechLinkUp";
 const APP_DESCRIPTION =
   "Discover tech events across Nigeria — conferences, meetups, hackathons, and workshops in Lagos, Abuja, and all 36 states. Submit your event for free.";
 
@@ -177,7 +177,7 @@ export const siteConfig: Metadata = {
         url: "/linkup-og-image-1200x600.webp",
         width: 1200,
         height: 630,
-        alt: "LinkUp - Community-Driven Tech Event Discovery in Nigeria",
+        alt: "TechLinkUp - Community-Driven Tech Event Discovery in Nigeria",
       },
     ],
   },
@@ -193,7 +193,7 @@ export const siteConfig: Metadata = {
         url: "/linkup-og-image-1200x600.webp",
         width: 1200,
         height: 630,
-        alt: "LinkUp - Community-Driven Tech Event Discovery in Nigeria",
+        alt: "TechLinkUp - Community-Driven Tech Event Discovery in Nigeria",
       },
     ],
   },

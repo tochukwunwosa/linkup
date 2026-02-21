@@ -20,7 +20,7 @@ function getResendClient(): Resend {
   return resendClient;
 }
 
-const FROM_EMAIL = "Tech Linkup <admin@techlinkup.xyz>";
+const FROM_EMAIL = "TechLinkUp <admin@techlinkup.xyz>";
 const REPLY_TO = config.resend.replyToEmail;
 
 export interface AdminNotificationParams {

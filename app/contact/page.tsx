@@ -6,14 +6,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Contact Us - LinkUp",
-  description: "Get in touch with the LinkUp team. Have questions, feedback, or want to collaborate? We'd love to hear from you.",
+  title: "Contact Us - TechLinkUp",
+  description: "Get in touch with the TechLinkUp team. Have questions, feedback, or want to collaborate? We'd love to hear from you.",
   alternates: {
     canonical: "https://techlinkup.xyz/contact",
   },
   openGraph: {
-    title: "Contact Us - LinkUp",
-    description: "Get in touch with the LinkUp team. Have questions, feedback, or want to collaborate? We'd love to hear from you.",
+    title: "Contact Us - TechLinkUp",
+    description: "Get in touch with the TechLinkUp team. Have questions, feedback, or want to collaborate? We'd love to hear from you.",
     url: "https://techlinkup.xyz/contact",
   },
 };
@@ -46,7 +46,7 @@ export default function ContactPage() {
               <CardTitle>General Inquiries</CardTitle>
             </div>
             <CardDescription>
-              Questions about LinkUp or how to use the platform
+              Questions about TechLinkUp or how to use the platform
             </CardDescription>
           </CardHeader>
           <CardContent>

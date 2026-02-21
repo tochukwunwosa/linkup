@@ -13,7 +13,7 @@ export function generateOrganizationSchema() {
   return {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: "LinkUp",
+    name: "TechLinkUp",
     alternateName: "Tech LinkUp",
     url: process.env.NEXT_PUBLIC_SITE_URL || "https://techlinkup.xyz",
     logo: `${process.env.NEXT_PUBLIC_SITE_URL || "https://techlinkup.xyz"}/assets/Logo/linkup-logo.png`,
@@ -41,7 +41,7 @@ export function generateWebSiteSchema() {
   return {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    name: "LinkUp - Community-Driven Tech Event Discovery in Nigeria",
+    name: "TechLinkUp - Community-Driven Tech Event Discovery in Nigeria",
     alternateName: "Tech LinkUp",
     url: siteUrl,
     description:
@@ -199,7 +199,7 @@ export function generateEventSchema(event: EventType) {
     location,
     organizer: {
       "@type": "Organization",
-      name: "LinkUp",
+      name: "TechLinkUp",
       url: siteUrl,
     },
     offers,
@@ -235,17 +235,13 @@ export function generateEventListSchema(events: EventType[]) {
   return {
     "@context": "https://schema.org",
     "@type": "ItemList",
+    name: "Tech Events in Nigeria",
+    url: siteUrl,
     itemListElement: events.map((event, index) => ({
       "@type": "ListItem",
       position: index + 1,
-      item: {
-        "@type": "Event",
-        name: event.title,
-        url: event.link || `${siteUrl}/#event-${event.id}`,
-        startDate: new Date(
-          `${event.start_date}T${event.time || "00:00"}`
-        ).toISOString(),
-      },
+      url: `${siteUrl}/events/${event.id}`,
+      name: event.title,
     })),
   };
 }

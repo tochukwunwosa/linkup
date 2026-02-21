@@ -1,10 +1,9 @@
 import JsonLd from "@/components/JsonLd";
-import { generateBreadcrumbSchema } from "@/lib/structured-data";
+import { generateBreadcrumbSchema, generateEventListSchema } from "@/lib/structured-data";
 import { getPaginatedFilteredEvents } from "@/app/actions/event/getPaginatedFilteredEvents";
 import HomeClient from "@/components/home-client";
 
 export default async function LinkUpLanding() {
-  // Generate breadcrumb schema for homepage
   const siteUrl =
     process.env.NEXT_PUBLIC_SITE_URL || "https://techlinkup.xyz";
 
@@ -28,10 +27,13 @@ export default async function LinkUpLanding() {
     userLocation: null,
   });
 
+  // ItemList schema so Google understands this page is a list of events
+  const itemListSchema = generateEventListSchema(data);
+
   return (
     <div className="bg-gray-50 overflow-visible">
-      {/* Add structured data for homepage */}
       <JsonLd data={breadcrumbSchema} id="breadcrumb" />
+      <JsonLd data={itemListSchema} id="event-list" />
 
       <HomeClient
         initialEvents={data}

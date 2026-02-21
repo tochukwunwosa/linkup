@@ -16,6 +16,13 @@ Website: https://techlinkup.xyz
 - About: https://techlinkup.xyz/about
 - Contact: https://techlinkup.xyz/contact
 
+## Individual Event Pages
+
+Each approved event has its own dedicated page at:
+https://techlinkup.xyz/events/[id]
+
+These pages include the full event title, date, time, location, description, category tags, price, and a link to the official event website. A full list of event URLs is available at: https://techlinkup.xyz/sitemap.xml
+
 ## Event Categories
 
 Events are organized into categories including: AI/ML, Web Development, Mobile Development, Cloud Computing, Cybersecurity, Data Science, Blockchain/Web3, DevOps, UI/UX Design, Product Management, Startup/Entrepreneurship, and General Tech.

@@ -5,21 +5,21 @@ import { Button } from "@/components/ui/button";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Terms of Use - LinkUp",
-  description: "Read LinkUp's terms of use to understand the guidelines for using our tech event discovery platform.",
+  title: "Terms of Use - TechLinkUp",
+  description: "Read TechLinkUp's terms of use to understand the guidelines for using our tech event discovery platform.",
   alternates: {
     canonical: "https://techlinkup.xyz/terms-of-use",
   },
   openGraph: {
-    title: "Terms of Use - LinkUp",
-    description: "Read LinkUp's terms of use to understand the guidelines for using our platform.",
+    title: "Terms of Use - TechLinkUp",
+    description: "Read TechLinkUp's terms of use to understand the guidelines for using our platform.",
     url: "https://techlinkup.xyz/terms-of-use",
     images: [
       {
         url: "/linkup-og-image-1200x600.webp",
         width: 1200,
         height: 630,
-        alt: "LinkUp Terms of Use",
+        alt: "TechLinkUp Terms of Use",
       },
     ],
   },
@@ -40,14 +40,14 @@ export default function TermsOfUsePage() {
       </p>
 
       <p className="mb-6">
-        Welcome to <strong>Tech LinkUp</strong>. {`If you're here, you're probably trying to
+        Welcome to <strong>TechLinkUp</strong>. {`If you're here, you're probably trying to
         find or share tech events — and that’s exactly what we built this for.`}
         These are the basic terms that guide how things work around here.
       </p>
 
       <h2 className="text-xl font-semibold mt-10 mb-4">What This Platform Is</h2>
       <p className="mb-6">
-        Tech LinkUp is a simple place to find and share tech-related events.
+        TechLinkUp is a simple place to find and share tech-related events.
         Over time, we’ll be adding more — things like profiles, reminders, and
         notifications to help you keep track of what matters to you.
       </p>
@@ -84,7 +84,7 @@ export default function TermsOfUsePage() {
       <h2 className="text-xl font-semibold mt-10 mb-4">Age Guidance</h2>
       <p className="mb-6">
         We’re not enforcing any age restrictions right now. But if you’re under
-        13, please check in with a parent or guardian before using Tech LinkUp.
+        13, please check in with a parent or guardian before using TechLinkUp.
       </p>
 
       <h2 className="text-xl font-semibold mt-10 mb-4">Things We Can’t Guarantee</h2>

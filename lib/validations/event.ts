@@ -114,7 +114,8 @@ export type Event = {
   city?: string;
   country?: string;
   lat: number,
-  lng: number
+  lng: number,
+  updated_at?: string;
 };
 
 // Event Submission Schemas

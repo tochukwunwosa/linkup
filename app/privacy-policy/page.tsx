@@ -5,21 +5,21 @@ import { Button } from "@/components/ui/button";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy - LinkUp",
-  description: "Read LinkUp's privacy policy to understand how we collect, use, and protect your data on our tech event discovery platform.",
+  title: "Privacy Policy - TechLinkUp",
+  description: "Read TechLinkUp's privacy policy to understand how we collect, use, and protect your data on our tech event discovery platform.",
   alternates: {
     canonical: "https://techlinkup.xyz/privacy-policy",
   },
   openGraph: {
-    title: "Privacy Policy - LinkUp",
-    description: "Read LinkUp's privacy policy to understand how we collect, use, and protect your data.",
+    title: "Privacy Policy - TechLinkUp",
+    description: "Read TechLinkUp's privacy policy to understand how we collect, use, and protect your data.",
     url: "https://techlinkup.xyz/privacy-policy",
     images: [
       {
         url: "/linkup-og-image-1200x600.webp",
         width: 1200,
         height: 630,
-        alt: "LinkUp Privacy Policy",
+        alt: "TechLinkUp Privacy Policy",
       },
     ],
   },
@@ -40,7 +40,7 @@ export default function PrivacyPolicyPage() {
       </p>
 
       <p className="mb-6">
-        Hi. This is the privacy policy for <strong>Tech LinkUp</strong> — a
+        Hi. This is the privacy policy for <strong>TechLinkUp</strong> — a
         space built for developers and tech folks to connect, explore events,
         and stay in the loop.
       </p>

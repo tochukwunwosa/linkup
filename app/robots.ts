@@ -23,6 +23,32 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ["/admin/", "/api/"],
         crawlDelay: 0,
       },
+      // AI crawlers — allow full access for discovery
+      {
+        userAgent: "GPTBot",
+        allow: "/",
+        disallow: ["/admin/", "/api/"],
+      },
+      {
+        userAgent: "ClaudeBot",
+        allow: "/",
+        disallow: ["/admin/", "/api/"],
+      },
+      {
+        userAgent: "PerplexityBot",
+        allow: "/",
+        disallow: ["/admin/", "/api/"],
+      },
+      {
+        userAgent: "anthropic-ai",
+        allow: "/",
+        disallow: ["/admin/", "/api/"],
+      },
+      {
+        userAgent: "Google-Extended",
+        allow: "/",
+        disallow: ["/admin/", "/api/"],
+      },
     ],
     sitemap: `${siteUrl}/sitemap.xml`,
   };

@@ -145,7 +145,7 @@ export const addToAppleCalendar = (event: Event) => {
   const icsContent = [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
-    "PRODID:-//LinkUp Events//Calendar Event//EN",
+    "PRODID:-//TechLinkUp Events//Calendar Event//EN",
     "BEGIN:VEVENT",
     `UID:${event.id}@linkup.com`,
     `DTSTAMP:${formatDateForICS(new Date())}`,

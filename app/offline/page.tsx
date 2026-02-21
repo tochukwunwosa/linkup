@@ -42,7 +42,7 @@ export default function OfflinePage() {
       </Card>
 
       <p className="text-sm text-muted-foreground mt-8">
-        Tech LinkUp works best with an active internet connection
+        TechLinkUp works best with an active internet connection
       </p>
     </div>
   );

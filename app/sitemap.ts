@@ -1,10 +1,11 @@
 import type { MetadataRoute } from "next";
+import { createClient } from "@/lib/supabase/server";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const siteUrl =
     process.env.NEXT_PUBLIC_SITE_URL || "https://techlinkup.xyz";
 
-  return [
+  const staticPages: MetadataRoute.Sitemap = [
     {
       url: siteUrl,
       lastModified: new Date(),
@@ -48,4 +49,23 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.3,
     },
   ];
+
+  try {
+    const supabase = await createClient();
+    const { data: events } = await supabase
+      .from("public_events")
+      .select("id, updated_at");
+
+    const eventPages: MetadataRoute.Sitemap = (events ?? []).map((event) => ({
+      url: `${siteUrl}/events/${event.id}`,
+      lastModified: event.updated_at ? new Date(event.updated_at) : new Date(),
+      changeFrequency: "weekly" as const,
+      priority: 0.8,
+    }));
+
+    return [...staticPages, ...eventPages];
+  } catch {
+    // If Supabase is unavailable, return static pages only
+    return staticPages;
+  }
 }

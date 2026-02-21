@@ -1,0 +1,97 @@
+# LinkUp — Full Index
+
+> https://techlinkup.xyz
+
+LinkUp is a community-driven platform for discovering tech events across Nigeria. It aggregates conferences, meetups, workshops, hackathons, and networking events submitted by Nigeria's tech community, covering all 36 states and the FCT.
+
+## About
+
+LinkUp was built to solve the problem of scattered, hard-to-find tech event information in Nigeria. The platform allows anyone to submit an event for free. Submitted events are reviewed by admins before being made publicly visible.
+
+## Audience
+
+- Software developers and engineers
+- Designers (UI/UX, product)
+- Product managers and founders
+- Data scientists and AI/ML practitioners
+- Students and early-career tech professionals
+- Event organizers looking to reach Nigeria's tech community
+
+## Event Categories
+
+- AI/ML (Artificial Intelligence, Machine Learning)
+- Web Development (frontend, backend, fullstack)
+- Mobile Development (iOS, Android, cross-platform)
+- Cloud Computing (AWS, GCP, Azure, DevOps)
+- Cybersecurity
+- Data Science and Analytics
+- Blockchain and Web3
+- UI/UX Design
+- Product Management
+- Startup and Entrepreneurship
+- General Tech / Networking
+
+## Event Types
+
+- In-person: Physical venue events across Nigerian cities
+- Online: Virtual events accessible from anywhere
+- Hybrid (In-person & Online): Both attendance modes available
+
+## Geographic Coverage
+
+All 36 Nigerian states and the Federal Capital Territory. Major tech hubs include:
+- Lagos (Ikeja, Lagos Island, Victoria Island, Lekki)
+- Abuja (FCT)
+- Port Harcourt, Rivers State
+- Ibadan, Oyo State
+- Enugu, Enugu State
+- Kano, Kano State
+- Benin City, Edo State
+- Owerri, Imo State
+- Uyo, Akwa Ibom State
+
+## Pages
+
+- [Home](https://techlinkup.xyz): Browse and filter all upcoming tech events in Nigeria
+- [Submit Event](https://techlinkup.xyz/submit-event): Submit a tech event to be listed on the platform
+- [Track Submissions](https://techlinkup.xyz/my-submissions): Check the status of a submitted event using a tracking ID
+- [About](https://techlinkup.xyz/about): About LinkUp and how it works
+- [Contact](https://techlinkup.xyz/contact): Contact the LinkUp team
+- [Privacy Policy](https://techlinkup.xyz/privacy-policy)
+- [Terms of Use](https://techlinkup.xyz/terms-of-use)
+
+## Individual Event Pages
+
+Each approved event has a dedicated page:
+https://techlinkup.xyz/events/[id]
+
+Event pages include:
+- Full event title
+- Start and end date
+- Time
+- Venue / location (with city and state)
+- Event type (in-person, online, hybrid)
+- Category tags
+- Full description
+- Price (free or paid with amount)
+- Link to the official event website or registration page
+
+## Sitemap
+
+A full list of all indexed event pages is available at:
+https://techlinkup.xyz/sitemap.xml
+
+## Submission and Review Process
+
+1. Organizers submit events via the public submission form
+2. Admins review each submission for relevance and accuracy
+3. Approved events are published and immediately visible on the homepage
+4. Rejected events receive feedback via email so organizers can resubmit
+
+## Content Policy
+
+All listed events are real, Nigeria-based tech community events. Events are reviewed before being made publicly visible. LinkUp does not endorse or take responsibility for individual events.
+
+## Contact
+
+Contact form: https://techlinkup.xyz/contact
