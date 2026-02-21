@@ -1,5 +1,7 @@
 import type { MetadataRoute } from "next";
 import { createClient } from "@/lib/supabase/server";
+import { locationMeta } from "@/constants/location-meta";
+import { categoryMeta } from "@/constants/category-meta";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const siteUrl =
@@ -50,6 +52,22 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
+  // Location pages (one per Nigerian state)
+  const locationPages: MetadataRoute.Sitemap = locationMeta.map((l) => ({
+    url: `${siteUrl}/location/${l.slug}`,
+    lastModified: new Date(),
+    changeFrequency: "daily" as const,
+    priority: 0.9,
+  }));
+
+  // Category pages
+  const categoryPages: MetadataRoute.Sitemap = categoryMeta.map((c) => ({
+    url: `${siteUrl}/category/${c.slug}`,
+    lastModified: new Date(),
+    changeFrequency: "daily" as const,
+    priority: 0.9,
+  }));
+
   try {
     const supabase = await createClient();
     const { data: events } = await supabase
@@ -63,9 +81,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.8,
     }));
 
-    return [...staticPages, ...eventPages];
+    return [...staticPages, ...locationPages, ...categoryPages, ...eventPages];
   } catch {
-    // If Supabase is unavailable, return static pages only
-    return staticPages;
+    return [...staticPages, ...locationPages, ...categoryPages];
   }
 }
