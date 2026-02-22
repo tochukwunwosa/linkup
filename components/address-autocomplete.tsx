@@ -76,6 +76,10 @@ export default function AddressAutocomplete({
   const abortRef = useRef<AbortController | null>(null)
   // Debounce timer
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  // True only when value changed because the user typed — not because code
+  // called onChangeAction() (e.g. after a selection). This prevents the
+  // useEffect from firing a new autocomplete search after a place is selected.
+  const isUserTypingRef = useRef(false)
 
   /** Return the current session token, creating one if needed */
   const getOrCreateToken = useCallback((): string => {
@@ -114,6 +118,13 @@ export default function AddressAutocomplete({
           signal: abortRef.current.signal,
         })
 
+        // Guard against non-JSON responses (e.g. HTML error pages from Next.js)
+        const contentType = res.headers.get("content-type") ?? ""
+        if (!contentType.includes("application/json")) {
+          setDropdown({ kind: "error", message: "Location search unavailable." })
+          return
+        }
+
         const data = await res.json() as
           | { predictions: AutocompletePrediction[]; cached: boolean }
           | { error: string }
@@ -145,6 +156,14 @@ export default function AddressAutocomplete({
   // ── Debounced effect ────────────────────────────────────────────────────────
 
   useEffect(() => {
+    // Only fetch when the user is actively typing.
+    // Programmatic calls to onChangeAction() (from handleSelect) do NOT set
+    // isUserTypingRef, so they never trigger a new autocomplete search.
+    const shouldFetch = isUserTypingRef.current
+    isUserTypingRef.current = false
+
+    if (!shouldFetch) return
+
     if (debounceRef.current) clearTimeout(debounceRef.current)
     debounceRef.current = setTimeout(() => fetchPredictions(value), 400)
     return () => {
@@ -177,6 +196,13 @@ export default function AddressAutocomplete({
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ placeId: prediction.placeId, sessionToken }),
         })
+
+        // Guard against non-JSON responses (e.g. HTML error pages from Next.js)
+        const contentType = res.headers.get("content-type") ?? ""
+        if (!contentType.includes("application/json")) {
+          setDropdown({ kind: "error", message: "Could not retrieve location details." })
+          return
+        }
 
         const data = await res.json() as
           | { place: PlaceDetails }
@@ -235,7 +261,10 @@ export default function AddressAutocomplete({
       <Input
         placeholder="Start typing an address…"
         value={value}
-        onChange={(e) => onChangeAction(e.target.value)}
+        onChange={(e) => {
+          isUserTypingRef.current = true
+          onChangeAction(e.target.value)
+        }}
         onBlur={handleBlur}
         autoComplete="off"
       />
