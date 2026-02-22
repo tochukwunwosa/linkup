@@ -19,6 +19,16 @@ export default function AnimatedCard({
 }: AnimatedCardProps) {
   const { ref, inView } = useInViewAnimation<HTMLDivElement>();
 
+  // If the user prefers reduced motion, skip the IntersectionObserver animation
+  // entirely and render children immediately at full opacity.
+  const prefersReducedMotion =
+    typeof window !== "undefined" &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (prefersReducedMotion) {
+    return <div className={className}>{children}</div>;
+  }
+
   return (
     <div
       ref={ref}

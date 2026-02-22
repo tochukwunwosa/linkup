@@ -1,4 +1,5 @@
 'use client'
+import { memo } from 'react'
 import { Event } from '@/lib/validations/event'
 import Link from 'next/link'
 import { Calendar, MapPin, Banknote } from 'lucide-react'
@@ -7,14 +8,14 @@ import { formatDateRange, isLiveEvent } from '@/lib/utils'
 import { getCurrencySymbol } from '@/lib/format-currency'
 import { LiveEventBadge } from '@/components/live-event-badge'
 
-export default function EventCard({ event }: { event: Event }) {
+function EventCard({ event }: { event: Event }) {
   return (
     <Link
       href={`/events/${event.id}`}
-      className="group block h-full rounded-xl border border-gray-200 bg-white shadow-sm hover:shadow-md hover:border-blue-200 transition-all duration-200 overflow-hidden"
+      className="group block h-full rounded-xl border border-gray-200 bg-white shadow-sm hover:shadow-md hover:border-blue-200 transition-all duration-200 overflow-hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
       aria-label={event.title}
     >
-      <div className="p-4 flex flex-col gap-3 h-full">
+      <article className="p-4 flex flex-col gap-3 h-full transition-transform duration-200 group-hover:scale-[1.01] group-hover:-translate-y-0.5">
         {/* Top row: type badge + live badge */}
         <div className="flex items-center gap-2">
           {isLiveEvent({ event }) && <LiveEventBadge event={event} />}
@@ -61,7 +62,9 @@ export default function EventCard({ event }: { event: Event }) {
             </div>
           )}
         </div>
-      </div>
+      </article>
     </Link>
   )
 }
+
+export default memo(EventCard)

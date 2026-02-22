@@ -79,7 +79,7 @@ export default function Filters() {
             </div>
 
             {/* Global Search Input */}
-            <div className="relative min-w-[280px] flex-1 max-w-md">
+            <div className="relative min-w-[280px] flex-1 max-w-md" aria-busy={isSearching}>
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
               <Input
                 type="text"
@@ -152,7 +152,7 @@ export default function Filters() {
       <div className="md:hidden">
         <div className="px-4 py-3 w-full space-y-3">
           {/* Always visible search input */}
-          <div className="relative">
+          <div className="relative" aria-busy={isSearching}>
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
             <Input
               type="text"
@@ -181,6 +181,8 @@ export default function Filters() {
           <Button
             variant="outline"
             onClick={() => setShowMobileFilters(!showMobileFilters)}
+            aria-expanded={showMobileFilters}
+            aria-controls="mobile-filters-panel"
             className="w-full justify-between h-10 bg-white hover:!bg-muted"
           >
             <div className="flex items-center gap-2">
@@ -195,7 +197,7 @@ export default function Filters() {
         </div>
 
         {showMobileFilters && (
-          <div className="px-4 pb-4 space-y-3 bg-white border-t">
+          <div id="mobile-filters-panel" className="px-4 pb-4 space-y-3 bg-white border-t">
             <div className="flex items-center justify-between pt-3">
               <span className="text-sm font-medium text-gray-700">Filter Options</span>
               {(filters.format !== "all" || filters.location !== "all" || filters.date !== "all") && (

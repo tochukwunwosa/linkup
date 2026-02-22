@@ -31,7 +31,9 @@ export const eventFormSchema = z.object({
   lng: z.number({
     required_error: "Please select a valid location from the dropdown",
     invalid_type_error: "Please select a valid location from the dropdown"
-  })
+  }),
+  city: z.string().optional(),
+  country: z.string().optional(),
 }).superRefine((data, ctx) => {
   // Validate that a valid location was selected (lat/lng are not 0)
   // Skip for Online events where lat/lng are intentionally 0
@@ -150,6 +152,8 @@ export const eventSubmissionFormSchema = z.object({
     required_error: "Please select a valid location from the dropdown",
     invalid_type_error: "Please select a valid location from the dropdown"
   }),
+  city: z.string().optional(),
+  country: z.string().optional(),
 
   // Organizer information
   organizer_name: z.string().min(1, "Your name is required").min(2, "Name must be at least 2 characters"),

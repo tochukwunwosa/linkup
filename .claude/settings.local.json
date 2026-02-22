@@ -17,7 +17,8 @@
       "mcp__supabase__get_advisors",
       "Bash(npx playwright:*)",
       "WebFetch(domain:techlinkup.xyz)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(cd /c/Users/KINPLUS/Documents/Tochi/Projects/linkup && pnpm build 2>&1)"
     ]
   },
   "enabledMcpjsonServers": [
