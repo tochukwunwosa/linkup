@@ -85,7 +85,7 @@ export default function Navbar() {
           </nav>
 
           {/* Mobile Navigation */}
-          <div className="md:hidden flex items-center gap-4">
+          <div className="md:hidden flex items-center gap-4 mt-[env(safe-area-inset-top)]">
             <Button asChild size="sm" className="text-xs">
               <Link href="/submit-event">
                 <Plus className="mr-1 h-3 w-3" />
