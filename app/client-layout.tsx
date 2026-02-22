@@ -26,7 +26,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
         )}
         {!isAdminRoute && <UserLocationProvider />}
 
-        <Navbar />
+        {!isAdminRoute && <Navbar />}
         <main id="main-content">
           {children}
         </main>

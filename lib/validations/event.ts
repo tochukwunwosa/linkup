@@ -34,7 +34,8 @@ export const eventFormSchema = z.object({
   })
 }).superRefine((data, ctx) => {
   // Validate that a valid location was selected (lat/lng are not 0)
-  if (data.lat === 0 || data.lng === 0) {
+  // Skip for Online events where lat/lng are intentionally 0
+  if (data.type !== "Online" && (data.lat === 0 || data.lng === 0)) {
     ctx.addIssue({
       code: z.ZodIssueCode.custom,
       message: "Please select a valid location from the dropdown suggestions",
@@ -157,7 +158,8 @@ export const eventSubmissionFormSchema = z.object({
   organizer_organization: z.string().optional(),
 }).superRefine((data, ctx) => {
   // Validate that a valid location was selected (lat/lng are not 0)
-  if (data.lat === 0 || data.lng === 0) {
+  // Skip for Online events where lat/lng are intentionally 0
+  if (data.type !== "Online" && (data.lat === 0 || data.lng === 0)) {
     ctx.addIssue({
       code: z.ZodIssueCode.custom,
       message: "Please select a valid location from the dropdown suggestions",

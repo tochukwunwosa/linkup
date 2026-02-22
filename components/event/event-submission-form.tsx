@@ -250,10 +250,12 @@ export function EventSubmissionForm({ onSuccess }: EventSubmissionFormProps) {
                     <AddressAutocomplete
                       value={field.value}
                       onChangeAction={(val) => field.onChange(val)}
-                      onSelectAction={(address, lat, lng) => {
+                      onSelectAction={(address, lat, lng, city, country) => {
                         field.onChange(address);
                         form.setValue("lat", lat);
                         form.setValue("lng", lng);
+                        form.setValue("city", city);
+                        form.setValue("country", country);
                       }}
                     />
                   </FormControl>
