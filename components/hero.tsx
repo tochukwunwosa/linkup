@@ -8,35 +8,36 @@ import { Calendar, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 
-export default function Hero() {
+export default function Hero({ initialTotal = 0 }: { initialTotal?: number }) {
   const { filters, setFilters, totalEventsFound } = useEventContext();
   const [loading, setLoading] = useState(false);
   const [stats, setStats] = useState({
-    events: 0,
-    cities: 0,
+    events: initialTotal,
+    cities: initialTotal > 0 ? 15 : 0,
     community: 0,
   });
 
-  // Animate stats when totalEventsFound changes
-  useEffect(() => {
-    const animateValue = (
-      start: number,
-      end: number,
-      duration: number,
-      setter: (val: number) => void
-    ) => {
-      const startTime = Date.now();
-      const animate = () => {
-        const now = Date.now();
-        const progress = Math.min((now - startTime) / duration, 1);
-        const current = Math.floor(progress * (end - start) + start);
-        setter(current);
-        if (progress < 1) requestAnimationFrame(animate);
-      };
-      animate();
+  const animateValue = (
+    start: number,
+    end: number,
+    duration: number,
+    setter: (val: number) => void
+  ) => {
+    const startTime = Date.now();
+    const animate = () => {
+      const now = Date.now();
+      const progress = Math.min((now - startTime) / duration, 1);
+      const current = Math.floor(progress * (end - start) + start);
+      setter(current);
+      if (progress < 1) requestAnimationFrame(animate);
     };
+    animate();
+  };
 
+  // Animate stats when totalEventsFound changes (e.g. after filters applied)
+  useEffect(() => {
     const eventCount = totalEventsFound || 0;
+    if (eventCount === 0) return;
 
     animateValue(0, eventCount, 1500, (val) =>
       setStats((prev) => ({ ...prev, events: val }))

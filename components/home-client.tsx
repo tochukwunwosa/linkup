@@ -9,9 +9,6 @@ import { Event } from "@/lib/validations/event";
 const UpcomingEvents = dynamic(() => import("@/components/upcoming-events"), {
   ssr: false, // Disable SSR for this since we're passing server data
 });
-const Footer = dynamic(() => import("@/components/footer"), {
-  ssr: true,
-});
 
 interface HomeClientProps {
   initialEvents: Event[];
@@ -26,7 +23,7 @@ export default function HomeClient({
 }: HomeClientProps) {
   return (
     <div className=" ">
-      <Hero />
+      <Hero initialTotal={initialTotal} />
 
       <Filters />
 
