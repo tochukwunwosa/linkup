@@ -49,7 +49,7 @@ export default function Navbar() {
     <header
       className={cn(
         "sticky top-0 z-40 transition-all duration-500",
-        scrolled ? "nav-scrolled" : "nav-over-hero"
+        scrolled ? "nav-scrolled pt-[env(safe-area-inset-top)]" : "nav-over-hero"
       )}
     >
       {/* Skip-to-content link — visible only on keyboard focus */}
