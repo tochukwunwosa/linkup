@@ -27,7 +27,13 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 10);
+    // Switch to white only after the hero section leaves the viewport.
+    // The hero is min-h-[92svh]; use 80% of viewport height as the threshold
+    // so the dark nav stays dark while the dark hero is still visible.
+    const getThreshold = () => window.innerHeight * 0.8;
+    const onScroll = () => setScrolled(window.scrollY > getThreshold());
+    // Check on mount in case the page was reloaded mid-scroll
+    onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
@@ -42,16 +48,14 @@ export default function Navbar() {
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 pt-[env(safe-area-inset-top)] transition-all duration-300",
-        scrolled
-          ? "backdrop-blur-md bg-white/90 shadow-sm border-b border-gray-200/50"
-          : "bg-white border-b border-gray-200 shadow-sm"
+        "sticky top-0 z-40 pt-[env(safe-area-inset-top)] transition-all duration-500",
+        scrolled ? "nav-scrolled" : "nav-over-hero"
       )}
     >
       {/* Skip-to-content link — visible only on keyboard focus */}
       <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[999] focus:px-4 focus:py-2 focus:bg-white focus:text-blue-600 focus:rounded-lg focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-999 focus:px-4 focus:py-2 focus:bg-white focus:text-blue-600 focus:rounded-lg focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
       >
         Skip to main content
       </a>
@@ -61,7 +65,16 @@ export default function Navbar() {
           {/* Logo */}
           <div className="flex items-center">
             <Link href="/" className="text-foreground">
-              <Image src="/logo.svg" alt="Tech LinkUp Logo" width={32} height={32} />
+              <Image
+                src="/logo.svg"
+                alt="Tech LinkUp Logo"
+                width={32}
+                height={32}
+                className={cn(
+                  "transition-all duration-300",
+                  scrolled ? "opacity-100" : "brightness-0 invert opacity-90"
+                )}
+              />
             </Link>
           </div>
 
@@ -71,12 +84,25 @@ export default function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="hover:text-primary font-medium transition-colors duration-300 ease-in-out"
+                className={cn(
+                  "relative font-medium text-sm tracking-wide transition-colors duration-300",
+                  "after:absolute after:bottom-0.5 after:left-0 after:h-0.5 after:w-0 after:rounded-full",
+                  "after:bg-[#c9f72f] after:transition-all after:duration-300 hover:after:w-full",
+                  scrolled ? "text-gray-700 hover:text-[#0066cc]" : "text-white/80 hover:text-white"
+                )}
               >
                 {link.label}
               </Link>
             ))}
-            <Button asChild className="ml-2">
+            <Button
+              asChild
+              className={cn(
+                "ml-2 text-sm font-semibold transition-all duration-300",
+                scrolled
+                  ? "bg-[#0066cc] text-white hover:bg-[#0052a3]"
+                  : "bg-[#c9f72f] text-[#070809] hover:bg-[#dbff45] border-0"
+              )}
+            >
               <Link href="/submit-event">
                 <Plus className="mr-2 h-4 w-4" />
                 Submit Event
@@ -86,7 +112,16 @@ export default function Navbar() {
 
           {/* Mobile Navigation */}
           <div className="md:hidden flex items-center gap-4">
-            <Button asChild size="sm" className="text-xs">
+            <Button
+              asChild
+              size="sm"
+              className={cn(
+                "text-xs font-semibold transition-all duration-300",
+                scrolled
+                  ? "bg-[#0066cc] text-white hover:bg-[#0052a3]"
+                  : "bg-[#c9f72f] text-[#070809] hover:bg-[#dbff45] border-0"
+              )}
+            >
               <Link href="/submit-event">
                 <Plus className="mr-1 h-3 w-3" />
                 Submit
@@ -95,11 +130,18 @@ export default function Navbar() {
 
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="md:hidden">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className={cn(
+                    "md:hidden",
+                    scrolled ? "text-gray-700 hover:bg-gray-100" : "text-white hover:bg-white/10"
+                  )}
+                >
                   {isOpen ? <X /> : <Menu />}
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-[250px] p-4">
+              <SheetContent side="right" className="w-62.5 p-4">
                 <nav className="flex flex-col space-y-4 mt-10">
                   {navLinks.map((link) => (
                     <Link

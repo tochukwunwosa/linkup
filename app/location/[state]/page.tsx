@@ -1,13 +1,14 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowLeft, MapPin } from "lucide-react";
+import { MapPin } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { generateBreadcrumbSchema } from "@/lib/structured-data";
 import JsonLd from "@/components/JsonLd";
 import EventCard from "@/components/event-card";
 import { locationMeta, getLocationMeta } from "@/constants/location-meta";
 import { Event } from "@/lib/validations/event";
+import { PageHero } from "@/components/page-hero";
 
 export const revalidate = 3600; // refresh every hour
 export const dynamic = "force-dynamic"; // always fetch fresh data
@@ -71,55 +72,43 @@ export default async function LocationPage({
     <>
       <JsonLd data={breadcrumbSchema} id="breadcrumb" />
 
-      <main className="min-h-screen bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-          {/* Back */}
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-800 mb-8 transition-colors"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            All events
-          </Link>
+      <main className="min-h-screen bg-[#f5f4f2]">
+        <PageHero
+          backHref="/"
+          backLabel="All events"
+          eyebrow="Nigeria"
+          title={`Tech Events in ${meta.label}`}
+          subtitle={meta.description}
+        >
+          <MapPin className="w-3.5 h-3.5" />
+        </PageHero>
 
-          {/* Header */}
-          <div className="mb-10">
-            <div className="inline-flex items-center gap-2 text-blue-600 text-sm font-medium mb-3">
-              <MapPin className="w-4 h-4" />
-              <span>Nigeria</span>
-            </div>
-            <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-              Tech Events in {meta.label}
-            </h1>
-            <p className="text-gray-600 max-w-3xl leading-relaxed">
-              {meta.description}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+          {events.length > 0 && (
+            <p className="text-sm text-[#64748b] mb-8">
+              {events.length} upcoming event{events.length !== 1 ? "s" : ""} in {meta.label}
             </p>
-            {events && events.length > 0 && (
-              <p className="mt-3 text-sm text-gray-500">
-                {events.length} upcoming event{events.length !== 1 ? "s" : ""} in {meta.label}
-              </p>
-            )}
-          </div>
+          )}
 
           {/* Events grid */}
-          {events && events.length > 0 ? (
+          {events.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {events.map((event) => (
                 <EventCard key={event.id} event={event} />
               ))}
             </div>
           ) : (
-            <div className="text-center py-20 bg-white rounded-2xl border border-gray-100">
-              <MapPin className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-              <h2 className="text-xl font-semibold text-gray-800 mb-2">
-                No events listed yet in {meta.label}
+            <div className="text-center py-20 rounded-2xl border border-[rgba(0,0,0,0.07)] bg-white">
+              <MapPin className="w-12 h-12 text-[#0066cc]/20 mx-auto mb-4" />
+              <h2 className="text-xl font-semibold text-[#1a1b25] mb-2">
+                No events yet in {meta.label}
               </h2>
-              <p className="text-gray-500 mb-6 max-w-md mx-auto">
+              <p className="text-[#64748b] mb-6 max-w-md mx-auto">
                 Be the first to bring a tech event to {meta.label}. Submit your event and we&apos;ll list it here.
               </p>
               <Link
                 href="/submit-event"
-                className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-xl transition-colors text-sm"
+                className="inline-flex items-center gap-2 bg-[#c9f72f] hover:bg-[#b8e020] text-[#1a1b25] font-semibold px-6 py-3 rounded-xl transition-colors text-sm"
               >
                 Submit an Event
               </Link>
@@ -127,8 +116,8 @@ export default async function LocationPage({
           )}
 
           {/* Browse other locations */}
-          <div className="mt-16">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">
+          <div className="mt-14">
+            <h2 className="text-base font-semibold text-[#1a1b25] mb-4">
               Browse events in other states
             </h2>
             <div className="flex flex-wrap gap-2">
@@ -139,7 +128,7 @@ export default async function LocationPage({
                   <Link
                     key={l.slug}
                     href={`/location/${l.slug}`}
-                    className="text-sm px-3 py-1.5 rounded-full border border-gray-200 text-gray-600 hover:border-blue-300 hover:text-blue-600 transition-colors bg-white"
+                    className="text-sm px-3.5 py-1.5 rounded-full border border-[rgba(0,0,0,0.10)] text-[#4a4a5a] bg-white hover:border-[#0066cc]/30 hover:text-[#0066cc] transition-colors"
                   >
                     {l.label}
                   </Link>

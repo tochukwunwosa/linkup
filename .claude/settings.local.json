@@ -12,13 +12,11 @@
       "mcp__playwright__browser_navigate",
       "mcp__playwright__browser_run_code",
       "mcp__playwright__browser_console_messages",
-      "mcp__supabase__list_projects",
-      "mcp__supabase__list_tables",
-      "mcp__supabase__get_advisors",
-      "Bash(npx playwright:*)",
-      "WebFetch(domain:techlinkup.xyz)",
-      "Bash(curl:*)",
-      "Bash(cd /c/Users/KINPLUS/Documents/Tochi/Projects/linkup && pnpm build 2>&1)"
+      "Bash(npx tsc:*)",
+      "Bash(cd /c/Users/KINPLUS/Documents/Tochi/Projects/linkup && node -e \"const { chromium } = require\\('playwright'\\); console.log\\('Playwright found'\\);\" 2>&1)",
+      "Bash(tail:*)",
+      "mcp__playwright__browser_resize",
+      "mcp__playwright__browser_hover"
     ]
   },
   "enabledMcpjsonServers": [

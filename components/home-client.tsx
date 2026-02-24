@@ -17,8 +17,10 @@ export default function HomeClient({
   initialHasMore,
 }: HomeClientProps) {
   return (
-    <div className=" ">
+    <div>
       <Hero initialTotal={initialTotal} />
+
+      <div className="relative" style={{background:"linear-gradient(180deg, #f5f4f2 0%, #f7f6f4 100%)"}}>
 
       <Filters />
 
@@ -27,6 +29,7 @@ export default function HomeClient({
         initialTotal={initialTotal}
         initialHasMore={initialHasMore}
       />
+      </div>
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import type React from "react";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Syne } from "next/font/google";
 import ClientLayout from "./client-layout";
 // Inter is self-hosted by Next.js (subset-optimised, no Google Fonts waterfall)
 import { siteConfig, viewport as siteViewport } from "@/lib/metadata";
@@ -12,6 +12,7 @@ import "./globals.css";
 import Script from "next/script";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+const syne = Syne({ subsets: ["latin"], variable: "--font-syne", weight: ["700", "800"] });
 
 export const metadata: Metadata = siteConfig;
 export const viewport = siteViewport;
@@ -54,7 +55,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={inter.variable}>
+      <body className={`${inter.variable} ${syne.variable}`}>
         <Script
           id="umami-script"
           src="https://cloud.umami.is/script.js"

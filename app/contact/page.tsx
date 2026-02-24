@@ -1,9 +1,8 @@
 import React from "react";
 import Link from "next/link";
-import { ArrowLeft, Mail, MessageSquare, Github } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Mail, MessageSquare, Github } from "lucide-react";
 import { Metadata } from "next";
+import { PageHero } from "@/components/page-hero";
 
 export const metadata: Metadata = {
   title: "Contact Us - TechLinkUp",
@@ -20,130 +19,120 @@ export const metadata: Metadata = {
 
 export default function ContactPage() {
   return (
-    <main className="max-w-4xl mx-auto px-4 py-12">
-      <Link href="/">
-        <Button variant="ghost" className="mb-6 -ml-4">
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          Back to Home
-        </Button>
-      </Link>
+    <main className="min-h-screen bg-[#f5f4f2]">
+      <PageHero
+        backHref="/"
+        backLabel="Home"
+        title="Get in Touch"
+        subtitle="Have questions or feedback? We'd love to hear from you."
+      />
 
-      <div className="text-center mb-12">
-        <h1 className="text-4xl font-bold mb-4 text-gray-900">Get in Touch</h1>
-        <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-          Have questions, feedback, or want to collaborate? We&apos;d love to hear from you!
-        </p>
-      </div>
-
-      <div className="grid md:grid-cols-2 gap-6 mb-12">
-        {/* General Inquiries */}
-        <Card className="hover:shadow-lg transition-shadow">
-          <CardHeader>
-            <div className="flex items-center gap-3 mb-2">
-              <div className="p-2 bg-blue-100 rounded-lg">
-                <Mail className="h-6 w-6 text-blue-600" />
-              </div>
-              <CardTitle>General Inquiries</CardTitle>
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Contact cards */}
+        <div className="grid md:grid-cols-2 gap-4 mb-10">
+          {/* General Inquiries */}
+          <div className="rounded-xl border border-[rgba(0,0,0,0.07)] bg-white p-6 hover:shadow-[0_4px_16px_rgba(0,0,0,0.08)] transition-shadow">
+            <div className="inline-flex p-2.5 rounded-lg bg-[#0066cc]/[0.08] mb-4">
+              <Mail className="h-5 w-5 text-[#0066cc]" />
             </div>
-            <CardDescription>
+            <h2 className="font-semibold text-[#1a1b25] mb-1">General Inquiries</h2>
+            <p className="text-sm text-[#64748b] mb-3">
               Questions about TechLinkUp or how to use the platform
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
+            </p>
             <a
               href="mailto:tochukwunwosa28@gmail.com"
-              className="text-blue-600 hover:underline font-medium"
+              className="text-sm font-medium text-[#0066cc] hover:underline"
             >
               tochukwunwosa28@gmail.com
             </a>
-          </CardContent>
-        </Card>
+          </div>
 
-        {/* Event Submissions */}
-        <Card className="hover:shadow-lg transition-shadow">
-          <CardHeader>
-            <div className="flex items-center gap-3 mb-2">
-              <div className="p-2 bg-purple-100 rounded-lg">
-                <MessageSquare className="h-6 w-6 text-purple-600" />
-              </div>
-              <CardTitle>Event Submissions</CardTitle>
+          {/* Event Submissions */}
+          <div className="rounded-xl border border-[rgba(0,0,0,0.07)] bg-white p-6 hover:shadow-[0_4px_16px_rgba(0,0,0,0.08)] transition-shadow">
+            <div className="inline-flex p-2.5 rounded-lg bg-[#6b46c1]/[0.08] mb-4">
+              <MessageSquare className="h-5 w-5 text-[#6b46c1]" />
             </div>
-            <CardDescription>
+            <h2 className="font-semibold text-[#1a1b25] mb-1">Event Submissions</h2>
+            <p className="text-sm text-[#64748b] mb-3">
               Questions about submitting or managing your events
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
+            </p>
             <a
               href="mailto:tochukwunwosa28@gmail.com"
-              className="text-blue-600 hover:underline font-medium"
+              className="text-sm font-medium text-[#0066cc] hover:underline"
             >
               tochukwunwosa28@gmail.com
             </a>
-          </CardContent>
-        </Card>
-      </div>
+          </div>
+        </div>
 
-      {/* Quick Actions */}
-      <Card className="bg-gray-50 border-gray-200">
-        <CardHeader>
-          <CardTitle>Other Ways to Connect</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
+        {/* Other connections */}
+        <div className="rounded-xl border border-[rgba(0,0,0,0.07)] bg-white p-6 space-y-5">
+          <h2 className="font-semibold text-[#1a1b25]">Other Ways to Connect</h2>
+
           <div className="flex items-start gap-4">
-            <div className="p-2 bg-white rounded-lg border">
-              <Github className="h-5 w-5 text-gray-700" />
+            <div className="p-2 rounded-lg border border-[rgba(0,0,0,0.08)] bg-[#f5f4f2]">
+              <Github className="h-5 w-5 text-[#1a1b25]" />
             </div>
             <div>
-              <h3 className="font-semibold text-gray-900 mb-1">Report an Issue</h3>
-              <p className="text-sm text-gray-600 mb-2">
+              <h3 className="font-medium text-[#1a1b25] mb-1">Report an Issue</h3>
+              <p className="text-sm text-[#64748b] mb-2">
                 Found a bug or have a feature request? Open an issue on GitHub.
               </p>
               <a
                 href="https://github.com/tochukwunwosa/tech-linkup/issues"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-blue-600 hover:underline text-sm font-medium"
+                className="text-sm font-medium text-[#0066cc] hover:underline"
               >
                 View on GitHub →
               </a>
             </div>
           </div>
 
-          <div className="flex items-start gap-4 pt-4 border-t">
-            <div className="p-2 bg-white rounded-lg border">
-              <MessageSquare className="h-5 w-5 text-gray-700" />
+          <div className="flex items-start gap-4 pt-4 border-t border-[rgba(0,0,0,0.06)]">
+            <div className="p-2 rounded-lg border border-[rgba(0,0,0,0.08)] bg-[#f5f4f2]">
+              <MessageSquare className="h-5 w-5 text-[#1a1b25]" />
             </div>
             <div>
-              <h3 className="font-semibold text-gray-900 mb-1">Submit an Event</h3>
-              <p className="text-sm text-gray-600 mb-2">
+              <h3 className="font-medium text-[#1a1b25] mb-1">Submit an Event</h3>
+              <p className="text-sm text-[#64748b] mb-2">
                 Have a tech event you&apos;d like to share with the community?
               </p>
               <Link
                 href="/submit-event"
-                className="text-blue-600 hover:underline text-sm font-medium"
+                className="text-sm font-medium text-[#0066cc] hover:underline"
               >
                 Submit Event →
               </Link>
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </div>
 
-      {/* Response Time Notice */}
-      <div className="mt-8 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-        <p className="text-sm text-gray-700">
-          <span className="font-semibold">Response time:</span> We typically respond within 24-48 hours during business days.
-        </p>
-      </div>
+        {/* Response time banner */}
+        <div className="mt-6 px-5 py-4 rounded-xl bg-[#0066cc]/[0.06] border border-[#0066cc]/10">
+          <p className="text-sm text-[#64748b]">
+            <span className="font-semibold text-[#1a1b25]">Response time:</span>{" "}
+            We typically respond within 24–48 hours during business days.
+          </p>
+        </div>
 
-      {/* Additional Links */}
-      <div className="mt-8 text-center text-sm text-gray-600">
-        <p>
-          Want to learn more about us? Visit our <Link href="/about" className="text-blue-600 hover:underline">About page</Link>.
-        </p>
-        <p className="mt-2">
-          Already submitted an event? <Link href="/my-submissions" className="text-blue-600 hover:underline">Track your submissions</Link>.
-        </p>
+        {/* Additional links */}
+        <div className="mt-8 text-center text-sm text-[#64748b]">
+          <p>
+            Want to learn more about us?{" "}
+            <Link href="/about" className="text-[#0066cc] hover:underline">
+              Visit our About page
+            </Link>
+            .
+          </p>
+          <p className="mt-2">
+            Already submitted an event?{" "}
+            <Link href="/my-submissions" className="text-[#0066cc] hover:underline">
+              Track your submissions
+            </Link>
+            .
+          </p>
+        </div>
       </div>
     </main>
   );

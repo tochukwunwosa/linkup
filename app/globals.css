@@ -8,6 +8,7 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-inter, ui-sans-serif, system-ui, sans-serif);
   --font-mono: var(--font-geist-mono, ui-monospace, monospace);
+  --font-display: var(--font-syne, ui-sans-serif, system-ui, sans-serif);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -47,7 +48,7 @@
 
 :root {
   --radius: 0.65rem;
-  --background: #f1f1f1;
+  --background: #f5f4f2;
   --foreground: #1a1b25;
   --card: #ffffff;
   --card-foreground: #1a1b25;
@@ -78,6 +79,11 @@
   --sidebar-accent-foreground: #0c4a6e;
   --sidebar-border: #e2e8f0;
   --sidebar-ring: #3b82f6;
+
+  --lime: #c9f72f;
+  --shadow-card: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-card-hover: 0 8px 24px rgba(0,0,0,0.10), 0 2px 8px rgba(0,102,204,0.08);
+  --surface-border: rgba(0,0,0,0.07);
 }
 
 
@@ -88,6 +94,7 @@
 
   html {
     @apply scroll-smooth;
+    background-color: #f5f4f2;
   }
 
   /* iOS safe area support for PWA standalone mode */
@@ -160,9 +167,132 @@
   }
 
   .animate-fade-in-up,
-  .animate-fade-in {
+  .animate-fade-in,
+  .btn-lime-glow {
     opacity: 1;
     transform: none;
     animation: none;
+    box-shadow: none;
   }
+}
+
+/* ── Hero grain texture ───────────────────────────────── */
+.hero-grain {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.035;
+  background-size: 200px 200px;
+}
+
+/* ── Hero entry animation ─────────────────────────────── */
+@keyframes heroIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-hero-in {
+  animation: heroIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-hero-in {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes limeGlow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(201,247,47,0); }
+  50%       { box-shadow: 0 0 20px 6px rgba(201,247,47,0.32); }
+}
+
+@keyframes navSlideDown {
+  from { transform: translateY(-3px); opacity: 0.8; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+/* CTA glow */
+.btn-lime-glow {
+  animation: limeGlow 3s ease-in-out infinite;
+}
+
+/* Navbar: dark state (over hero) — fully opaque so white text is always readable */
+.nav-over-hero {
+  background: rgba(7,8,9,0.92);
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+}
+
+/* Navbar: solid white state (scrolled past hero) */
+.nav-scrolled {
+  background: rgba(255,255,255,0.97);
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 1px 0 rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
+}
+
+/* Filters frosted glass */
+.filters-glass {
+  background: rgba(255,255,255,0.88);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid rgba(0,0,0,0.07);
+  box-shadow: 0 1px 0 rgba(255,255,255,0.8) inset, 0 2px 12px rgba(0,0,0,0.04);
+}
+
+/* Event card lime accent bar */
+.card-lime-bar::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 12px; bottom: 12px;
+  width: 3px;
+  border-radius: 0 2px 2px 0;
+  background: linear-gradient(to bottom, #c9f72f, rgba(201,247,47,0.4));
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+.card-lime-bar:hover::before { opacity: 1; }
+
+/* ── Scrollbar hide ───────────────────────────────────── */
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* ── Filter pill — default (inactive) ────────────────── */
+.filter-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 34px;
+  padding: 0 14px;
+  border-radius: 9999px;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  border: 1px solid rgba(0,0,0,0.12);
+  background: white;
+  color: #4a4a5a;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+  cursor: pointer;
+}
+.filter-pill:hover {
+  border-color: rgba(0,102,204,0.35);
+  color: #0066cc;
+}
+
+/* ── Filter pill — active ─────────────────────────────── */
+.filter-pill-active {
+  border-color: #0066cc;
+  background: rgba(0,102,204,0.06);
+  color: #0066cc;
+}
+.filter-pill-active:hover {
+  background: rgba(0,102,204,0.10);
 }

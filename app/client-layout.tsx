@@ -26,11 +26,13 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
         )}
         {!isAdminRoute && <UserLocationProvider />}
 
-        {!isAdminRoute && <Navbar />}
-        <main id="main-content">
-          {children}
-        </main>
-        {!isAdminRoute && <Footer />}
+        <div>
+          {!isAdminRoute && <Navbar />}
+          <main id="main-content">
+            {children}
+          </main>
+          {!isAdminRoute && <Footer />}
+        </div>
 
         <Toaster richColors />
         {!isAdminRoute && <PWAInstallPrompt />}

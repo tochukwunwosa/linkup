@@ -116,26 +116,26 @@ export default async function EventPage({
       <JsonLd data={eventSchema} id="event-schema" />
       <JsonLd data={breadcrumbSchema} id="breadcrumb-schema" />
 
-      <main className="min-h-screen bg-gray-50">
+      <main className="min-h-screen bg-[#f5f4f2]">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
           {/* Back link */}
           <Link
             href="/"
-            className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-800 mb-8 transition-colors"
+            className="inline-flex items-center gap-2 text-sm text-[#64748b] hover:text-[#1a1b25] mb-8 transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
             Back to all events
           </Link>
 
           {/* Header */}
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 mb-6">
+          <div className="bg-white rounded-2xl border border-[rgba(0,0,0,0.07)] shadow-[0_1px_3px_rgba(0,0,0,0.06)] p-8 mb-6">
             {/* Category badges */}
             {event.category && event.category.length > 0 && (
               <div className="flex flex-wrap gap-2 mb-4">
                 {event.category.map((cat) => (
                   <span
                     key={cat}
-                    className="inline-flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-full bg-blue-50 text-blue-700"
+                    className="inline-flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-full bg-[#6b46c1]/[0.08] text-[#6b46c1]"
                   >
                     <Tag className="w-3 h-3" />
                     {cat}
@@ -144,25 +144,25 @@ export default async function EventPage({
               </div>
             )}
 
-            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4 leading-tight">
+            <h1 className="text-2xl sm:text-3xl font-bold text-[#1a1b25] mb-4 leading-tight">
               {event.title}
             </h1>
 
             {/* Type badge */}
-            <span className="inline-block text-xs font-semibold px-3 py-1 rounded-full bg-purple-50 text-purple-700 mb-6">
+            <span className="inline-block text-xs font-semibold px-3 py-1 rounded-full bg-[#6b46c1]/[0.08] text-[#6b46c1] mb-6">
               {event.type}
             </span>
 
             {/* Key details */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
               <div className="flex items-start gap-3">
-                <Calendar className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
+                <Calendar className="w-5 h-5 text-[#0066cc] mt-0.5 flex-shrink-0" />
                 <div>
-                  <p className="text-sm font-medium text-gray-900">
+                  <p className="text-sm font-medium text-[#1a1b25]">
                     {formattedStartDate}
                   </p>
                   {formattedEndDate && (
-                    <p className="text-sm text-gray-500">
+                    <p className="text-sm text-[#64748b]">
                       to {formattedEndDate}
                     </p>
                   )}
@@ -170,18 +170,18 @@ export default async function EventPage({
               </div>
 
               <div className="flex items-start gap-3">
-                <Clock className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
-                <p className="text-sm font-medium text-gray-900">{formatTo12Hour(event.time)}</p>
+                <Clock className="w-5 h-5 text-[#0066cc] mt-0.5 flex-shrink-0" />
+                <p className="text-sm font-medium text-[#1a1b25]">{formatTo12Hour(event.time)}</p>
               </div>
 
               <div className="flex items-start gap-3">
-                <MapPin className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
+                <MapPin className="w-5 h-5 text-[#0066cc] mt-0.5 flex-shrink-0" />
                 <div>
-                  <p className="text-sm font-medium text-gray-900">
+                  <p className="text-sm font-medium text-[#1a1b25]">
                     {event.location}
                   </p>
                   {event.city && (
-                    <p className="text-sm text-gray-500">
+                    <p className="text-sm text-[#64748b]">
                       {event.city}
                       {event.country ? `, ${event.country}` : ""}
                     </p>
@@ -190,10 +190,10 @@ export default async function EventPage({
               </div>
 
               <div className="flex items-start gap-3">
-                <span className="text-blue-600 font-bold text-base mt-0.5 flex-shrink-0">
+                <span className="text-[#0066cc] font-bold text-base mt-0.5 flex-shrink-0">
                   ₦
                 </span>
-                <p className="text-sm font-medium text-gray-900">
+                <p className="text-sm font-medium text-[#1a1b25]">
                   {priceDisplay}
                 </p>
               </div>
@@ -202,11 +202,11 @@ export default async function EventPage({
 
           {/* Description */}
           {event.description && (
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 mb-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-3">
+            <div className="bg-white rounded-2xl border border-[rgba(0,0,0,0.07)] shadow-[0_1px_3px_rgba(0,0,0,0.06)] p-8 mb-6">
+              <h2 className="text-lg font-semibold text-[#1a1b25] mb-3">
                 About this event
               </h2>
-              <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
+              <p className="text-[#4a4a5a] leading-relaxed whitespace-pre-wrap">
                 {event.description}
               </p>
             </div>
@@ -214,15 +214,15 @@ export default async function EventPage({
 
           {/* CTA */}
           {event.link && (
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 mb-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-3">
+            <div className="bg-white rounded-2xl border border-[rgba(0,0,0,0.07)] shadow-[0_1px_3px_rgba(0,0,0,0.06)] p-8 mb-6">
+              <h2 className="text-lg font-semibold text-[#1a1b25] mb-3">
                 Register / Learn More
               </h2>
               <a
                 href={event.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-xl transition-colors"
+                className="inline-flex items-center gap-2 bg-[#0066cc] hover:bg-[#0052a3] text-white font-semibold px-6 py-3 rounded-xl transition-colors"
               >
                 Visit Event Website
                 <ExternalLink className="w-4 h-4" />
@@ -234,7 +234,7 @@ export default async function EventPage({
           <div className="text-center pt-4">
             <Link
               href="/"
-              className="text-sm text-gray-500 hover:text-gray-800 transition-colors"
+              className="text-sm text-[#64748b] hover:text-[#1a1b25] transition-colors"
             >
               ← Discover more tech events in Nigeria
             </Link>

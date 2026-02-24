@@ -13,7 +13,7 @@ export default function UpcomingEvents({
   initialHasMore = true
 }: UpcomingEventsProps) {
   return (
-    <div id="events" className="pt-12">
+    <div id="events" className="py-12">
       <EventsGrid
         title="Events Near You"
         initialEvents={initialEvents}

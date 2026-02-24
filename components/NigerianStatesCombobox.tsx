@@ -62,7 +62,7 @@ export function NigerianStatesCombobox({
         </Button>
       </PopoverTrigger>
 
-      <PopoverContent className={cn("p-0", className)}>
+      <PopoverContent className="p-0 w-[220px]">
         <Command>
           <CommandInput placeholder="Search state..." />
           <CommandList className="max-h-[250px] overflow-y-auto">
