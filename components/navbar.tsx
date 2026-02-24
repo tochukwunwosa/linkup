@@ -30,7 +30,7 @@ export default function Navbar() {
     // Switch to white only after the hero section leaves the viewport.
     // The hero is min-h-[92svh]; use 80% of viewport height as the threshold
     // so the dark nav stays dark while the dark hero is still visible.
-    const getThreshold = () => window.innerHeight * 0.8;
+    const getThreshold = () => window.innerHeight * 0.95;
     const onScroll = () => setScrolled(window.scrollY > getThreshold());
     // Check on mount in case the page was reloaded mid-scroll
     onScroll();
