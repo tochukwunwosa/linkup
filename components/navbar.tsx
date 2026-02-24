@@ -48,7 +48,7 @@ export default function Navbar() {
   return (
     <header
       className={cn(
-        "sticky top-0 z-40 pt-[env(safe-area-inset-top)] transition-all duration-500",
+        "sticky top-0 z-40 transition-all duration-500",
         scrolled ? "nav-scrolled" : "nav-over-hero"
       )}
     >
