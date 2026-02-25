@@ -101,7 +101,7 @@ const nextConfig: NextConfig = {
               "style-src 'self' 'unsafe-inline'",
               "img-src 'self' data: https: blob:",
               "font-src 'self' data:",
-              "connect-src 'self' https://*.supabase.co https://maps.googleapis.com https://cloud.umami.is",
+              "connect-src 'self' https://*.supabase.co https://maps.googleapis.com https://cloud.umami.is https://api-gateway.umami.dev",
               "frame-ancestors 'none'",
               "base-uri 'self'",
               "form-action 'self'",

@@ -44,17 +44,17 @@ export default function Footer() {
               />
               <span className="font-bold text-white text-lg">TechLinkUp</span>
             </Link>
-            <p className="text-white/55 text-xs leading-relaxed max-w-[180px] mb-4">
+            <p className="text-white/70 text-xs leading-relaxed max-w-[180px] mb-4">
               Community-driven tech event discovery across Nigeria.
             </p>
             <div className="flex items-center gap-4">
-              <a href="#" aria-label="Twitter / X" className="text-white/40 hover:text-white/80 transition-colors duration-200">
+              <a href="#" aria-label="Twitter / X" className="text-white/60 hover:text-white/90 transition-colors duration-200">
                 <Twitter className="h-4 w-4" />
               </a>
-              <a href="#" aria-label="LinkedIn" className="text-white/40 hover:text-white/80 transition-colors duration-200">
+              <a href="#" aria-label="LinkedIn" className="text-white/60 hover:text-white/90 transition-colors duration-200">
                 <Linkedin className="h-4 w-4" />
               </a>
-              <a href="#" aria-label="Instagram" className="text-white/40 hover:text-white/80 transition-colors duration-200">
+              <a href="#" aria-label="Instagram" className="text-white/60 hover:text-white/90 transition-colors duration-200">
                 <Instagram className="h-4 w-4" />
               </a>
             </div>
@@ -66,12 +66,12 @@ export default function Footer() {
               Platform
             </h3>
             <ul className="space-y-2 text-sm">
-              <li><Link href="/submit-event" className="text-white/55 hover:text-white transition-colors duration-200">Submit Event</Link></li>
-              <li><Link href="/my-submissions" className="text-white/55 hover:text-white transition-colors duration-200">Track Submissions</Link></li>
-              <li><Link href="/about" className="text-white/55 hover:text-white transition-colors duration-200">About</Link></li>
-              <li><Link href="/contact" className="text-white/55 hover:text-white transition-colors duration-200">Contact</Link></li>
-              <li><Link href="/privacy-policy" className="text-white/55 hover:text-white transition-colors duration-200">Privacy Policy</Link></li>
-              <li><Link href="/terms-of-use" className="text-white/55 hover:text-white transition-colors duration-200">Terms of Use</Link></li>
+              <li><Link href="/submit-event" className="text-white/70 hover:text-white transition-colors duration-200">Submit Event</Link></li>
+              <li><Link href="/my-submissions" className="text-white/70 hover:text-white transition-colors duration-200">Track Submissions</Link></li>
+              <li><Link href="/about" className="text-white/70 hover:text-white transition-colors duration-200">About</Link></li>
+              <li><Link href="/contact" className="text-white/70 hover:text-white transition-colors duration-200">Contact</Link></li>
+              <li><Link href="/privacy-policy" className="text-white/70 hover:text-white transition-colors duration-200">Privacy Policy</Link></li>
+              <li><Link href="/terms-of-use" className="text-white/70 hover:text-white transition-colors duration-200">Terms of Use</Link></li>
             </ul>
           </div>
 
@@ -83,13 +83,13 @@ export default function Footer() {
             <ul className="space-y-2 text-sm">
               {topLocations.map((l) => (
                 <li key={l.slug}>
-                  <Link href={`/location/${l.slug}`} className="text-white/55 hover:text-white transition-colors duration-200">
+                  <Link href={`/location/${l.slug}`} className="text-white/70 hover:text-white transition-colors duration-200">
                     {l.label}
                   </Link>
                 </li>
               ))}
               <li>
-                <Link href="/" className="text-white/55 hover:text-white transition-colors duration-200 text-xs">
+                <Link href="/" className="text-white/60 hover:text-white transition-colors duration-200 text-xs">
                   All states →
                 </Link>
               </li>
@@ -104,7 +104,7 @@ export default function Footer() {
             <ul className="space-y-2 text-sm">
               {topCategories.map((c) => (
                 <li key={c.slug}>
-                  <Link href={`/category/${c.slug}`} className="text-white/55 hover:text-white transition-colors duration-200">
+                  <Link href={`/category/${c.slug}`} className="text-white/70 hover:text-white transition-colors duration-200">
                     {c.label}
                   </Link>
                 </li>
@@ -114,9 +114,9 @@ export default function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="pt-8 border-t border-white/8 flex flex-col sm:flex-row justify-between items-center gap-2 text-xs text-white/35">
-          <span>© {new Date().getFullYear()} TechLinkUp. All rights reserved.</span>
-          <span>Built for Nigeria&apos;s tech community.</span>
+        <div className="pt-8 border-t border-white/8 flex flex-col sm:flex-row justify-between items-center gap-2 text-xs">
+          <span className="text-white/60">© {new Date().getFullYear()} TechLinkUp. All rights reserved.</span>
+          <span className="text-white/60">Built for Nigeria&apos;s tech community.</span>
         </div>
       </div>
     </footer>

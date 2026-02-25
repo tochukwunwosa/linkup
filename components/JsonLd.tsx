@@ -1,9 +1,8 @@
 /**
  * JsonLd Component - Reusable component for adding structured data to pages
+ * Renders as a static <script> tag so crawlers see it in the initial HTML.
  * Usage: <JsonLd data={schemaObject} />
  */
-
-import Script from "next/script";
 
 interface JsonLdProps {
   data: object | object[];
@@ -11,20 +10,15 @@ interface JsonLdProps {
 }
 
 export default function JsonLd({ data, id }: JsonLdProps) {
-  // Handle array of schemas
   const schemas = Array.isArray(data) ? data : [data];
 
   return (
     <>
       {schemas.map((schema, index) => (
-        <Script
+        <script
           key={id ? `${id}-${index}` : `schema-${index}`}
-          id={id ? `${id}-${index}` : undefined}
           type="application/ld+json"
-          strategy="lazyOnload"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(schema),
-          }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
         />
       ))}
     </>

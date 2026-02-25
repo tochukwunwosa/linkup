@@ -34,21 +34,14 @@ export default function RootLayout({
         <link rel="dns-prefetch" href={process.env.NEXT_PUBLIC_SUPABASE_URL} />
         <link rel="preconnect" href="https://maps.googleapis.com" />
         <link rel="dns-prefetch" href="https://maps.googleapis.com" />
-        <Script
-          id="organization-schema"
+        {/* Static LD+JSON — rendered in initial HTML so crawlers see them immediately */}
+        <script
           type="application/ld+json"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(organizationSchema),
-          }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
         />
-        <Script
-          id="website-schema"
+        <script
           type="application/ld+json"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(websiteSchema),
-          }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
         />
       </head>
       <body className={`${inter.variable} ${syne.variable}`}>
