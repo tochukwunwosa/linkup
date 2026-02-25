@@ -13,12 +13,15 @@ export default function UserLocationProvider() {
   const [locationError, setLocationError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Only show modal if permission has not been handled yet
+    // Only show modal if permission has not been handled yet.
+    // Delay by 3s so the modal doesn't animate during the initial page load,
+    // which would trigger Lighthouse non-composited animation warnings.
     const permissionHandled = localStorage.getItem(
       "location-permission-handled",
     );
     if (!permissionHandled) {
-      setModalOpen(true);
+      const timer = setTimeout(() => setModalOpen(true), 3000);
+      return () => clearTimeout(timer);
     }
   }, []);
 

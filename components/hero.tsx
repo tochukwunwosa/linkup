@@ -156,7 +156,7 @@ export default function Hero({ initialTotal = 0 }: { initialTotal?: number }) {
                 Browse Events
                 <ArrowRight className="h-4 w-4" />
               </button>
-              <Link href="/submit-event" className="sm:inline-flex flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-semibold text-sm text-white/75 border border-white/12 hover:bg-white/5 hover:border-white/25 hover:text-white active:scale-95 transition-all duration-150">
+              <Link href="/submit-event" prefetch={false} className="sm:inline-flex flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-semibold text-sm text-white/75 border border-white/12 hover:bg-white/5 hover:border-white/25 hover:text-white active:scale-95 transition-all duration-150">
                   <Calendar className="h-4 w-4" />
                   Submit an Event
               </Link>

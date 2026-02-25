@@ -37,7 +37,7 @@ export default function Navbar() {
 
   const navLinks = [
     { href: "/about", label: "About" },
-    { href: "/contact", label: "Contact" },
+    { href: "/contact", label: "Contact", prefetch: false as const },
     { href: "/#events", label: "Events" },
     { href: "/my-submissions", label: "Track Submissions" },
   ];
@@ -88,6 +88,7 @@ export default function Navbar() {
                 <Link
                   key={link.href}
                   href={link.href}
+                  prefetch={'prefetch' in link ? link.prefetch : undefined}
                   aria-current={active ? 'page' : undefined}
                   className={cn(
                     "relative font-medium text-sm tracking-wide transition-colors duration-300",
@@ -120,7 +121,7 @@ export default function Navbar() {
                   : "bg-[#c9f72f] text-[#070809] hover:bg-[#dbff45] border-0"
               )}
             >
-              <Link href="/submit-event">
+              <Link href="/submit-event" prefetch={false}>
                 <Plus className="mr-2 h-4 w-4" />
                 Submit Event
               </Link>
@@ -139,7 +140,7 @@ export default function Navbar() {
                   : "bg-[#c9f72f] text-[#070809] hover:bg-[#dbff45] border-0"
               )}
             >
-              <Link href="/submit-event">
+              <Link href="/submit-event" prefetch={false}>
                 <Plus className="mr-1 h-3 w-3" />
                 Submit
               </Link>
@@ -214,7 +215,7 @@ export default function Navbar() {
                       asChild
                       className="w-full bg-[#c9f72f] text-[#070809] hover:bg-[#dbff45] font-semibold border-0 mt-4"
                     >
-                      <Link href="/submit-event" onClick={() => setIsOpen(false)}>
+                      <Link href="/submit-event" prefetch={false} onClick={() => setIsOpen(false)}>
                         <Plus className="mr-2 h-4 w-4" />
                         Submit Event
                       </Link>
