@@ -13,13 +13,6 @@ export default function Hero({ initialTotal = 0 }: { initialTotal?: number }) {
   const [loading, setLoading] = useState(false);
   const [eventCount, setEventCount] = useState(0);
   const [cityCount, setCityCount] = useState(0);
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    // Slight delay so the entry animations fire after mount
-    const t = setTimeout(() => setMounted(true), 40);
-    return () => clearTimeout(t);
-  }, []);
 
   const animateValue = (
     start: number,
@@ -106,11 +99,8 @@ export default function Hero({ initialTotal = 0 }: { initialTotal?: number }) {
 
             {/* Platform badge */}
             <div
-              className={cn(
-                "inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full border border-[#c9f72f]/25 transition-all duration-700",
-                mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-              )}
-              style={{ transitionDelay: "0ms" }}
+              className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full border border-[#c9f72f]/25 animate-hero-in"
+              style={{ animationDelay: "0ms" }}
             >
               <span className="h-1.5 w-1.5 rounded-full bg-[#c9f72f] animate-pulse shrink-0" />
               <span className="text-[#c9f72f] text-[11px] font-mono uppercase tracking-[0.15em]">
@@ -120,11 +110,8 @@ export default function Hero({ initialTotal = 0 }: { initialTotal?: number }) {
 
             {/* Main heading */}
             <div
-              className={cn(
-                "transition-all duration-700",
-                mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
-              )}
-              style={{ transitionDelay: "80ms" }}
+              className="animate-hero-in"
+              style={{ animationDelay: "80ms" }}
             >
               <h1
                 className="font-display leading-[0.9] tracking-tighter text-white"
@@ -149,10 +136,9 @@ export default function Hero({ initialTotal = 0 }: { initialTotal?: number }) {
             {/* Subheading */}
             <p
               className={cn(
-                "text-[#8a8a96] text-base sm:text-lg leading-relaxed transition-all duration-700",
-                mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+                "text-[#8a8a96] text-base sm:text-lg leading-relaxed animate-hero-in"
               )}
-              style={{ transitionDelay: "160ms" }}
+              style={{ animationDelay: "160ms" }}
             >
               Conferences, meetups, and workshops across Nigeria — curated
               by the community, for the community.
@@ -160,11 +146,8 @@ export default function Hero({ initialTotal = 0 }: { initialTotal?: number }) {
 
             {/* CTA buttons */}
             <div
-              className={cn(
-                "flex flex-col sm:flex-row sm:flex-wrap gap-3 transition-all duration-700",
-                mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
-              )}
-              style={{ transitionDelay: "240ms" }}
+              className="flex flex-col sm:flex-row sm:flex-wrap gap-3 animate-hero-in"
+              style={{ animationDelay: "240ms" }}
             >
               <button
                 onClick={scrollToEvents}
@@ -181,11 +164,8 @@ export default function Hero({ initialTotal = 0 }: { initialTotal?: number }) {
 
             {/* Stats row */}
             <div
-              className={cn(
-                "flex items-stretch gap-0 pt-2 transition-all duration-700",
-                mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
-              )}
-              style={{ transitionDelay: "320ms" }}
+              className="flex items-stretch gap-0 pt-2 animate-hero-in"
+              style={{ animationDelay: "320ms" }}
             >
               <div className="pr-5 sm:pr-8">
                 <div
@@ -235,11 +215,8 @@ export default function Hero({ initialTotal = 0 }: { initialTotal?: number }) {
 
           {/* ── Right column: Filter card ── */}
           <div
-            className={cn(
-              "lg:pt-6 transition-all duration-700",
-              mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-            )}
-            style={{ transitionDelay: "180ms" }}
+            className="lg:pt-6 animate-hero-in"
+            style={{ animationDelay: "180ms" }}
           >
             <div className="relative rounded-2xl overflow-hidden border border-white/12 shadow-[0_8px_32px_rgba(0,0,0,0.4),0_2px_8px_rgba(201,247,47,0.06)]">
               {/* Card background: event photo + dark overlay */}
@@ -248,6 +225,7 @@ export default function Hero({ initialTotal = 0 }: { initialTotal?: number }) {
                   src="/assets/images/wceu.webp"
                   alt=""
                   fill
+                  priority
                   quality={50}
                   sizes="400px"
                   className="object-cover object-center"
@@ -315,11 +293,8 @@ export default function Hero({ initialTotal = 0 }: { initialTotal?: number }) {
 
         {/* Scroll hint */}
         <div
-          className={cn(
-            "mt-auto pt-10 pb-2 flex items-center gap-3 transition-all duration-700",
-            mounted ? "opacity-100" : "opacity-0"
-          )}
-          style={{ transitionDelay: "500ms" }}
+          className="mt-auto pt-10 pb-2 flex items-center gap-3 animate-hero-in"
+          style={{ animationDelay: "500ms" }}
           aria-hidden="true"
         >
           <div className="w-8 h-px bg-white/15" />

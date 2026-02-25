@@ -198,7 +198,7 @@ export const siteConfig: Metadata = {
     ],
   },
   icons: {
-    icon: "/linkup-logo.png",
+    icon: "/logo.png",
     shortcut: "/favicon.ico",
   },
 };

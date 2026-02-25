@@ -5,9 +5,10 @@ import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Button } from './ui/button';
-import { Menu, X, Plus } from 'lucide-react';
+import { Menu, X, Plus, Twitter, Linkedin, Instagram } from 'lucide-react';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
+import { SheetTitle } from '@/components/ui/sheet';
 
 const Sheet = dynamic(
   () => import('@/components/ui/sheet').then((m) => ({ default: m.Sheet })),
@@ -158,8 +159,23 @@ export default function Navbar() {
                   {isOpen ? <X /> : <Menu />}
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-62.5 p-4">
-                <nav className="flex flex-col space-y-4 mt-10" aria-label="Mobile navigation">
+              <SheetContent
+                side="right"
+                className="w-72 p-0 bg-[#0d0e12] border-l border-white/10 [&>button]:text-white/70 [&>button]:hover:text-white"
+              >
+                {/* Brand header */}
+                <div className="flex items-center gap-2 px-5 pt-5 pb-4 border-b border-white/8">
+                  <Image
+                    src="/logo.svg"
+                    alt="TechLinkUp"
+                    width={24}
+                    height={24}
+                    className="brightness-0 invert opacity-90"
+                  />
+                  <SheetTitle className="font-semibold text-white text-sm tracking-wide">TechLinkUp</SheetTitle>
+                </div>
+
+                <nav className="flex flex-col space-y-1 px-5 pt-4" aria-label="Mobile navigation">
                   {navLinks.map((link) => {
                     const active = isActive(link.href);
                     return (
@@ -168,10 +184,10 @@ export default function Navbar() {
                         href={link.href}
                         aria-current={active ? 'page' : undefined}
                         className={cn(
-                          "text-lg font-medium transition-colors",
+                          "text-base py-2 transition-colors duration-200",
                           active
-                            ? "text-[#0066cc] font-semibold border-l-2 border-[#c9f72f] pl-3"
-                            : "hover:text-primary pl-3"
+                            ? "text-white font-semibold border-l-2 border-[#c9f72f] pl-3"
+                            : "text-white/65 hover:text-white pl-3"
                         )}
                         onClick={() => setIsOpen(false)}
                       >
@@ -179,8 +195,25 @@ export default function Navbar() {
                       </Link>
                     );
                   })}
-                  <div className="pt-4 border-t">
-                    <Button asChild className="w-full">
+
+                  {/* Social icons */}
+                  <div className="pb-4 pt-2 flex items-center gap-4">
+                    <a href="#" aria-label="Twitter / X" className="text-white/40 hover:text-white/80 transition-colors duration-200">
+                      <Twitter className="h-4 w-4" />
+                    </a>
+                    <a href="#" aria-label="LinkedIn" className="text-white/40 hover:text-white/80 transition-colors duration-200">
+                      <Linkedin className="h-4 w-4" />
+                    </a>
+                    <a href="#" aria-label="Instagram" className="text-white/40 hover:text-white/80 transition-colors duration-200">
+                      <Instagram className="h-4 w-4" />
+                    </a>
+                  </div>
+
+                  <div className="pt-2 border-t border-white/8">
+                    <Button
+                      asChild
+                      className="w-full bg-[#c9f72f] text-[#070809] hover:bg-[#dbff45] font-semibold border-0 mt-4"
+                    >
                       <Link href="/submit-event" onClick={() => setIsOpen(false)}>
                         <Plus className="mr-2 h-4 w-4" />
                         Submit Event

@@ -31,15 +31,21 @@ export default async function LinkUpLanding() {
   const itemListSchema = generateEventListSchema(data);
 
   return (
-    <div className="bg-[#070809] overflow-visible">
-      <JsonLd data={breadcrumbSchema} id="breadcrumb" />
-      <JsonLd data={itemListSchema} id="event-list" />
+    <>
+      {/* Preload LCP hero image — explicit preload needed because the Image is inside a client component chain */}
+      {/* eslint-disable-next-line @next/next/no-head-element */}
+      <link rel="preload" as="image" href="/assets/images/wceu.webp" fetchPriority="high" />
 
-      <HomeClient
-        initialEvents={data}
-        initialTotal={total}
-        initialHasMore={hasMore}
-      />
-    </div>
+      <div className="bg-[#070809] overflow-visible">
+        <JsonLd data={breadcrumbSchema} id="breadcrumb" />
+        <JsonLd data={itemListSchema} id="event-list" />
+
+        <HomeClient
+          initialEvents={data}
+          initialTotal={total}
+          initialHasMore={hasMore}
+        />
+      </div>
+    </>
   );
 }

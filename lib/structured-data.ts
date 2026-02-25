@@ -16,7 +16,7 @@ export function generateOrganizationSchema() {
     name: "TechLinkUp",
     alternateName: "Tech LinkUp",
     url: process.env.NEXT_PUBLIC_SITE_URL || "https://techlinkup.xyz",
-    logo: `${process.env.NEXT_PUBLIC_SITE_URL || "https://techlinkup.xyz"}/assets/Logo/linkup-logo.png`,
+    logo: `${process.env.NEXT_PUBLIC_SITE_URL || "https://techlinkup.xyz"}/assets/Logo/LinkUp-Logo-80x35.png`,
     description:
       "Community-driven platform for discovering and connecting with tech events across Nigeria",
     address: {

@@ -10,15 +10,9 @@ interface LocationPermissionModalProps {
 }
 
 export default function LocationPermissionModal({ open, onAllow, onDeny }: LocationPermissionModalProps) {
-  // Debug log to check if modal is being called
-  console.log("LocationPermissionModal rendered with open:", open);
-
   return (
     <Dialog open={open} onOpenChange={(isOpen) => {
-      // Handle dialog close via overlay or escape key
-      if (!isOpen) {
-        onDeny();
-      }
+      if (!isOpen) onDeny();
     }}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
@@ -46,23 +40,10 @@ export default function LocationPermissionModal({ open, onAllow, onDeny }: Locat
         </div>
 
         <DialogFooter className="gap-2 sm:gap-2">
-          <Button
-            variant="outline"
-            onClick={() => {
-              console.log("Deny clicked");
-              onDeny();
-            }}
-            className="flex-1 sm:flex-none"
-          >
+          <Button variant="outline" onClick={onDeny} className="flex-1 sm:flex-none">
             Not Now
           </Button>
-          <Button
-            onClick={() => {
-              console.log("Allow clicked");
-              onAllow();
-            }}
-            className="flex-1 sm:flex-none"
-          >
+          <Button onClick={onAllow} className="flex-1 sm:flex-none">
             Allow Location
           </Button>
         </DialogFooter>

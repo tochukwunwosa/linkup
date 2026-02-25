@@ -16,7 +16,9 @@
       "Bash(cd /c/Users/KINPLUS/Documents/Tochi/Projects/linkup && node -e \"const { chromium } = require\\('playwright'\\); console.log\\('Playwright found'\\);\" 2>&1)",
       "Bash(tail:*)",
       "mcp__playwright__browser_resize",
-      "mcp__playwright__browser_hover"
+      "mcp__playwright__browser_hover",
+      "Bash(find:*)",
+      "Bash(ls:*)"
     ]
   },
   "enabledMcpjsonServers": [

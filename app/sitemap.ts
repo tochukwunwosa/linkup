@@ -1,5 +1,7 @@
 import type { MetadataRoute } from "next";
 import { createClient } from "@/lib/supabase/server";
+
+export const dynamic = "force-dynamic";
 import { locationMeta } from "@/constants/location-meta";
 import { categoryMeta } from "@/constants/category-meta";
 

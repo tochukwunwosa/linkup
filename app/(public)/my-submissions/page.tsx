@@ -3,13 +3,30 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Loader, Search, ArrowLeft, Calendar, MapPin, Clock, ExternalLink } from "lucide-react";
+import {
+  Loader,
+  Search,
+  Calendar,
+  MapPin,
+  Clock,
+  ExternalLink,
+  Copy,
+  Check,
+  ChevronRight,
+} from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
 import { getSubmissionsByEmail } from "@/app/actions/submission/getSubmissionsByEmail";
 import { getSubmissionByTrackingId } from "@/app/actions/submission/getSubmissionByTracking";
 import type { EventSubmission } from "@/lib/validations/event";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { PageHero } from "@/components/page-hero";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 export default function MySubmissionsPage() {
   const [loading, setLoading] = useState(false);
@@ -17,6 +34,15 @@ export default function MySubmissionsPage() {
   const [searchValue, setSearchValue] = useState("");
   const [submissions, setSubmissions] = useState<EventSubmission[]>([]);
   const [searched, setSearched] = useState(false);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [selectedSubmission, setSelectedSubmission] =
+    useState<EventSubmission | null>(null);
+
+  const copyTrackingId = (id: string) => {
+    navigator.clipboard.writeText(id);
+    setCopiedId(id);
+    setTimeout(() => setCopiedId(null), 2000);
+  };
 
   const handleSearch = async () => {
     if (!searchValue.trim()) {
@@ -40,7 +66,9 @@ export default function MySubmissionsPage() {
           setSubmissions([]);
         }
       } else {
-        const result = await getSubmissionByTrackingId(searchValue.trim().toUpperCase());
+        const result = await getSubmissionByTrackingId(
+          searchValue.trim().toUpperCase()
+        );
         if (result.success && result.submission) {
           setSubmissions([result.submission]);
         } else {
@@ -88,20 +116,17 @@ export default function MySubmissionsPage() {
 
   return (
     <div className="min-h-screen bg-[#f5f4f2]">
-      <div className="max-w-2xl mx-auto px-4 sm:px-6 py-10">
-        <Link
-          href="/"
-          className="inline-flex items-center gap-2 text-sm text-[#64748b] hover:text-[#1a1b25] mb-8 transition-colors"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Back to Home
-        </Link>
-
-        <h1 className="text-3xl font-bold text-[#1a1b25] mb-2">Track Your Submissions</h1>
-        <p className="text-[#64748b] text-base mb-8">Check the status of your event submissions</p>
+      <PageHero
+        backHref="/"
+        backLabel="Home"
+        eyebrow="Community Platform"
+        title="Track Your Submissions"
+        subtitle="Check the review status of your submitted events."
+      />
+      <div className="mx-auto px-4 sm:px-6 py-10">
 
         {/* Search card */}
-        <div className="rounded-xl border border-[rgba(0,0,0,0.07)] bg-white p-6 shadow-[0_1px_3px_rgba(0,0,0,0.06)] mb-6">
+        <div className="max-w-3xl mx-auto rounded-xl border border-[rgba(0,0,0,0.07)] bg-white p-6 shadow-[0_1px_3px_rgba(0,0,0,0.06)] mb-6">
           <h2 className="font-semibold text-[#1a1b25] mb-1">Find Your Submissions</h2>
           <p className="text-sm text-[#64748b] mb-4">
             Search by email to see all your submissions, or use a tracking ID for a specific event
@@ -150,7 +175,7 @@ export default function MySubmissionsPage() {
         </div>
 
         {/* CTA banner */}
-        <div className="mb-6 px-5 py-4 rounded-xl bg-[#0066cc]/[0.05] border border-[#0066cc]/10 text-center text-sm text-[#64748b]">
+        <div className="mb-6 px-5 max-w-3xl mx-auto py-4 rounded-xl bg-[#0066cc]/5 border border-[#0066cc]/10 text-center text-sm text-[#64748b]">
           Have a new event to share?{" "}
           <Link href="/submit-event" className="text-[#0066cc] hover:underline font-medium">
             Submit your event
@@ -160,14 +185,15 @@ export default function MySubmissionsPage() {
 
         {/* Results */}
         {searched && (
-          <div className="space-y-4">
+          <div className="max-w-5xl mx-auto space-y-3">
             {submissions.length === 0 ? (
-              <div className="rounded-xl border border-[rgba(0,0,0,0.07)] bg-white p-12 text-center">
-                <p className="text-[#64748b]">No submissions found</p>
+              <div className="max-w-3xl mx-auto rounded-xl border border-[rgba(0,0,0,0.07)] bg-white p-12 text-center">
+                <Search className="h-8 w-8 text-[#cbd5e1] mx-auto mb-3" />
+                <p className="font-medium text-[#1a1b25]">No submissions found</p>
                 <p className="text-sm text-[#64748b] mt-2">
                   {searchType === "email"
-                    ? "No events found for this email address"
-                    : "Please check your tracking ID and try again"}
+                    ? "No events submitted from this email address yet."
+                    : "Double-check your tracking ID — it looks like EVT-XXXXXXXX"}
                 </p>
               </div>
             ) : (
@@ -175,121 +201,211 @@ export default function MySubmissionsPage() {
                 <p className="text-sm text-[#64748b]">
                   Found {submissions.length} submission{submissions.length !== 1 ? "s" : ""}
                 </p>
-
-                {submissions.map((submission) => (
-                  <div
-                    key={submission.id}
-                    className="rounded-xl border border-[rgba(0,0,0,0.07)] bg-white shadow-[0_1px_3px_rgba(0,0,0,0.06)] overflow-hidden"
-                  >
-                    <div className="p-6">
-                      <div className="flex items-start justify-between gap-4 mb-4">
-                        <div className="flex-1">
-                          <h3 className="text-lg font-semibold text-[#1a1b25] mb-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {submissions.map((submission) => (
+                    <button
+                      key={submission.id}
+                      onClick={() => setSelectedSubmission(submission)}
+                      className={`w-full text-left rounded-xl border border-[rgba(0,0,0,0.07)] bg-white shadow-[0_1px_3px_rgba(0,0,0,0.06)] overflow-hidden border-l-4 cursor-pointer hover:shadow-md transition-shadow duration-150 ${
+                        submission.submission_status === "approved"
+                          ? "border-l-emerald-500"
+                          : submission.submission_status === "rejected"
+                          ? "border-l-red-400"
+                          : "border-l-amber-400"
+                      }`}
+                    >
+                      <div className="p-4 sm:p-5 flex flex-col h-full">
+                        <div className="flex items-start justify-between gap-3 mb-2">
+                          <h3 className="text-base font-semibold text-[#1a1b25] leading-snug line-clamp-2 min-w-0">
                             {submission.title}
                           </h3>
-                          <div className="flex flex-wrap items-center gap-3 text-sm text-[#64748b]">
-                            <span className="flex items-center gap-1">
-                              <Calendar className="h-4 w-4" />
-                              {new Date(submission.start_date).toLocaleDateString("en-US", {
-                                month: "short",
-                                day: "numeric",
-                                year: "numeric",
-                              })}
-                            </span>
-                            <span className="flex items-center gap-1">
-                              <Clock className="h-4 w-4" />
-                              {submission.time}
-                            </span>
-                            <span className="flex items-center gap-1">
-                              <MapPin className="h-4 w-4" />
-                              {submission.location}
-                            </span>
-                          </div>
+                          <div className="shrink-0">{getStatusBadge(submission.submission_status)}</div>
                         </div>
-                        {getStatusBadge(submission.submission_status)}
-                      </div>
 
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm pt-4 border-t border-[rgba(0,0,0,0.06)]">
-                        <div>
-                          <p className="font-medium text-[#1a1b25] mb-1">Tracking ID</p>
-                          <code className="bg-[#f5f4f2] px-2 py-1 rounded text-xs font-mono text-[#4a4a5a]">
-                            {submission.tracking_id}
-                          </code>
-                        </div>
-                        <div>
-                          <p className="font-medium text-[#1a1b25] mb-1">Submitted On</p>
-                          <p className="text-[#64748b]">
-                            {new Date(submission.submitted_at).toLocaleString("en-US", {
+                        <div className="flex flex-col gap-1 text-sm text-[#64748b] mb-3">
+                          <span className="flex items-center gap-1">
+                            <Calendar className="h-3.5 w-3.5 shrink-0" />
+                            {new Date(submission.start_date).toLocaleDateString("en-US", {
                               month: "short",
                               day: "numeric",
                               year: "numeric",
-                              hour: "2-digit",
-                              minute: "2-digit",
                             })}
-                          </p>
+                          </span>
+                          <span className="flex items-center gap-1 truncate">
+                            <MapPin className="h-3.5 w-3.5 shrink-0" />
+                            <span className="truncate">{submission.location}</span>
+                          </span>
                         </div>
-                        {submission.reviewed_at && (
-                          <div>
-                            <p className="font-medium text-[#1a1b25] mb-1">Reviewed On</p>
-                            <p className="text-[#64748b]">
-                              {new Date(submission.reviewed_at).toLocaleString("en-US", {
-                                month: "short",
-                                day: "numeric",
-                                year: "numeric",
-                                hour: "2-digit",
-                                minute: "2-digit",
-                              })}
-                            </p>
-                          </div>
-                        )}
-                        <div>
-                          <p className="font-medium text-[#1a1b25] mb-1">Event Type</p>
-                          <p className="text-[#64748b]">{submission.type}</p>
+
+                        <div className="flex items-center justify-between mt-auto pt-3 border-t border-[rgba(0,0,0,0.05)]">
+                          <code className="text-xs font-mono text-[#94a3b8] bg-[#f5f4f2] px-2 py-0.5 rounded">
+                            {submission.tracking_id}
+                          </code>
+                          <span className="flex items-center gap-0.5 text-xs text-[#0066cc] font-medium shrink-0">
+                            View details
+                            <ChevronRight className="h-3.5 w-3.5" />
+                          </span>
                         </div>
                       </div>
-
-                      {submission.admin_feedback && submission.submission_status === "rejected" && (
-                        <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
-                          <p className="font-medium text-sm text-red-800 mb-1">Feedback from Admin</p>
-                          <p className="text-sm text-red-700">{submission.admin_feedback}</p>
-                        </div>
-                      )}
-
-                      {submission.submission_status === "approved" && submission.published_event_id && (
-                        <div className="mt-4 p-4 bg-emerald-50 border border-emerald-200 rounded-lg">
-                          <p className="text-sm font-medium text-emerald-800 mb-2">
-                            Your event has been published!
-                          </p>
-                          <Link
-                            href="/"
-                            className="inline-flex items-center gap-1.5 text-sm font-medium text-emerald-700 hover:underline"
-                          >
-                            View on Tech Linkup
-                            <ExternalLink className="h-3.5 w-3.5" />
-                          </Link>
-                        </div>
-                      )}
-
-                      {submission.category.length > 0 && (
-                        <div className="mt-4 flex flex-wrap gap-2">
-                          {submission.category.map((cat) => (
-                            <span
-                              key={cat}
-                              className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-[#6b46c1]/[0.08] text-[#6b46c1]"
-                            >
-                              {cat}
-                            </span>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                ))}
+                    </button>
+                  ))}
+                </div>
               </>
             )}
           </div>
         )}
       </div>
+
+      {/* Detail Modal */}
+      <Dialog
+        open={selectedSubmission !== null}
+        onOpenChange={(open) => {
+          if (!open) setSelectedSubmission(null);
+        }}
+      >
+        <DialogContent className="max-h-[90dvh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="pr-6 leading-snug">
+              {selectedSubmission?.title}
+            </DialogTitle>
+          </DialogHeader>
+
+          {selectedSubmission && (
+            <div className="space-y-4">
+              {/* Status */}
+              <div>{getStatusBadge(selectedSubmission.submission_status)}</div>
+
+              {/* Meta */}
+              <div className="flex flex-wrap gap-x-4 gap-y-2 text-sm text-[#64748b]">
+                <span className="flex items-center gap-1.5">
+                  <Calendar className="h-4 w-4 shrink-0 text-[#94a3b8]" />
+                  {new Date(selectedSubmission.start_date).toLocaleDateString("en-US", {
+                    weekday: "short",
+                    month: "short",
+                    day: "numeric",
+                    year: "numeric",
+                  })}
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <Clock className="h-4 w-4 shrink-0 text-[#94a3b8]" />
+                  {selectedSubmission.time}
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <MapPin className="h-4 w-4 shrink-0 text-[#94a3b8]" />
+                  {selectedSubmission.location}
+                </span>
+              </div>
+
+              {/* Tracking ID */}
+              <div className="pt-3 border-t border-[rgba(0,0,0,0.06)]">
+                <p className="text-xs font-medium text-[#94a3b8] uppercase tracking-wide mb-1.5">
+                  Tracking ID
+                </p>
+                <div className="flex items-center gap-2">
+                  <code className="bg-[#f5f4f2] px-2.5 py-1 rounded text-sm font-mono text-[#4a4a5a]">
+                    {selectedSubmission.tracking_id}
+                  </code>
+                  <button
+                    onClick={() => copyTrackingId(selectedSubmission.tracking_id)}
+                    className="p-1.5 rounded hover:bg-[#f5f4f2] text-[#64748b] hover:text-[#0066cc] transition-colors"
+                    title="Copy tracking ID"
+                  >
+                    {copiedId === selectedSubmission.tracking_id ? (
+                      <Check className="h-4 w-4 text-[#0066cc]" />
+                    ) : (
+                      <Copy className="h-4 w-4" />
+                    )}
+                  </button>
+                </div>
+              </div>
+
+              {/* Submission details grid */}
+              <div className="grid grid-cols-2 gap-4 text-sm pt-3 border-t border-[rgba(0,0,0,0.06)]">
+                <div>
+                  <p className="text-xs font-medium text-[#94a3b8] uppercase tracking-wide mb-1">
+                    Submitted On
+                  </p>
+                  <p className="text-[#1a1b25]">
+                    {new Date(selectedSubmission.submitted_at).toLocaleString("en-US", {
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </p>
+                </div>
+                {selectedSubmission.reviewed_at && (
+                  <div>
+                    <p className="text-xs font-medium text-[#94a3b8] uppercase tracking-wide mb-1">
+                      Reviewed On
+                    </p>
+                    <p className="text-[#1a1b25]">
+                      {new Date(selectedSubmission.reviewed_at).toLocaleString("en-US", {
+                        month: "short",
+                        day: "numeric",
+                        year: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </p>
+                  </div>
+                )}
+                <div>
+                  <p className="text-xs font-medium text-[#94a3b8] uppercase tracking-wide mb-1">
+                    Event Type
+                  </p>
+                  <p className="text-[#1a1b25]">{selectedSubmission.type}</p>
+                </div>
+              </div>
+
+              {/* Admin feedback */}
+              {selectedSubmission.admin_feedback &&
+                selectedSubmission.submission_status === "rejected" && (
+                  <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
+                    <p className="font-medium text-sm text-red-800 mb-1">
+                      Feedback from Admin
+                    </p>
+                    <p className="text-sm text-red-700">
+                      {selectedSubmission.admin_feedback}
+                    </p>
+                  </div>
+                )}
+
+              {/* Published event link */}
+              {selectedSubmission.submission_status === "approved" &&
+                selectedSubmission.published_event_id && (
+                  <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-lg">
+                    <p className="text-sm font-medium text-emerald-800 mb-2">
+                      Your event has been published!
+                    </p>
+                    <Link
+                      href={`/events/${selectedSubmission.published_event_id}`}
+                      className="inline-flex items-center gap-1.5 text-sm font-medium text-emerald-700 hover:underline"
+                    >
+                      View on Tech Linkup
+                      <ExternalLink className="h-3.5 w-3.5" />
+                    </Link>
+                  </div>
+                )}
+
+              {/* Category tags */}
+              {selectedSubmission.category.length > 0 && (
+                <div className="flex flex-wrap gap-2 pt-1">
+                  {selectedSubmission.category.map((cat) => (
+                    <span
+                      key={cat}
+                      className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-[#6b46c1]/[0.08] text-[#6b46c1]"
+                    >
+                      {cat}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

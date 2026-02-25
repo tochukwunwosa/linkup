@@ -1,6 +1,4 @@
 import { WifiOff } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import Link from "next/link";
 import type { Metadata } from "next";
 
@@ -10,39 +8,48 @@ export const metadata: Metadata = {
 
 export default function OfflinePage() {
   return (
-    <div className="container max-w-2xl mx-auto px-4 py-16 flex flex-col items-center justify-center min-h-screen">
-      <Card className="w-full">
-        <CardContent className="pt-6 text-center">
-          <div className="mb-6 flex justify-center">
-            <div className="rounded-full bg-muted p-6">
-              <WifiOff className="h-16 w-16 text-muted-foreground" />
-            </div>
-          </div>
+    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-16 bg-[#f5f4f2]">
+      <div className="max-w-sm w-full rounded-2xl border border-[rgba(0,0,0,0.07)] bg-white p-8 text-center shadow-[0_4px_24px_rgba(0,0,0,0.06)]">
+        {/* Icon */}
+        <div
+          className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6"
+          style={{ background: "rgba(0, 102, 204, 0.08)" }}
+        >
+          <WifiOff className="h-8 w-8 text-[#0066cc]" />
+        </div>
 
-          <h1 className="text-3xl font-bold mb-3">You&apos;re Offline</h1>
-          <p className="text-muted-foreground mb-6 max-w-md mx-auto">
-            It looks like you&apos;ve lost your internet connection. Some features may not be available right now.
+        {/* Heading */}
+        <h1 className="text-2xl font-bold text-[#1a1b25] mb-3">
+          You&apos;re offline
+        </h1>
+        <p className="text-[#64748b] text-sm leading-relaxed mb-6">
+          It looks like you&apos;ve lost your internet connection. Some features
+          may not be available right now.
+        </p>
+
+        {/* Tips */}
+        <div className="bg-[#f5f4f2] rounded-xl p-4 mb-6 text-left">
+          <p className="text-xs font-semibold text-[#1a1b25] uppercase tracking-wide mb-2">
+            What you can do
           </p>
+          <ul className="space-y-1.5 text-sm text-[#64748b]">
+            <li>• Check your internet connection</li>
+            <li>• Try refreshing the page</li>
+            <li>• View previously loaded content</li>
+          </ul>
+        </div>
 
-          <div className="space-y-4">
-            <div className="bg-muted/50 rounded-lg p-4 text-sm">
-              <p className="font-medium mb-2">What you can do:</p>
-              <ul className="text-left space-y-1 text-muted-foreground">
-                <li>• Check your internet connection</li>
-                <li>• Try refreshing the page</li>
-                <li>• View previously loaded content</li>
-              </ul>
-            </div>
+        {/* CTA */}
+        <Link
+          href="/"
+          className="w-full inline-flex items-center justify-center px-5 py-3 rounded-xl bg-[#0066cc] hover:bg-[#0052a3] text-white font-semibold text-sm transition-colors"
+        >
+          Try Again
+        </Link>
+      </div>
 
-            <Button asChild className="w-full">
-              <Link href="/">Try Again</Link>
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
-
-      <p className="text-sm text-muted-foreground mt-8">
-        TechLinkUp works best with an active internet connection
+      <p className="text-xs text-[#64748b] mt-8">
+        TechLinkUp works best with an active internet connection.
       </p>
     </div>
   );

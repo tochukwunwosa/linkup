@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Metadata } from "next";
 import { PageHero } from "@/components/page-hero";
 import { Users2, Map, Zap, Layers } from "lucide-react";
+import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
   title: "About Us - TechLinkUp",
@@ -50,11 +51,6 @@ const features = [
   },
 ];
 
-const stats = [
-  { value: "500+", label: "Events Listed" },
-  { value: "36", label: "States Covered" },
-  { value: "10+", label: "Tech Categories" },
-];
 
 const steps = [
   {
@@ -74,7 +70,19 @@ const steps = [
   },
 ];
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const supabase = await createClient();
+  const { data: statsData } = await supabase
+    .from("public_stats")
+    .select("*")
+    .single();
+
+  const stats = [
+    { value: `${statsData?.published_events ?? 150}+`, label: "Events Listed" },
+    { value: `${statsData?.cities_covered ?? 36}`, label: "Cities Covered" },
+    { value: "10+", label: "Tech Categories" },
+  ];
+
   return (
     <main className="min-h-screen bg-[#f5f4f2]">
       <PageHero

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { EventSubmissionForm } from "@/components/event/event-submission-form";
 import { Button } from "@/components/ui/button";
+import { PageHero } from "@/components/page-hero";
 import { CheckCircle2, ArrowLeft, Copy, Check } from "lucide-react";
 import Link from "next/link";
 
@@ -91,40 +92,73 @@ export default function SubmitEventPage() {
 
   return (
     <div className="min-h-screen bg-[#f5f4f2]">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10">
-        <Link
-          href="/"
-          className="inline-flex items-center gap-2 text-sm text-[#64748b] hover:text-[#1a1b25] mb-8 transition-colors"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Back to Home
-        </Link>
+      <PageHero
+        backHref="/"
+        backLabel="Home"
+        eyebrow="Community Submissions"
+        title="Submit Your Event"
+        subtitle="Share your tech event with Nigeria's tech community."
+      />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-8 items-start">
 
-        <h1 className="text-3xl font-bold text-[#1a1b25] mb-2">Submit Your Event</h1>
-        <p className="text-[#64748b] text-base mb-8">
-          Share your tech event with Nigeria&apos;s tech community
-        </p>
+          {/* LEFT — form card */}
+          <div className="rounded-xl border border-[rgba(0,0,0,0.07)] bg-white p-6 sm:p-8 shadow-[0_1px_3px_rgba(0,0,0,0.06)]">
+            <h2 className="text-lg font-semibold text-[#1a1b25] mb-1">Event Information</h2>
+            <p className="text-sm text-[#64748b] mb-6">
+              Fill out the form below to submit your event for review. All fields marked with{" "}
+              <span className="text-red-500">*</span> are required.
+            </p>
+            <EventSubmissionForm onSuccess={handleSuccess} />
+          </div>
 
-        {/* Form card */}
-        <div className="rounded-xl border border-[rgba(0,0,0,0.07)] bg-white p-6 sm:p-8 shadow-[0_1px_3px_rgba(0,0,0,0.06)] mb-6">
-          <h2 className="text-lg font-semibold text-[#1a1b25] mb-1">Event Information</h2>
-          <p className="text-sm text-[#64748b] mb-6">
-            Fill out the form below to submit your event for review. All fields marked with{" "}
-            <span className="text-red-500">*</span> are required.
-          </p>
-          <EventSubmissionForm onSuccess={handleSuccess} />
-        </div>
+          {/* RIGHT — sticky info sidebar */}
+          <aside className="sticky top-24 space-y-5">
+            {/* Guidelines card */}
+            <div className="rounded-xl border border-[rgba(0,0,0,0.07)] bg-white p-5">
+              <h3 className="font-semibold text-[#1a1b25] mb-3">Submission Guidelines</h3>
+              <ul className="space-y-2.5 text-sm text-[#64748b]">
+                <li>• Events must be tech-related and relevant to the Nigerian tech community</li>
+                <li>• Provide accurate and complete information about your event</li>
+                <li>• Events will be reviewed within 1–2 business days</li>
+                <li>• You&apos;ll receive email notifications about your submission status</li>
+                <li>• Keep your tracking ID to check submission status anytime</li>
+              </ul>
+            </div>
 
-        {/* Guidelines */}
-        <div className="p-5 rounded-xl bg-white border border-[rgba(0,0,0,0.07)]">
-          <h3 className="font-semibold text-[#1a1b25] mb-3">Submission Guidelines</h3>
-          <ul className="space-y-2 text-sm text-[#64748b]">
-            <li>• Events must be tech-related and relevant to the Nigerian tech community</li>
-            <li>• Provide accurate and complete information about your event</li>
-            <li>• Events will be reviewed within 1-2 business days</li>
-            <li>• You&apos;ll receive email notifications about your submission status</li>
-            <li>• Keep your tracking ID to check submission status anytime</li>
-          </ul>
+            {/* Accepted event types card */}
+            <div className="rounded-xl border border-[rgba(0,0,0,0.07)] bg-white p-5">
+              <h3 className="font-semibold text-[#1a1b25] mb-3">Accepted Event Types</h3>
+              <div className="flex flex-wrap gap-2">
+                {["Conferences", "Meetups", "Workshops", "Hackathons", "Bootcamps", "Webinars"].map(
+                  (type) => (
+                    <span
+                      key={type}
+                      className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-[#0066cc]/[0.07] text-[#0066cc]"
+                    >
+                      {type}
+                    </span>
+                  )
+                )}
+              </div>
+            </div>
+
+            {/* Review timeline card */}
+            <div className="rounded-xl bg-[#0066cc]/[0.05] border border-[#0066cc]/10 p-5">
+              <p className="text-sm font-semibold text-[#0066cc] mb-1">Review Timeline</p>
+              <p className="text-sm text-[#64748b] mb-3">
+                Our team reviews submissions within 1–2 business days. You&apos;ll receive an email
+                once your event is approved or if changes are needed.
+              </p>
+              <Link
+                href="/my-submissions"
+                className="text-sm font-medium text-[#0066cc] hover:underline"
+              >
+                Track your submission →
+              </Link>
+            </div>
+          </aside>
+
         </div>
       </div>
     </div>

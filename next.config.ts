@@ -51,52 +51,6 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizePackageImports: ["lucide-react", "@radix-ui/react-icons", "recharts", "date-fns"],
   },
-  webpack: (config, { isServer }) => {
-    // Optimize chunk splitting for better caching
-    if (!isServer) {
-      config.optimization = {
-        ...config.optimization,
-        splitChunks: {
-          chunks: 'all',
-          cacheGroups: {
-            default: false,
-            vendors: false,
-            // Vendor chunk for node_modules
-            vendor: {
-              name: 'vendor',
-              chunks: 'all',
-              test: /node_modules/,
-              priority: 20,
-            },
-            // Separate chunk for UI components
-            ui: {
-              name: 'ui',
-              test: /[\\/]components[\\/]ui[\\/]/,
-              chunks: 'all',
-              priority: 30,
-            },
-            // Separate chunk for recharts (heavy library)
-            recharts: {
-              name: 'recharts',
-              test: /[\\/]node_modules[\\/]recharts[\\/]/,
-              chunks: 'async',
-              priority: 40,
-            },
-            // Common chunk for shared code
-            common: {
-              name: 'common',
-              minChunks: 2,
-              chunks: 'all',
-              priority: 10,
-              reuseExistingChunk: true,
-              enforce: true,
-            },
-          },
-        },
-      };
-    }
-    return config;
-  },
   env: {
     // Only expose NEXT_PUBLIC_ variables here - server secrets are accessed via process.env directly
     NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -161,7 +115,7 @@ const nextConfig: NextConfig = {
         headers: [
           {
             key: "Cache-Control",
-            value: "public, max-age=3600, s-maxage=86400, stale-while-revalidate=43200",
+            value: "public, max-age=0, s-maxage=3600, stale-while-revalidate=3600",
           },
         ],
       },

@@ -1,10 +1,19 @@
 "use client";
 
 import React, { Suspense } from "react";
-import UserLocationProvider from "@/components/location/UserLocationProvider";
+import dynamic from "next/dynamic";
 import { EventProvider } from "@/context/EventContext";
 import { EventUrlSync } from "@/context/EventUrlSync";
-import { PWAInstallPrompt } from "@/components/pwa/install-prompt";
+
+const UserLocationProvider = dynamic(
+  () => import("@/components/location/UserLocationProvider"),
+  { ssr: false }
+);
+
+const PWAInstallPrompt = dynamic(
+  () => import("@/components/pwa/install-prompt").then((m) => ({ default: m.PWAInstallPrompt })),
+  { ssr: false }
+);
 
 export function PublicShell({ children }: { children: React.ReactNode }) {
   return (
