@@ -129,7 +129,7 @@ export default function Navbar() {
           </nav>
 
           {/* Mobile Navigation */}
-          <div className="md:hidden flex items-center gap-4 pt-[env(safe-area-inset-top)]">
+          <div className="md:hidden flex items-center gap-4">
             <Button
               asChild
               size="sm"

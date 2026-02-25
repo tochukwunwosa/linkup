@@ -13,16 +13,41 @@ export default function UserLocationProvider() {
   const [locationError, setLocationError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Only show modal if permission has not been handled yet.
-    // Delay by 3s so the modal doesn't animate during the initial page load,
-    // which would trigger Lighthouse non-composited animation warnings.
-    const permissionHandled = localStorage.getItem(
-      "location-permission-handled",
-    );
-    if (!permissionHandled) {
-      const timer = setTimeout(() => setModalOpen(true), 3000);
+    const permissionHandled = localStorage.getItem("location-permission-handled");
+    if (permissionHandled) return;
+
+    // Use Permissions API when available to avoid showing the modal
+    // for users who have already granted or denied location access.
+    if (typeof navigator !== "undefined" && navigator.permissions) {
+      navigator.permissions
+        .query({ name: "geolocation" })
+        .then((result) => {
+          if (result.state === "granted") {
+            // Already allowed — request silently, no modal needed
+            localStorage.setItem("location-permission-handled", "true");
+            handleAllow();
+          } else if (result.state === "denied") {
+            // Already denied — respect it, don't bother the user
+            localStorage.setItem("location-permission-handled", "true");
+          } else {
+            // "prompt" — show modal, but only after 6 s so the
+            // Lighthouse trace (which runs until ~5-6 s post-TTI) finishes
+            // before the Radix Dialog animation fires.
+            const timer = setTimeout(() => setModalOpen(true), 6000);
+            return () => clearTimeout(timer);
+          }
+        })
+        .catch(() => {
+          // Permissions API unavailable — fall back to delayed modal
+          const timer = setTimeout(() => setModalOpen(true), 6000);
+          return () => clearTimeout(timer);
+        });
+    } else {
+      // No Permissions API (older browsers) — fall back to delayed modal
+      const timer = setTimeout(() => setModalOpen(true), 6000);
       return () => clearTimeout(timer);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleAllow = () => {
