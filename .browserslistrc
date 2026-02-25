@@ -1,18 +1,19 @@
 # Browsers that we support
+# Minimum versions chosen to eliminate polyfills for:
+#   Array.at, Array.flat/flatMap, Object.fromEntries, Object.hasOwn,
+#   String.trimStart/trimEnd — all baseline since 2022.
 
-# Modern browsers that support ES modules natively
-> 0.5%
-last 2 versions
+[production]
+Chrome >= 93
+Edge >= 93
+Firefox >= 92
+Safari >= 15.4
+> 0.3%
 not dead
 not IE 11
 not op_mini all
 
-# Modern Chrome, Firefox, Safari, Edge
-Chrome >= 90
-Firefox >= 88
-Safari >= 14
-Edge >= 90
-
-# Support ES6+ features to avoid unnecessary polyfills
-supports es6-module
-supports es6-module-dynamic-import
+[development]
+last 1 chrome version
+last 1 firefox version
+last 1 safari version
