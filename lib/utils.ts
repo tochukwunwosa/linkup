@@ -170,6 +170,14 @@ export const addToAppleCalendar = (event: Event) => {
 };
 
 
+export function formatTo12Hour(time24: string): string {
+  const [h, m] = time24.split(":").map(Number);
+  if (isNaN(h) || isNaN(m)) return time24;
+  const period = h >= 12 ? "PM" : "AM";
+  const hour = h % 12 || 12;
+  return `${hour}:${String(m).padStart(2, "0")} ${period}`;
+}
+
 /**
  * Converts stored event time from WAT (Africa/Lagos) to user's local time
  * Returns time only (not date)

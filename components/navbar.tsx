@@ -3,12 +3,12 @@
 import React, { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { Button } from './ui/button';
 import { Menu, X, Plus } from 'lucide-react';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
 
-// Lazy-load mobile Sheet — not needed on desktop, keeps it out of the critical bundle
 const Sheet = dynamic(
   () => import('@/components/ui/sheet').then((m) => ({ default: m.Sheet })),
   { ssr: false }
@@ -25,17 +25,13 @@ const SheetTrigger = dynamic(
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
-    // Switch to white only after the hero section leaves the viewport.
-    // The hero is min-h-[92svh]; use 80% of viewport height as the threshold
-    // so the dark nav stays dark while the dark hero is still visible.
-    const getThreshold = () => window.innerHeight * 0.95;
-    const onScroll = () => setScrolled(window.scrollY > getThreshold());
-    // Check on mount in case the page was reloaded mid-scroll
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
+    const handleScroll = () => setScrolled(window.scrollY > 10);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const navLinks = [
@@ -45,6 +41,12 @@ export default function Navbar() {
     { href: "/my-submissions", label: "Track Submissions" },
   ];
 
+  // Match active link: exact for most routes, hash links match by pathname "/"
+  const isActive = (href: string) => {
+    if (href.includes('#')) return pathname === '/';
+    return pathname === href || pathname.startsWith(href + '/');
+  };
+
   return (
     <header
       className={cn(
@@ -52,7 +54,6 @@ export default function Navbar() {
         scrolled ? "nav-scrolled pt-[env(safe-area-inset-top)]" : "nav-over-hero"
       )}
     >
-      {/* Skip-to-content link — visible only on keyboard focus */}
       <a
         href="#main-content"
         className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-999 focus:px-4 focus:py-2 focus:bg-white focus:text-blue-600 focus:rounded-lg focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -64,7 +65,7 @@ export default function Navbar() {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex items-center">
-            <Link href="/" className="text-foreground">
+            <Link href="/" aria-label="Go to homepage">
               <Image
                 src="/logo.svg"
                 alt="Tech LinkUp Logo"
@@ -79,21 +80,36 @@ export default function Navbar() {
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-6">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={cn(
-                  "relative font-medium text-sm tracking-wide transition-colors duration-300",
-                  "after:absolute after:bottom-0.5 after:left-0 after:h-0.5 after:w-0 after:rounded-full",
-                  "after:bg-[#c9f72f] after:transition-all after:duration-300 hover:after:w-full",
-                  scrolled ? "text-gray-700 hover:text-[#0066cc]" : "text-white/80 hover:text-white"
-                )}
-              >
-                {link.label}
-              </Link>
-            ))}
+          <nav className="hidden md:flex items-center space-x-6" aria-label="Main navigation">
+            {navLinks.map((link) => {
+              const active = isActive(link.href);
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  aria-current={active ? 'page' : undefined}
+                  className={cn(
+                    "relative font-medium text-sm tracking-wide transition-colors duration-300",
+                    // Underline bar
+                    "after:absolute after:bottom-0.5 after:left-0 after:h-0.5 after:rounded-full",
+                    "after:bg-[#c9f72f] after:transition-all after:duration-300",
+                    // Active = full underline, inactive = 0 → full on hover
+                    active ? "after:w-full" : "after:w-0 hover:after:w-full",
+                    // Text color
+                    scrolled
+                      ? active
+                        ? "text-[#0066cc] font-semibold"
+                        : "text-gray-700 hover:text-[#0066cc]"
+                      : active
+                        ? "text-white font-semibold"
+                        : "text-white/80 hover:text-white"
+                  )}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
+
             <Button
               asChild
               className={cn(
@@ -133,6 +149,7 @@ export default function Navbar() {
                 <Button
                   variant="ghost"
                   size="icon"
+                  aria-label={isOpen ? "Close menu" : "Open menu"}
                   className={cn(
                     "md:hidden",
                     scrolled ? "text-gray-700 hover:bg-gray-100" : "text-white hover:bg-white/10"
@@ -142,17 +159,26 @@ export default function Navbar() {
                 </Button>
               </SheetTrigger>
               <SheetContent side="right" className="w-62.5 p-4">
-                <nav className="flex flex-col space-y-4 mt-10">
-                  {navLinks.map((link) => (
-                    <Link
-                      key={link.href}
-                      href={link.href}
-                      className="text-lg font-medium hover:text-primary transition-colors"
-                      onClick={() => setIsOpen(false)}
-                    >
-                      {link.label}
-                    </Link>
-                  ))}
+                <nav className="flex flex-col space-y-4 mt-10" aria-label="Mobile navigation">
+                  {navLinks.map((link) => {
+                    const active = isActive(link.href);
+                    return (
+                      <Link
+                        key={link.href}
+                        href={link.href}
+                        aria-current={active ? 'page' : undefined}
+                        className={cn(
+                          "text-lg font-medium transition-colors",
+                          active
+                            ? "text-[#0066cc] font-semibold border-l-2 border-[#c9f72f] pl-3"
+                            : "hover:text-primary pl-3"
+                        )}
+                        onClick={() => setIsOpen(false)}
+                      >
+                        {link.label}
+                      </Link>
+                    );
+                  })}
                   <div className="pt-4 border-t">
                     <Button asChild className="w-full">
                       <Link href="/submit-event" onClick={() => setIsOpen(false)}>

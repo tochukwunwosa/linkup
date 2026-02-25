@@ -3,6 +3,7 @@
 import Hero from "@/components/hero";
 import Filters from "@/components/filters";
 import UpcomingEvents from "@/components/upcoming-events";
+import { CategoryBrowseStrip } from "@/components/category-browse-strip";
 import { Event } from "@/lib/validations/event";
 
 interface HomeClientProps {
@@ -21,6 +22,8 @@ export default function HomeClient({
       <Hero initialTotal={initialTotal} />
 
       <div className="relative" style={{background:"linear-gradient(180deg, #f5f4f2 0%, #f7f6f4 100%)"}}>
+
+      <CategoryBrowseStrip />
 
       <Filters />
 

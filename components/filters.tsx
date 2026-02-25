@@ -8,6 +8,23 @@ import { useEventContext } from "@/context/EventContext";
 import { NigerianStatesCombobox } from "./NigerianStatesCombobox";
 import { useDebouncedCallback } from "@/hooks/use-debounce";
 import { cn } from "@/lib/utils";
+import { getCategoryColors } from "@/lib/category-color";
+
+// Curated high-volume category chips
+const CATEGORY_CHIPS = [
+  "AI",
+  "Web",
+  "Web3",
+  "Mobile",
+  "Cloud",
+  "Cybersecurity",
+  "Data Science",
+  "Design",
+  "Startup",
+  "Hackathon",
+  "Fintech",
+  "Career",
+];
 
 export default function Filters() {
   const { filters, setFilters } = useEventContext();
@@ -43,11 +60,23 @@ export default function Filters() {
     setIsSearching(false);
   };
 
+  const activeCategories = filters.category ?? [];
+
+  const toggleCategory = (cat: string) => {
+    const isActive = activeCategories.includes(cat);
+    setFilters({
+      category: isActive
+        ? activeCategories.filter((c) => c !== cat)
+        : [...activeCategories, cat],
+    });
+  };
+
   const hasActiveFilters =
     filters.search !== "" ||
     filters.format !== "all" ||
     filters.location !== "all" ||
-    filters.date !== "all";
+    filters.date !== "all" ||
+    activeCategories.length > 0;
 
   const clearFilters = () => {
     setSearchValue("");
@@ -168,6 +197,32 @@ export default function Filters() {
         {/* Row 2: Mobile-only horizontal scroll chips */}
         <div className="md:hidden overflow-x-auto scrollbar-hide flex gap-2 mt-2 pb-0.5">
           <FilterChips />
+        </div>
+
+        {/* Row 3: Category chips — always visible */}
+        <div className="overflow-x-auto scrollbar-hide flex gap-2 mt-2 pb-0.5">
+          {CATEGORY_CHIPS.map((cat) => {
+            const isActive = activeCategories.includes(cat);
+            const catColors = getCategoryColors([cat]);
+            return (
+              <button
+                key={cat}
+                onClick={() => toggleCategory(cat)}
+                className={cn("filter-pill text-xs px-3", isActive && "filter-pill-active")}
+                style={
+                  isActive
+                    ? {
+                        borderColor: catColors.solid,
+                        color: catColors.solid,
+                        background: catColors.overlay,
+                      }
+                    : undefined
+                }
+              >
+                {cat}
+              </button>
+            );
+          })}
         </div>
       </div>
     </section>

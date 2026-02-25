@@ -1,110 +1,189 @@
-"use client"
+"use client";
 
-import { useEffect } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { AlertTriangle, Home, RefreshCw } from "lucide-react"
-import Link from "next/link"
+import { useEffect } from "react";
 
 export default function GlobalError({
   error,
   reset,
 }: {
-  error: Error & { digest?: string }
-  reset: () => void
+  error: Error & { digest?: string };
+  reset: () => void;
 }) {
   useEffect(() => {
-    // Log error to console (in production, you'd send to an error tracking service)
-    console.error("Global error boundary caught:", error)
-  }, [error])
+    console.error("Global error boundary caught:", error);
+  }, [error]);
 
   return (
     <html lang="en">
-      <body>
-        <div className="min-h-screen flex items-center justify-center px-4 py-16 bg-gray-50">
-          <Card className="max-w-2xl w-full shadow-lg border-red-200">
-            <CardContent className="p-8 md:p-12">
-              <div className="text-center space-y-6">
-                {/* Error Icon */}
-                <div className="flex justify-center">
-                  <div className="relative">
-                    <div className="absolute inset-0 bg-red-100 rounded-full blur-xl"></div>
-                    <div className="relative bg-red-100 p-6 rounded-full">
-                      <AlertTriangle className="h-16 w-16 md:h-20 md:w-20 text-red-600" />
-                    </div>
-                  </div>
-                </div>
+      <body
+        style={{
+          margin: 0,
+          minHeight: "100vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          backgroundColor: "#f5f4f2",
+          fontFamily: "ui-sans-serif, system-ui, sans-serif",
+          padding: "16px",
+        }}
+      >
+        <div
+          style={{
+            maxWidth: "420px",
+            width: "100%",
+            backgroundColor: "#ffffff",
+            borderRadius: "16px",
+            border: "1px solid rgba(0,0,0,0.07)",
+            padding: "40px 32px",
+            textAlign: "center",
+            boxShadow: "0 4px 24px rgba(0,0,0,0.06)",
+          }}
+        >
+          {/* Brand */}
+          <p
+            style={{
+              fontSize: "11px",
+              fontWeight: 600,
+              letterSpacing: "0.1em",
+              textTransform: "uppercase",
+              color: "#64748b",
+              marginBottom: "24px",
+            }}
+          >
+            TechLinkUp
+          </p>
 
-                {/* Error Message */}
-                <div className="space-y-3">
-                  <h2 className="text-2xl md:text-3xl font-semibold text-gray-900">
-                    Critical Error
-                  </h2>
-                  <p className="text-gray-600 text-base md:text-lg max-w-md mx-auto">
-                    A critical error occurred that prevented the application from loading properly. Please try refreshing the page.
-                  </p>
-                </div>
+          {/* Icon circle */}
+          <div
+            style={{
+              width: "72px",
+              height: "72px",
+              borderRadius: "50%",
+              background:
+                "linear-gradient(135deg, rgba(239,68,68,0.12), rgba(249,115,22,0.12))",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              margin: "0 auto 24px",
+            }}
+          >
+            <svg
+              width="36"
+              height="36"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#ef4444"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" />
+              <path d="M12 9v4" />
+              <path d="M12 17h.01" />
+            </svg>
+          </div>
 
-                {/* Error Details (Development) */}
-                {process.env.NODE_ENV === "development" && (
-                  <div className="bg-gray-100 rounded-lg p-4 text-left">
-                    <p className="text-xs font-mono text-red-600 break-all">
-                      <strong>Error:</strong> {error.message}
-                    </p>
-                    {error.digest && (
-                      <p className="text-xs font-mono text-gray-600 mt-2">
-                        <strong>Digest:</strong> {error.digest}
-                      </p>
-                    )}
-                    {error.stack && (
-                      <pre className="text-xs font-mono text-gray-600 mt-2 overflow-x-auto max-h-40">
-                        {error.stack}
-                      </pre>
-                    )}
-                  </div>
-                )}
+          {/* Heading */}
+          <h1
+            style={{
+              fontSize: "22px",
+              fontWeight: 700,
+              color: "#1a1b25",
+              marginBottom: "12px",
+            }}
+          >
+            Critical Error
+          </h1>
+          <p
+            style={{
+              fontSize: "14px",
+              color: "#64748b",
+              lineHeight: "1.6",
+              marginBottom: "28px",
+            }}
+          >
+            A critical error occurred and the app could not load. Please try
+            refreshing the page.
+          </p>
 
-                {/* Action Buttons */}
-                <div className="flex flex-col sm:flex-row gap-3 justify-center pt-4">
-                  <Button
-                    onClick={reset}
-                    size="lg"
-                    className="gap-2 bg-blue-600 hover:bg-blue-700"
-                  >
-                    <RefreshCw className="h-4 w-4" />
-                    Try Again
-                  </Button>
+          {/* Dev detail */}
+          {process.env.NODE_ENV === "development" && (
+            <div
+              style={{
+                backgroundColor: "#f5f4f2",
+                borderRadius: "8px",
+                border: "1px solid rgba(0,0,0,0.06)",
+                padding: "12px",
+                marginBottom: "24px",
+                textAlign: "left",
+              }}
+            >
+              <p
+                style={{
+                  fontSize: "11px",
+                  fontFamily: "monospace",
+                  color: "#ef4444",
+                  wordBreak: "break-all",
+                }}
+              >
+                <strong>Error:</strong> {error.message}
+              </p>
+              {error.digest && (
+                <p
+                  style={{
+                    fontSize: "11px",
+                    fontFamily: "monospace",
+                    color: "#64748b",
+                    marginTop: "6px",
+                  }}
+                >
+                  <strong>Digest:</strong> {error.digest}
+                </p>
+              )}
+            </div>
+          )}
 
-                  <Button
-                    asChild
-                    variant="outline"
-                    size="lg"
-                    className="gap-2"
-                  >
-                    <Link href="/">
-                      <Home className="h-4 w-4" />
-                      Back to Home
-                    </Link>
-                  </Button>
-                </div>
-
-                {/* Helpful Information */}
-                <div className="pt-6 border-t mt-8">
-                  <p className="text-sm text-gray-600 mb-3">
-                    If this error persists:
-                  </p>
-                  <ul className="text-sm text-gray-600 space-y-1 max-w-md mx-auto text-left list-disc list-inside">
-                    <li>Try clearing your browser cache and cookies</li>
-                    <li>Check your internet connection</li>
-                    <li>Try accessing the site in a private/incognito window</li>
-                    <li>Contact support if the problem continues</li>
-                  </ul>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+          {/* Buttons */}
+          <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+            <button
+              onClick={reset}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                padding: "12px 20px",
+                borderRadius: "12px",
+                backgroundColor: "#0066cc",
+                color: "#ffffff",
+                fontWeight: 600,
+                fontSize: "14px",
+                border: "none",
+                cursor: "pointer",
+              }}
+            >
+              Try Again
+            </button>
+            <a
+              href="/"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                padding: "12px 20px",
+                borderRadius: "12px",
+                backgroundColor: "#ffffff",
+                color: "#4a4a5a",
+                fontWeight: 600,
+                fontSize: "14px",
+                border: "1px solid rgba(0,0,0,0.12)",
+                textDecoration: "none",
+              }}
+            >
+              Back to Home
+            </a>
+          </div>
         </div>
       </body>
     </html>
-  )
+  );
 }
