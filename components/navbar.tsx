@@ -162,7 +162,7 @@ export default function Navbar() {
               </SheetTrigger>
               <SheetContent
                 side="right"
-                className="w-72 p-0 bg-[#0d0e12] border-l border-white/10 [&>button]:text-white/70 [&>button]:hover:text-white"
+                className="w-72 p-0 bg-[#0d0e12] border-l border-white/10 [&>button]:text-white/70 [&>button]:hover:text-white pt-[env(safe-area-inset-top)]"
               >
                 {/* Brand header */}
                 <div className="flex items-center gap-2 px-5 pt-5 pb-4 border-b border-white/8">
