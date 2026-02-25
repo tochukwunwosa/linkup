@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect } from "react";
 
 export default function GlobalError({
@@ -163,7 +164,7 @@ export default function GlobalError({
             >
               Try Again
             </button>
-            <a
+            <Link
               href="/"
               style={{
                 display: "inline-flex",
@@ -180,7 +181,7 @@ export default function GlobalError({
               }}
             >
               Back to Home
-            </a>
+            </Link>
           </div>
         </div>
       </body>
