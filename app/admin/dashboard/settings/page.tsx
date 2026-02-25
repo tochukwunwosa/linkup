@@ -39,7 +39,7 @@ export default function SettingsPage() {
                 <CardContent className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="site-name">Site Name</Label>
-                    <Input id="site-name" defaultValue="LinkUp" />
+                    <Input id="site-name" defaultValue="TechLinkUp" />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="site-description">Site Description</Label>

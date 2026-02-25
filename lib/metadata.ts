@@ -174,7 +174,7 @@ export const siteConfig: Metadata = {
     description: APP_DESCRIPTION,
     images: [
       {
-        url: "/linkup-og-image-1200x600.webp",
+        url: "/linkup-og-image-1200x630.avif",
         width: 1200,
         height: 630,
         alt: "TechLinkUp - Community-Driven Tech Event Discovery in Nigeria",
@@ -190,7 +190,7 @@ export const siteConfig: Metadata = {
     description: APP_DESCRIPTION,
     images: [
       {
-        url: "/linkup-og-image-1200x600.webp",
+        url: "/linkup-og-image-1200x630.avif",
         width: 1200,
         height: 630,
         alt: "TechLinkUp - Community-Driven Tech Event Discovery in Nigeria",

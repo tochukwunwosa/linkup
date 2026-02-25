@@ -14,7 +14,7 @@ export function generateOrganizationSchema() {
     "@context": "https://schema.org",
     "@type": "Organization",
     name: "TechLinkUp",
-    alternateName: "Tech LinkUp",
+    alternateName: "TechLinkUp",
     url: process.env.NEXT_PUBLIC_SITE_URL || "https://techlinkup.xyz",
     logo: `${process.env.NEXT_PUBLIC_SITE_URL || "https://techlinkup.xyz"}/assets/Logo/LinkUp-Logo-80x35.png`,
     description:
@@ -42,7 +42,7 @@ export function generateWebSiteSchema() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "TechLinkUp - Community-Driven Tech Event Discovery in Nigeria",
-    alternateName: "Tech LinkUp",
+    alternateName: "TechLinkUp",
     url: siteUrl,
     description:
       "Discover and connect with tech events across Nigeria through our community-driven platform",

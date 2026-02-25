@@ -69,7 +69,7 @@ export default function Navbar() {
             <Link href="/" aria-label="Go to homepage">
               <Image
                 src="/logo.svg"
-                alt="Tech LinkUp Logo"
+                alt="TechLinkUp Logo"
                 width={32}
                 height={32}
                 className={cn(

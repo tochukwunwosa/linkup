@@ -1,6 +1,6 @@
 {
-  "name": "LinkUp - Community-Driven Tech Event Discovery",
-  "short_name": "LinkUp",
+  "name": "TechLinkUp - Community-Driven Tech Event Discovery",
+  "short_name": "TechLinkUp",
   "description": "Discover and connect with tech events across Nigeria through our community-driven platform. Join thousands of tech enthusiasts finding conferences, meetups, workshops, and networking events submitted by the community.",
   "start_url": "/",
   "display": "standalone",
@@ -76,14 +76,14 @@
       "sizes": "1280x720",
       "type": "image/png",
       "form_factor": "wide",
-      "label": "Tech LinkUp Home Page"
+      "label": "TechLinkUp Home Page"
     },
     {
       "src": "/screenshots/mobile-home.png",
       "sizes": "750x1334",
       "type": "image/png",
       "form_factor": "narrow",
-      "label": "Tech LinkUp Mobile View"
+      "label": "TechLinkUp Mobile View"
     }
   ],
   "categories": ["events", "productivity", "social", "technology"],
