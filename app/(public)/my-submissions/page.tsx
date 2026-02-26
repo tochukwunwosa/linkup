@@ -395,7 +395,7 @@ export default function MySubmissionsPage() {
                   {selectedSubmission.category.map((cat) => (
                     <span
                       key={cat}
-                      className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-[#6b46c1]/[0.08] text-[#6b46c1]"
+                      className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-[#6b46c1]/8 text-[#6b46c1]"
                     >
                       {cat}
                     </span>
