@@ -37,7 +37,7 @@ export default function Footer() {
             <Link href="/" aria-label="Go to homepage" className="inline-flex items-center gap-2 mb-3">
               <Image
                 src="/logo.svg"
-                alt="TechLinkUp"
+                alt=""
                 width={28}
                 height={28}
                 className="brightness-0 invert opacity-90"

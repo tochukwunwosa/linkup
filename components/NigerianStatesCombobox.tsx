@@ -45,6 +45,7 @@ export function NigerianStatesCombobox({
           variant="outline"
           role="combobox"
           aria-expanded={open}
+          aria-label={selectedLabel}
           disabled={loading}
           className={cn(
             "bg-white hover:!bg-white w-full justify-between disabled:!bg-muted",

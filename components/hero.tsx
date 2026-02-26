@@ -54,9 +54,7 @@ export default function Hero({ initialTotal = 0 }: { initialTotal?: number }) {
   };
 
   return (
-    <section className="relative w-full min-h-[92svh] flex flex-col bg-[#070809] overflow-hidden">
-      {/* Grain texture */}
-      <div className="hero-grain absolute inset-0 z-1 pointer-events-none" aria-hidden="true" />
+    <section className="hero-section relative w-full min-h-[92svh] flex flex-col bg-[#070809] overflow-hidden">
 
       {/* Top accent line */}
       <div

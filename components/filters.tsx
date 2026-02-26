@@ -99,6 +99,7 @@ export default function Filters() {
     <>
       <Select value={filters.format} onValueChange={(value) => setFilters({ format: value })}>
         <SelectTrigger
+          aria-label="Filter by format"
           className={cn(
             pillClass(filters.format !== "all"),
             "border-none shadow-none focus:ring-0 focus:ring-offset-0 [&>span]:line-clamp-1 [&>svg]:h-3 [&>svg]:w-3 [&>svg]:opacity-60"
@@ -121,6 +122,7 @@ export default function Filters() {
 
       <Select value={filters.date} onValueChange={(value) => setFilters({ date: value })}>
         <SelectTrigger
+          aria-label="Filter by date"
           className={cn(
             pillClass(filters.date !== "all"),
             "border-none shadow-none focus:ring-0 focus:ring-offset-0 [&>span]:line-clamp-1 [&>svg]:h-3 [&>svg]:w-3 [&>svg]:opacity-60"

@@ -380,10 +380,10 @@ export default function MySubmissionsPage() {
                       Your event has been published!
                     </p>
                     <Link
-                      href={`/events/${selectedSubmission.published_event_id}`}
+                      href={`/my-submissions/${selectedSubmission.tracking_id}`}
                       className="inline-flex items-center gap-1.5 text-sm font-medium text-emerald-700 hover:underline"
                     >
-                      View on Tech Linkup
+                      View event details
                       <ExternalLink className="h-3.5 w-3.5" />
                     </Link>
                   </div>
