@@ -59,7 +59,7 @@
   --secondary: #6b46c1;
   --secondary-foreground: #ffffff;
   --muted: #f0f4f8;
-  --muted-foreground: #64748b;
+  --muted-foreground: #596070;
   --accent: #e6f7ff;
   --accent-foreground: #0c4a6e;
   --destructive: #e11d48;
@@ -95,6 +95,7 @@
   html {
     @apply scroll-smooth;
     background-color: #f5f4f2;
+    scrollbar-gutter: stable;
   }
 
   /* iOS safe area support for PWA standalone mode */

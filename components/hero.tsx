@@ -11,8 +11,10 @@ import { cn } from "@/lib/utils";
 export default function Hero({ initialTotal = 0 }: { initialTotal?: number }) {
   const { filters, setFilters, totalEventsFound } = useEventContext();
   const [loading, setLoading] = useState(false);
-  const [eventCount, setEventCount] = useState(0);
-  const [cityCount, setCityCount] = useState(0);
+  // Initialise directly from the server-provided count so the LCP text is
+  // visible on first paint — no animation delay on the initial load.
+  const [eventCount, setEventCount] = useState(initialTotal || 0);
+  const [cityCount, setCityCount] = useState(initialTotal > 0 ? 15 : 0);
 
   const animateValue = (
     start: number,
@@ -31,13 +33,14 @@ export default function Hero({ initialTotal = 0 }: { initialTotal?: number }) {
     requestAnimationFrame(tick);
   };
 
+  // Only animate when the count changes *after* the initial render
+  // (i.e. the user applied a filter and totalEventsFound updated).
   useEffect(() => {
-    const count = totalEventsFound || initialTotal || 0;
-    if (count === 0) return;
-    animateValue(0, count, 1800, setEventCount);
+    if (!totalEventsFound || totalEventsFound === initialTotal) return;
+    animateValue(0, totalEventsFound, 1800, setEventCount);
     animateValue(0, 15, 1800, setCityCount);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [totalEventsFound, initialTotal]);
+  }, [totalEventsFound]);
 
   const handleStateChange = (value: string) => {
     if (value === filters.location) return;
