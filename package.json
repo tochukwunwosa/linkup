@@ -56,13 +56,6 @@
     "vaul": "^1.1.2",
     "zod": "^3.25.76"
   },
-  "browserslist": [
-    "chrome >= 92",
-    "edge >= 92",
-    "firefox >= 90",
-    "safari >= 15.4",
-    "not dead"
-  ],
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@playwright/mcp": "^0.0.64",

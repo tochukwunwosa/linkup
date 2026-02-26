@@ -33,7 +33,6 @@ export default async function LinkUpLanding() {
   return (
     <>
       {/* Preload LCP hero image — explicit preload needed because the Image is inside a client component chain */}
-      {/* eslint-disable-next-line @next/next/no-head-element */}
       <link rel="preload" as="image" href="/assets/images/wceu.webp" fetchPriority="high" />
 
       <div className="bg-[#070809] overflow-visible">
