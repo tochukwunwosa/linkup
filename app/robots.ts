@@ -9,45 +9,44 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/admin/", "/api/"],
+        disallow: ["/admin/", "/api/", "/my-submissions/"],
       },
       {
         userAgent: "Googlebot",
         allow: "/",
-        disallow: ["/admin/", "/api/"],
+        disallow: ["/admin/", "/api/", "/my-submissions/"],
         crawlDelay: 0,
       },
       {
         userAgent: "Bingbot",
         allow: "/",
-        disallow: ["/admin/", "/api/"],
+        disallow: ["/admin/", "/api/", "/my-submissions/"],
         crawlDelay: 0,
       },
-      // AI crawlers — allow full access for discovery
       {
         userAgent: "GPTBot",
         allow: "/",
-        disallow: ["/admin/", "/api/"],
+        disallow: ["/admin/", "/api/", "/my-submissions/"],
       },
       {
         userAgent: "ClaudeBot",
         allow: "/",
-        disallow: ["/admin/", "/api/"],
+        disallow: ["/admin/", "/api/", "/my-submissions/"],
       },
       {
         userAgent: "PerplexityBot",
         allow: "/",
-        disallow: ["/admin/", "/api/"],
+        disallow: ["/admin/", "/api/", "/my-submissions/"],
       },
       {
         userAgent: "anthropic-ai",
         allow: "/",
-        disallow: ["/admin/", "/api/"],
+        disallow: ["/admin/", "/api/", "/my-submissions/"],
       },
       {
         userAgent: "Google-Extended",
         allow: "/",
-        disallow: ["/admin/", "/api/"],
+        disallow: ["/admin/", "/api/", "/my-submissions/"],
       },
     ],
     sitemap: `${siteUrl}/sitemap.xml`,
