@@ -1,15 +1,22 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { EventSubmissionForm } from "@/components/event/event-submission-form";
 import { Button } from "@/components/ui/button";
 import { PageHero } from "@/components/page-hero";
 import { CheckCircle2, ArrowLeft, Copy, Check } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function SubmitEventPage() {
   const [trackingId, setTrackingId] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+
+  useEffect(() => {
+    if (trackingId) {
+      window.scrollTo({ top: 0, behavior: "instant" });
+    }
+  }, [trackingId]);
 
   const handleSuccess = (id: string) => {
     setTrackingId(id);
@@ -109,6 +116,7 @@ export default function SubmitEventPage() {
               Fill out the form below to submit your event for review. All fields marked with{" "}
               <span className="text-red-500">*</span> are required.
             </p>
+            
             <EventSubmissionForm onSuccess={handleSuccess} />
           </div>
 

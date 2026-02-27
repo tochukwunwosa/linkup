@@ -128,7 +128,7 @@ export async function approveSubmissionAction(submissionId: string) {
       eventDate,
       eventLocation: submission.location,
       trackingId: submission.tracking_id,
-      eventUrl: `${siteUrl}/?category=${encodeURIComponent(submission.category[0] || "")}`,
+      eventUrl: `${siteUrl}/events/${newEvent.id}`,
     }).catch((error) => {
       console.error("Failed to send organizer approval notification:", error);
       // Don't fail the approval if email fails

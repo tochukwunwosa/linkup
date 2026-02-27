@@ -1,15 +1,7 @@
-import {
-  Body,
-  Button,
-  Container,
-  Head,
-  Heading,
-  Html,
-  Preview,
-  Section,
-  Text,
-} from "@react-email/components";
+import { Button, Heading, Section, Text } from "@react-email/components";
 import * as React from "react";
+import { EmailLayout } from "../components/EmailLayout";
+import { colors } from "../emailTheme";
 
 interface AdminNotificationEmailProps {
   eventTitle: string;
@@ -33,248 +25,139 @@ export const AdminNotificationEmail = ({
   submissionUrl = "https://techlinkup.xyz/admin/dashboard/submissions",
 }: AdminNotificationEmailProps) => {
   return (
-    <Html>
-      <Head />
-      <Preview>New event submission: {eventTitle}</Preview>
-      <Body style={main}>
-        <Container style={container}>
-          {/* Header */}
-          <Section style={header}>
-            <Heading style={headerTitle}>New Event Submission</Heading>
-            <Text style={headerSubtitle}>Tech Linkup Admin Notification</Text>
-          </Section>
+    <EmailLayout
+      previewText={`New event submission: ${eventTitle}`}
+      accentColor={colors.purple}
+      headerSubtitleColor={colors.purpleSubtitle}
+      headerTitle="New Submission Alert"
+      headerSubtitle="TechLinkUp Admin Notification"
+    >
+      <Text className="m-0 mb-4 text-brand-dark text-[16px] leading-6 font-semibold">
+        Hello Admin,
+      </Text>
+      <Text className="m-0 mb-6 text-brand-muted text-[15px] leading-6">
+        A new event has been submitted and is awaiting your review.
+      </Text>
 
-          {/* Content */}
-          <Section style={content}>
-            <Text style={greeting}>Hello Admin,</Text>
-            <Text style={paragraph}>
-              A new event has been submitted to Tech Linkup and is awaiting your review.
-            </Text>
+      {/* Info card */}
+      <Section
+        style={{
+          border: "1px solid #cfd1d4",
+          borderLeftWidth: "4px",
+          borderLeftColor: colors.purple,
+        }}
+        className="bg-brand-card rounded-md px-5 pt-5 pb-4 mb-6"
+      >
+        <Heading
+          as="h2"
+          className="m-0 mb-[14px] text-brand-dark text-[15px] font-semibold"
+        >
+          Submission Details
+        </Heading>
+        <table style={{ width: "100%", borderCollapse: "collapse" }}>
+          <tbody>
+            <tr>
+              <td className="py-[6px] text-brand-muted text-[13px] w-[100px] align-top">
+                Title:
+              </td>
+              <td className="py-[6px] text-brand-dark text-[13px] font-semibold">
+                {eventTitle}
+              </td>
+            </tr>
+            <tr>
+              <td className="py-[6px] text-brand-muted text-[13px] w-[100px] align-top">
+                Date:
+              </td>
+              <td className="py-[6px] text-brand-dark text-[13px]">
+                {eventDate}
+              </td>
+            </tr>
+            <tr>
+              <td className="py-[6px] text-brand-muted text-[13px] w-[100px] align-top">
+                Location:
+              </td>
+              <td className="py-[6px] text-brand-dark text-[13px]">
+                {eventLocation}
+              </td>
+            </tr>
+            {eventWebsite && (
+              <tr>
+                <td className="py-[6px] text-brand-muted text-[13px] w-[100px] align-top">
+                  Website:
+                </td>
+                <td className="py-[6px] text-brand-dark text-[13px]">
+                  <a
+                    href={eventWebsite}
+                    style={{ color: colors.purple, textDecoration: "none" }}
+                  >
+                    {eventWebsite}
+                  </a>
+                </td>
+              </tr>
+            )}
+            <tr>
+              <td className="py-[6px] text-brand-muted text-[13px] w-[100px] align-top">
+                Tracking ID:
+              </td>
+              <td className="py-[6px] text-brand-dark text-[13px] font-mono">
+                {trackingId}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div style={{ borderTop: "1px solid #cfd1d4", margin: "16px 0" }} />
+        <Heading
+          as="h3"
+          className="m-0 mb-3 text-brand-dark text-[13px] font-semibold uppercase tracking-[0.5px]"
+        >
+          Organizer
+        </Heading>
+        <table style={{ width: "100%", borderCollapse: "collapse" }}>
+          <tbody>
+            <tr>
+              <td className="py-[6px] text-brand-muted text-[13px] w-[100px] align-top">
+                Name:
+              </td>
+              <td className="py-[6px] text-brand-dark text-[13px]">
+                {organizerName}
+              </td>
+            </tr>
+            <tr>
+              <td className="py-[6px] text-brand-muted text-[13px] w-[100px] align-top">
+                Email:
+              </td>
+              <td className="py-[6px] text-brand-dark text-[13px]">
+                <a
+                  href={`mailto:${organizerEmail}`}
+                  style={{ color: colors.purple, textDecoration: "none" }}
+                >
+                  {organizerEmail}
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </Section>
 
-            {/* Event Details Card */}
-            <Section style={cardPrimary}>
-              <Heading as="h2" style={cardTitle}>
-                Event Details
-              </Heading>
-              <table style={detailsTable}>
-                <tbody>
-                  <tr>
-                    <td style={labelCell}>Title:</td>
-                    <td style={valueCell}>{eventTitle}</td>
-                  </tr>
-                  <tr>
-                    <td style={labelCell}>Date:</td>
-                    <td style={valueCellNormal}>{eventDate}</td>
-                  </tr>
-                  <tr>
-                    <td style={labelCell}>Location:</td>
-                    <td style={valueCellNormal}>{eventLocation}</td>
-                  </tr>
-                  <tr>
-                    <td style={labelCell}>Tracking ID:</td>
-                    <td style={trackingIdCell}>{trackingId}</td>
-                  </tr>
-                  <tr>
-                    <td style={labelCell}>Event Website:</td>
-                    <td style={trackingIdCell}>{eventWebsite}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </Section>
-
-            {/* Organizer Info Card */}
-            <Section style={cardSecondary}>
-              <Heading as="h2" style={cardTitle}>
-                Organizer Information
-              </Heading>
-              <table style={detailsTable}>
-                <tbody>
-                  <tr>
-                    <td style={labelCell}>Name:</td>
-                    <td style={valueCellNormal}>{organizerName}</td>
-                  </tr>
-                  <tr>
-                    <td style={labelCell}>Email:</td>
-                    <td style={valueCellNormal}>
-                      <a href={`mailto:${organizerEmail}`} style={link}>
-                        {organizerEmail}
-                      </a>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </Section>
-
-            {/* CTA Button */}
-            <Section style={buttonContainer}>
-              <Button style={button} href={submissionUrl}>
-                Review Submission
-              </Button>
-            </Section>
-          </Section>
-
-          {/* Footer */}
-          <Section style={footer}>
-            <Text style={footerText}>
-              This is an automated notification from Tech Linkup
-            </Text>
-            <Text style={footerCopyright}>
-              © {new Date().getFullYear()} Tech Linkup. All rights reserved.
-            </Text>
-          </Section>
-        </Container>
-      </Body>
-    </Html>
+      <Section className="text-center py-1">
+        <Button
+          href={submissionUrl}
+          style={{
+            display: "inline-block",
+            backgroundColor: colors.purple,
+            color: "#ffffff",
+            textDecoration: "none",
+            padding: "13px 36px",
+            borderRadius: "6px",
+            fontSize: "15px",
+            fontWeight: "600",
+          }}
+        >
+          Review Submission
+        </Button>
+      </Section>
+    </EmailLayout>
   );
 };
 
 export default AdminNotificationEmail;
-
-// Styles
-const main = {
-  backgroundColor: "#f4f4f5",
-  fontFamily:
-    '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif',
-};
-
-const container = {
-  margin: "40px auto",
-  maxWidth: "600px",
-  backgroundColor: "#ffffff",
-  borderRadius: "8px",
-  overflow: "hidden",
-  boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
-};
-
-const header = {
-  background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-  padding: "40px 30px",
-  textAlign: "center" as const,
-};
-
-const headerTitle = {
-  margin: "0",
-  color: "#ffffff",
-  fontSize: "28px",
-  fontWeight: "700",
-  lineHeight: "1.2",
-};
-
-const headerSubtitle = {
-  margin: "10px 0 0 0",
-  color: "#e0e7ff",
-  fontSize: "16px",
-};
-
-const content = {
-  padding: "40px 30px",
-};
-
-const greeting = {
-  margin: "0 0 20px 0",
-  color: "#374151",
-  fontSize: "16px",
-  lineHeight: "24px",
-};
-
-const paragraph = {
-  margin: "0 0 30px 0",
-  color: "#374151",
-  fontSize: "16px",
-  lineHeight: "24px",
-};
-
-const cardPrimary = {
-  backgroundColor: "#f9fafb",
-  borderRadius: "6px",
-  padding: "20px",
-  marginBottom: "30px",
-};
-
-const cardSecondary = {
-  backgroundColor: "#f0fdf4",
-  borderRadius: "6px",
-  padding: "20px",
-  marginBottom: "30px",
-};
-
-const cardTitle = {
-  margin: "0 0 15px 0",
-  color: "#111827",
-  fontSize: "18px",
-  fontWeight: "600",
-};
-
-const detailsTable = {
-  width: "100%",
-  borderCollapse: "collapse" as const,
-};
-
-const labelCell = {
-  padding: "8px 0",
-  color: "#6b7280",
-  fontSize: "14px",
-  width: "140px",
-  verticalAlign: "top" as const,
-};
-
-const valueCell = {
-  padding: "8px 0",
-  color: "#111827",
-  fontSize: "14px",
-  fontWeight: "600",
-};
-
-const valueCellNormal = {
-  padding: "8px 0",
-  color: "#111827",
-  fontSize: "14px",
-};
-
-const trackingIdCell = {
-  padding: "8px 0",
-  color: "#111827",
-  fontSize: "14px",
-  fontFamily: "monospace",
-};
-
-const link = {
-  color: "#667eea",
-  textDecoration: "none",
-};
-
-const buttonContainer = {
-  textAlign: "center" as const,
-  padding: "20px 0",
-};
-
-const button = {
-  display: "inline-block",
-  background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-  color: "#ffffff",
-  textDecoration: "none",
-  padding: "14px 40px",
-  borderRadius: "6px",
-  fontSize: "16px",
-  fontWeight: "600",
-  boxShadow: "0 4px 6px rgba(102, 126, 234, 0.25)",
-};
-
-const footer = {
-  backgroundColor: "#f9fafb",
-  padding: "30px",
-  textAlign: "center" as const,
-  borderTop: "1px solid #e5e7eb",
-};
-
-const footerText = {
-  margin: "0",
-  color: "#6b7280",
-  fontSize: "14px",
-};
-
-const footerCopyright = {
-  margin: "10px 0 0 0",
-  color: "#9ca3af",
-  fontSize: "12px",
-};

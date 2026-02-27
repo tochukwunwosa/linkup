@@ -1,15 +1,7 @@
-import {
-  Body,
-  Button,
-  Container,
-  Head,
-  Heading,
-  Html,
-  Preview,
-  Section,
-  Text,
-} from "@react-email/components";
+import { Button, Heading, Section, Text } from "@react-email/components";
 import * as React from "react";
+import { EmailLayout } from "../components/EmailLayout";
+import { colors } from "../emailTheme";
 
 interface OrganizerApprovedEmailProps {
   organizerName: string;
@@ -29,234 +21,100 @@ export const OrganizerApprovedEmail = ({
   eventUrl = "https://techlinkup.xyz",
 }: OrganizerApprovedEmailProps) => {
   return (
-    <Html>
-      <Head />
-      <Preview>Great News! Your Event &quot;{eventTitle}&quot; Has Been Approved</Preview>
-      <Body style={main}>
-        <Container style={container}>
-          {/* Header */}
-          <Section style={header}>
-            <Text style={emoji}>🎉</Text>
-            <Heading style={headerTitle}>Event Approved!</Heading>
-            <Text style={headerSubtitle}>Your event is now live on Tech Linkup</Text>
-          </Section>
+    <EmailLayout
+      previewText={`Your event "${eventTitle}" is now live on TechLinkUp`}
+      accentColor={colors.green}
+      headerSubtitleColor={colors.greenSubtitle}
+      headerTitle="Event Approved!"
+      headerSubtitle="Your event is now live on TechLinkUp"
+    >
+      <Text className="m-0 mb-4 text-brand-dark text-[16px] leading-6 font-semibold">
+        Hello {organizerName},
+      </Text>
+      <Text className="m-0 mb-6 text-brand-muted text-[15px] leading-6">
+        Your event submission has been{" "}
+        <strong style={{ color: colors.green }}>approved</strong> and is now
+        publicly visible on TechLinkUp.
+      </Text>
 
-          {/* Content */}
-          <Section style={content}>
-            <Text style={greeting}>Hello {organizerName},</Text>
-            <Text style={paragraph}>
-              Great news! Your event submission has been{" "}
-              <strong style={approved}>approved</strong> and is now live on Tech Linkup.
-              Your event is now visible to thousands of tech enthusiasts across Nigeria!
-            </Text>
+      {/* Info card */}
+      <Section
+        style={{
+          border: "1px solid #cfd1d4",
+          borderLeftWidth: "4px",
+          borderLeftColor: colors.green,
+        }}
+        className="bg-brand-card rounded-md px-5 pt-5 pb-4 mb-6"
+      >
+        <Heading
+          as="h2"
+          className="m-0 mb-[14px] text-brand-dark text-[15px] font-semibold"
+        >
+          Your Event
+        </Heading>
+        <table style={{ width: "100%", borderCollapse: "collapse" }}>
+          <tbody>
+            <tr>
+              <td className="py-[6px] text-brand-muted text-[13px] w-[90px] align-top">
+                Title:
+              </td>
+              <td className="py-[6px] text-brand-dark text-[13px] font-semibold">
+                {eventTitle}
+              </td>
+            </tr>
+            <tr>
+              <td className="py-[6px] text-brand-muted text-[13px] w-[90px] align-top">
+                Date:
+              </td>
+              <td className="py-[6px] text-brand-dark text-[13px]">
+                {eventDate}
+              </td>
+            </tr>
+            <tr>
+              <td className="py-[6px] text-brand-muted text-[13px] w-[90px] align-top">
+                Location:
+              </td>
+              <td className="py-[6px] text-brand-dark text-[13px]">
+                {eventLocation}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div style={{ borderTop: "1px solid #cfd1d4", margin: "16px 0" }} />
+        <Text className="m-0 mb-1 text-brand-muted text-[12px] uppercase tracking-[0.5px]">
+          Tracking ID
+        </Text>
+        <Text
+          className="m-0 text-[20px] font-bold font-mono tracking-[1px]"
+          style={{ color: colors.green }}
+        >
+          {trackingId}
+        </Text>
+      </Section>
 
-            {/* Event Details Card */}
-            <Section style={card}>
-              <Heading as="h2" style={cardTitle}>
-                Your Event
-              </Heading>
-              <table style={detailsTable}>
-                <tbody>
-                  <tr>
-                    <td style={labelCell}>Title:</td>
-                    <td style={valueCell}>{eventTitle}</td>
-                  </tr>
-                  <tr>
-                    <td style={labelCell}>Date:</td>
-                    <td style={valueCellNormal}>{eventDate}</td>
-                  </tr>
-                  <tr>
-                    <td style={labelCell}>Location:</td>
-                    <td style={valueCellNormal}>{eventLocation}</td>
-                  </tr>
-                  <tr>
-                    <td style={labelCell}>Tracking ID:</td>
-                    <td style={trackingIdCell}>{trackingId}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </Section>
+      <Section className="text-center pb-4 pt-1">
+        <Button
+          href={eventUrl}
+          style={{
+            display: "inline-block",
+            backgroundColor: colors.green,
+            color: "#ffffff",
+            textDecoration: "none",
+            padding: "13px 36px",
+            borderRadius: "6px",
+            fontSize: "15px",
+            fontWeight: "600",
+          }}
+        >
+          View Your Event
+        </Button>
+      </Section>
 
-            {/* CTA Button */}
-            <Section style={buttonContainer}>
-              <Button style={button} href={eventUrl}>
-                View Your Event
-              </Button>
-            </Section>
-
-            <Text style={thankYou}>
-              Thank you for contributing to the Nigerian tech community! 🚀
-            </Text>
-          </Section>
-
-          {/* Footer */}
-          <Section style={footer}>
-            <Text style={footerText}>
-              This is an automated notification from Tech Linkup
-            </Text>
-            <Text style={footerCopyright}>
-              © {new Date().getFullYear()} Tech Linkup. All rights reserved.
-            </Text>
-          </Section>
-        </Container>
-      </Body>
-    </Html>
+      <Text className="m-0 text-brand-muted text-[14px] leading-[22px] text-center">
+        Thank you for contributing to the tech community!
+      </Text>
+    </EmailLayout>
   );
 };
 
 export default OrganizerApprovedEmail;
-
-// Styles
-const main = {
-  backgroundColor: "#f4f4f5",
-  fontFamily:
-    '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif',
-};
-
-const container = {
-  margin: "40px auto",
-  maxWidth: "600px",
-  backgroundColor: "#ffffff",
-  borderRadius: "8px",
-  overflow: "hidden",
-  boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
-};
-
-const header = {
-  background: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
-  padding: "40px 30px",
-  textAlign: "center" as const,
-};
-
-const emoji = {
-  fontSize: "48px",
-  marginBottom: "10px",
-};
-
-const headerTitle = {
-  margin: "0",
-  color: "#ffffff",
-  fontSize: "28px",
-  fontWeight: "700",
-  lineHeight: "1.2",
-};
-
-const headerSubtitle = {
-  margin: "10px 0 0 0",
-  color: "#d1fae5",
-  fontSize: "16px",
-};
-
-const content = {
-  padding: "40px 30px",
-};
-
-const greeting = {
-  margin: "0 0 20px 0",
-  color: "#374151",
-  fontSize: "16px",
-  lineHeight: "24px",
-};
-
-const paragraph = {
-  margin: "0 0 30px 0",
-  color: "#374151",
-  fontSize: "16px",
-  lineHeight: "24px",
-};
-
-const approved = {
-  color: "#10b981",
-};
-
-const card = {
-  backgroundColor: "#f0fdf4",
-  borderRadius: "6px",
-  borderLeft: "4px solid #10b981",
-  padding: "20px",
-  marginBottom: "30px",
-};
-
-const cardTitle = {
-  margin: "0 0 15px 0",
-  color: "#111827",
-  fontSize: "18px",
-  fontWeight: "600",
-};
-
-const detailsTable = {
-  width: "100%",
-  borderCollapse: "collapse" as const,
-};
-
-const labelCell = {
-  padding: "8px 0",
-  color: "#6b7280",
-  fontSize: "14px",
-  width: "140px",
-  verticalAlign: "top" as const,
-};
-
-const valueCell = {
-  padding: "8px 0",
-  color: "#111827",
-  fontSize: "14px",
-  fontWeight: "600",
-};
-
-const valueCellNormal = {
-  padding: "8px 0",
-  color: "#111827",
-  fontSize: "14px",
-};
-
-const trackingIdCell = {
-  padding: "8px 0",
-  color: "#111827",
-  fontSize: "14px",
-  fontFamily: "monospace",
-};
-
-const buttonContainer = {
-  textAlign: "center" as const,
-  padding: "20px 0",
-};
-
-const button = {
-  display: "inline-block",
-  background: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
-  color: "#ffffff",
-  textDecoration: "none",
-  padding: "14px 40px",
-  borderRadius: "6px",
-  fontSize: "16px",
-  fontWeight: "600",
-  boxShadow: "0 4px 6px rgba(16, 185, 129, 0.25)",
-};
-
-const thankYou = {
-  margin: "30px 0 0 0",
-  color: "#6b7280",
-  fontSize: "14px",
-  lineHeight: "22px",
-  textAlign: "center" as const,
-};
-
-const footer = {
-  backgroundColor: "#f9fafb",
-  padding: "30px",
-  textAlign: "center" as const,
-  borderTop: "1px solid #e5e7eb",
-};
-
-const footerText = {
-  margin: "0",
-  color: "#6b7280",
-  fontSize: "14px",
-};
-
-const footerCopyright = {
-  margin: "10px 0 0 0",
-  color: "#9ca3af",
-  fontSize: "12px",
-};
