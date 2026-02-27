@@ -92,6 +92,13 @@ export default function SubmitEventPage() {
               Back to Home
             </Link>
           </div>
+
+          <button
+            onClick={() => setTrackingId(null)}
+            className="w-full mt-2 text-sm text-[#64748b] hover:text-[#0066cc] transition-colors underline underline-offset-2"
+          >
+            Submit another event
+          </button>
         </div>
       </div>
     );
@@ -116,7 +123,13 @@ export default function SubmitEventPage() {
               Fill out the form below to submit your event for review. All fields marked with{" "}
               <span className="text-red-500">*</span> are required.
             </p>
-            
+            <Image
+                            src="https://techlinkup.xyz/logo.png"
+                            alt="TechLinkUp"
+                            width="140"
+                            height="50"
+                            className="block w-[140px] h-12 mx-auto mb-4"
+                          />
             <EventSubmissionForm onSuccess={handleSuccess} />
           </div>
 

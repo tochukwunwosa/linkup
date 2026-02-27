@@ -47,9 +47,9 @@ export function EmailLayout({
               <Img
                 src="https://techlinkup.xyz/logo.png"
                 alt="TechLinkUp"
-                width="140"
-                height="140"
-                className="block w-35 h-12.5 mx-auto mb-4"
+                width="48"
+                height="48"
+                className="block mx-auto mb-4"
               />
               <Heading
                 as="h1"
