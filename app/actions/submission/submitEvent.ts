@@ -1,7 +1,7 @@
 "use server";
 
 import { eventSubmissionFormSchema } from "@/lib/validations/event";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/supabase/client";
 import { revalidatePath } from "next/cache";
 import { serverGeocodeAddress } from "@/lib/geocode/geocode-server";
 import { headers } from "next/headers";
