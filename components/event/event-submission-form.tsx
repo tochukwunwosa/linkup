@@ -107,10 +107,10 @@ export function EventSubmissionForm({ onSuccess }: EventSubmissionFormProps) {
       <form onSubmit={form.handleSubmit(onFormSubmit)} className="max-w-3xl space-y-8 py-4">
         {/* Event Details Section */}
         <div className="space-y-6">
-          <div>
+          {/*<div>
             <h3 className="text-lg font-semibold">Event Details</h3>
             <p className="text-sm text-muted-foreground">Tell us about your event</p>
-          </div>
+          </div>*/}
 
           <FormField
             control={form.control}
