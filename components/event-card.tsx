@@ -14,7 +14,7 @@ function EventCard({ event }: { event: Event }) {
 
   return (
     <Link
-      href={`/events/${event.id}`}
+      href={`/events/${event.slug}`}
       className="card-lime-bar group relative flex flex-col h-full rounded-xl border border-[rgba(0,0,0,0.07)] bg-white transition-all duration-200 overflow-hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0066cc] focus-visible:ring-offset-2 hover:border-[#0066cc]/20 hover:shadow-[0_8px_24px_rgba(0,0,0,0.10),0_2px_8px_rgba(0,102,204,0.08)] hover:-translate-y-0.5"
       aria-label={event.title}
     >

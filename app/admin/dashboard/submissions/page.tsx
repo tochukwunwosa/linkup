@@ -16,6 +16,7 @@ import { Loader } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { SubmissionsTable } from "@/components/submission/submissions-table";
 import { SubmissionsCardView } from "@/components/submission/submissions-card-view";
+import { SubmissionDetailsDialog } from "@/components/submission/submission-details-dialog";
 
 export default function SubmissionsPage() {
   const isMobile = useIsMobile();
@@ -27,6 +28,8 @@ export default function SubmissionsPage() {
   const [rejectDialogOpen, setRejectDialogOpen] = useState(false);
   const [feedback, setFeedback] = useState("");
   const [actionLoading, setActionLoading] = useState(false);
+  const [viewSubmission, setViewSubmission] = useState<EventSubmission | null>(null);
+  const [viewDialogOpen, setViewDialogOpen] = useState(false);
 
   const fetchSubmissions = async () => {
     setLoading(true);
@@ -72,6 +75,21 @@ export default function SubmissionsPage() {
     setRejectDialogOpen(true);
   };
 
+  const handleView = (submission: EventSubmission) => {
+    setViewSubmission(submission);
+    setViewDialogOpen(true);
+  };
+
+  const handleApproveFromView = async (submission: EventSubmission) => {
+    setViewDialogOpen(false);
+    await handleApprove(submission);
+  };
+
+  const handleRejectFromView = (submission: EventSubmission) => {
+    setViewDialogOpen(false);
+    handleReject(submission);
+  };
+
   const handleRejectSubmit = async () => {
     if (!selectedSubmission) return;
 
@@ -113,7 +131,7 @@ export default function SubmissionsPage() {
       />
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <Card>
           <CardContent className="p-6">
             <div className="text-2xl font-bold">{submissions.length}</div>
@@ -168,6 +186,7 @@ export default function SubmissionsPage() {
               submissions={filteredSubmissions}
               onApprove={handleApprove}
               onReject={handleReject}
+              onView={handleView}
             />
           )}
         </TabsContent>
@@ -205,6 +224,16 @@ export default function SubmissionsPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* View Details Dialog */}
+      <SubmissionDetailsDialog
+        submission={viewSubmission}
+        open={viewDialogOpen}
+        onOpenChange={setViewDialogOpen}
+        onApprove={handleApproveFromView}
+        onReject={handleRejectFromView}
+        actionLoading={actionLoading}
+      />
     </div>
   );
 }

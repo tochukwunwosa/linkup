@@ -9,7 +9,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Badge } from "@/components/ui/badge"
-import { ArrowUpDown, CheckCircle, MoreHorizontal, XCircle } from "lucide-react"
+import { ArrowUpDown, CheckCircle, Eye, MoreHorizontal, XCircle } from "lucide-react"
 import type { EventSubmission } from "@/lib/validations/event"
 import { EventTypeCell } from "@/components/event/event-type-cell"
 import { formatDateRange } from "@/lib/utils"
@@ -27,9 +27,25 @@ const getStatusBadge = (status: string) => {
   }
 };
 
+const getConfidenceBadge = (score: number | null | undefined) => {
+  if (score == null) return null;
+  const className =
+    score >= 90
+      ? "bg-green-50 text-green-700 border-green-300"
+      : score >= 70
+      ? "bg-yellow-50 text-yellow-700 border-yellow-300"
+      : "bg-red-50 text-red-700 border-red-300";
+  return (
+    <Badge variant="outline" className={className}>
+      {Math.round(score)}%
+    </Badge>
+  );
+};
+
 export function getSubmissionColumns(
   onApprove: (submission: EventSubmission) => void,
-  onReject: (submission: EventSubmission) => void
+  onReject: (submission: EventSubmission) => void,
+  onView: (submission: EventSubmission) => void
 ): ColumnDef<EventSubmission>[] {
   return [
     {
@@ -92,8 +108,8 @@ export function getSubmissionColumns(
       header: "Organizer",
       cell: ({ row }) => (
         <div className="whitespace-normal break-words max-w-[200px]">
-          <div className="font-medium">{row.getValue("organizer_name")}</div>
-          <div className="text-xs text-muted-foreground">{row.original.organizer_email}</div>
+          <div className="font-medium">{row.getValue("organizer_name") || "Unknown"}</div>
+          <div className="text-xs text-muted-foreground">{row.original.organizer_email || "—"}</div>
         </div>
       ),
     },
@@ -116,6 +132,23 @@ export function getSubmissionColumns(
       accessorKey: "submission_status",
       header: "Status",
       cell: ({ row }) => getStatusBadge(row.getValue("submission_status")),
+      filterFn: (row, id, value) => value.includes(row.getValue(id)),
+    },
+    {
+      accessorKey: "source_type",
+      header: "Source",
+      cell: ({ row }) => {
+        const submission = row.original;
+        const isScraped = submission.source_type === "scraped";
+        return (
+          <div className="flex flex-col gap-1">
+            <Badge variant="outline" className={isScraped ? "bg-blue-50 text-blue-700 border-blue-300 w-fit" : "bg-slate-50 text-slate-700 border-slate-300 w-fit"}>
+              {isScraped ? (submission.source_connector || "Scraped") : "User"}
+            </Badge>
+            {isScraped && getConfidenceBadge(submission.confidence_score)}
+          </div>
+        );
+      },
       filterFn: (row, id, value) => value.includes(row.getValue(id)),
     },
     {
@@ -149,6 +182,10 @@ export function getSubmissionColumns(
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuItem onClick={() => onView(submission)}>
+                <Eye className="mr-2 h-4 w-4" />
+                View details
+              </DropdownMenuItem>
               {isPending && (
                 <>
                   <DropdownMenuItem onClick={() => onApprove(submission)}>

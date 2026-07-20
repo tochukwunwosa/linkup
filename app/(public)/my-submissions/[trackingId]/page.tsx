@@ -94,9 +94,9 @@ export default async function SubmissionPreviewPage({
                 ? "Your event is live on TechLinkUp"
                 : "This event is has ended"}
             </p>
-            {isPubliclyListed && submission.published_event_id && (
+            {isPubliclyListed && submission.slug && (
               <Link
-                href={`/events/${submission.published_event_id}`}
+                href={`/events/${submission.slug}`}
                 className="inline-flex items-center gap-1.5 text-sm font-medium text-emerald-700 hover:underline"
               >
                 View public listing

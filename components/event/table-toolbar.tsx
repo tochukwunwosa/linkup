@@ -14,6 +14,11 @@ interface TableToolbarProps<TData> {
 
 export function TableToolbar<TData>({ table }: TableToolbarProps<TData>) {
   const isFiltered = table.getState().columnFilters.length > 0
+  // table.getColumn(id) throws if the id isn't registered on this table
+  // instance, so check against the actual column list first — this
+  // toolbar is shared between tables that don't all have the same columns
+  // (e.g. the submissions table has no "publish_status" column).
+  const hasColumn = (id: string) => table.getAllLeafColumns().some((column) => column.id === id)
 
   return (
     <div className="flex items-center justify-between">
@@ -24,7 +29,7 @@ export function TableToolbar<TData>({ table }: TableToolbarProps<TData>) {
           onChange={(event) => table.getColumn("title")?.setFilterValue(event.target.value)}
           className="h-8 w-[150px] lg:w-[250px]"
         />
-        {table.getColumn("type") && (
+        {hasColumn("type") && (
           <DataTableFacetedFilter
             column={table.getColumn("type")}
             title="Type"
@@ -34,7 +39,7 @@ export function TableToolbar<TData>({ table }: TableToolbarProps<TData>) {
             ]}
           />
         )}
-        {table.getColumn("publish_status") && (
+        {hasColumn("publish_status") && (
           <DataTableFacetedFilter
             column={table.getColumn("publish_status")}
             title="Publish Status"

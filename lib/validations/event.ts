@@ -101,6 +101,7 @@ export type EventFormData = z.infer<typeof eventFormSchema>;
 
 export type Event = {
   id: string;
+  slug: string;
   title: string;
   start_date: string;
   end_date?: string;
@@ -216,10 +217,23 @@ export type SubmissionMetadata = {
 
 
 export type OrganizerInfo = {
-  organizer_name: string;
-  organizer_email: string;
+  organizer_name: string | null;
+  organizer_email: string | null;
   organizer_phone?: string;
   organizer_organization?: string;
+};
+
+export type SourceType = "user" | "scraped";
+export type ExtractionMethod = "json-ld" | "og-meta";
+
+export type ScrapedSubmissionMetadata = {
+  source_type: SourceType;
+  source_url?: string | null;
+  source_connector?: string | null;
+  extraction_method?: ExtractionMethod | null;
+  confidence_score?: number | null;
+  confidence_breakdown?: Record<string, unknown> | null;
+  dedupe_hash?: string | null;
 };
 
 
@@ -229,6 +243,7 @@ export type EventSubmission = {
   tracking_id: string;
 } & Event &
   OrganizerInfo &
-  SubmissionMetadata;
+  SubmissionMetadata &
+  ScrapedSubmissionMetadata;
 
 

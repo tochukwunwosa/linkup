@@ -12,15 +12,15 @@ export const contentType = "image/png";
 export default async function OgImage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ slug: string }>;
 }) {
-  const { id } = await params;
+  const { slug } = await params;
   const supabase = await createClient();
 
   const { data: event } = await supabase
     .from("public_events")
     .select("*")
-    .eq("id", id)
+    .eq("slug", slug)
     .single<Event>();
 
   if (!event) {

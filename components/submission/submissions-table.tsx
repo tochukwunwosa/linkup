@@ -25,9 +25,10 @@ interface SubmissionsTableProps {
   submissions: EventSubmission[]
   onApprove: (submission: EventSubmission) => void
   onReject: (submission: EventSubmission) => void
+  onView: (submission: EventSubmission) => void
 }
 
-export function SubmissionsTable({ submissions, onApprove, onReject }: SubmissionsTableProps) {
+export function SubmissionsTable({ submissions, onApprove, onReject, onView }: SubmissionsTableProps) {
   const data = submissions
   const [rowSelection, setRowSelection] = useState({})
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
@@ -38,7 +39,7 @@ export function SubmissionsTable({ submissions, onApprove, onReject }: Submissio
     pageSize: 10,
   })
 
-  const columns = useMemo(() => getSubmissionColumns(onApprove, onReject), [onApprove, onReject])
+  const columns = useMemo(() => getSubmissionColumns(onApprove, onReject, onView), [onApprove, onReject, onView])
 
   const table = useReactTable({
     data,

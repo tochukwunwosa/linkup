@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
+import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Metadata } from "next";
 import { generateEventSchema, generateBreadcrumbSchema } from "@/lib/structured-data";
 import JsonLd from "@/components/JsonLd";
@@ -15,18 +16,47 @@ import { RelatedEvents } from "@/components/event/related-events";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://techlinkup.xyz";
 
+// Next.js requires a single dynamic-segment name per route level, so the
+// old numeric-id URLs (likely already indexed/backlinked) are handled here
+// instead of a separate [id] route: if `slug` doesn't match any event but
+// looks numeric, treat it as a legacy id and permanently redirect (308) to
+// the real slug URL rather than 404ing.
+async function resolveEventBySlug(supabase: SupabaseClient, slug: string): Promise<Event> {
+  const { data: event } = await supabase
+    .from("public_events")
+    .select("*")
+    .eq("slug", slug)
+    .single<Event>();
+
+  if (event) return event;
+
+  if (/^\d+$/.test(slug)) {
+    const { data: legacyEvent } = await supabase
+      .from("public_events")
+      .select("slug")
+      .eq("id", slug)
+      .maybeSingle();
+
+    if (legacyEvent?.slug) {
+      permanentRedirect(`/events/${legacyEvent.slug}`);
+    }
+  }
+
+  notFound();
+}
+
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
-  const { id } = await params;
+  const { slug } = await params;
   const supabase = await createClient();
 
   const { data: event } = await supabase
     .from("public_events")
     .select("*")
-    .eq("id", id)
+    .eq("slug", slug)
     .single<Event>();
 
   if (!event) return {};
@@ -40,12 +70,12 @@ export async function generateMetadata({
     title,
     description,
     alternates: {
-      canonical: `/events/${event.id}`,
+      canonical: `/events/${event.slug}`,
     },
     openGraph: {
       title: event.title,
       description,
-      url: `${siteUrl}/events/${event.id}`,
+      url: `${siteUrl}/events/${event.slug}`,
       type: "website",
       // opengraph-image.tsx is auto-discovered by Next.js
     },
@@ -60,18 +90,12 @@ export async function generateMetadata({
 export default async function EventPage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ slug: string }>;
 }) {
-  const { id } = await params;
+  const { slug } = await params;
   const supabase = await createClient();
 
-  const { data: event } = await supabase
-    .from("public_events")
-    .select("*")
-    .eq("id", id)
-    .single<Event>();
-
-  if (!event) return notFound();
+  const event = await resolveEventBySlug(supabase, slug);
 
   // Fetch related events from the same categories, excluding this event
   const { data: relatedRaw } = await supabase
@@ -85,7 +109,7 @@ export default async function EventPage({
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: "Home", url: siteUrl },
     { name: "Events", url: `${siteUrl}/#events` },
-    { name: event.title, url: `${siteUrl}/events/${event.id}` },
+    { name: event.title, url: `${siteUrl}/events/${event.slug}` },
   ]);
 
   const colors = getCategoryColors(event.category);
@@ -112,7 +136,7 @@ export default async function EventPage({
       ? formatCurrency(Number(event.price_amount), event.currency || "NGN")
       : event.price || "See event page";
 
-  const eventUrl = `${siteUrl}/events/${event.id}`;
+  const eventUrl = `${siteUrl}/events/${event.slug}`;
 
   return (
     <>

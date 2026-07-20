@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 import { serverGeocodeAddress } from "@/lib/geocode/geocode-server";
 import { formatDateToYYYYMMDD } from "@/lib/date-utils";
+import { buildEventSlugBase, generateUniqueEventSlug } from "@/lib/slug";
 
 export async function createEventAction(formData: z.infer<typeof eventSchema>) {
   const supabase = await createClient();
@@ -36,10 +37,14 @@ export async function createEventAction(formData: z.infer<typeof eventSchema>) {
   // 🗺️ Geocode the address
   const geo = await serverGeocodeAddress(parsed.data.location);
 
+  const slugBase = buildEventSlugBase(parsed.data.title, geo?.city ?? undefined, parsed.data.location);
+  const slug = await generateUniqueEventSlug(supabase, slugBase);
+
   const result = await supabase
     .from("events")
     .insert({
       ...parsed.data,
+      slug,
       created_by: admin.id,
       city: geo?.city ?? null,
       country: geo?.country ?? null,

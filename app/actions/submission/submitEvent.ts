@@ -8,6 +8,7 @@ import { headers } from "next/headers";
 import { rateLimit } from "@/lib/rate-limit";
 import { sendAdminNotification, getAdminEmails, sendOrganizerConfirmation } from "@/lib/email/emailService";
 import { formatDateToYYYYMMDD } from "@/lib/date-utils";
+import { buildEventSlugBase, generateUniqueEventSlug } from "@/lib/slug";
 
 export async function submitEventAction(formData: unknown) {
   try {
@@ -42,12 +43,18 @@ export async function submitEventAction(formData: unknown) {
     // Create Supabase client (no auth required for public submissions)
     const supabase = await createClient();
 
+    // Generate a unique, SEO-friendly slug up front so it can be carried
+    // straight into `events` on approval without regenerating.
+    const slugBase = buildEventSlugBase(data.title, geo?.city ?? undefined, data.location);
+    const slug = await generateUniqueEventSlug(supabase, slugBase);
+
     // Insert into event_submissions table
     const { data: submission, error: insertError } = await supabase
       .from("event_submissions")
       .insert({
         // Event details
         title: data.title,
+        slug,
         start_date: formatDateToYYYYMMDD(data.start_date), // Format as YYYY-MM-DD
         end_date: data.end_date ? formatDateToYYYYMMDD(data.end_date) : null,
         location: data.location,

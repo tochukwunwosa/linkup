@@ -3,6 +3,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 import { sendOrganizerApprovedNotification } from "@/lib/email/emailService";
+import { buildEventSlugBase, generateUniqueEventSlug } from "@/lib/slug";
 
 export async function approveSubmissionAction(submissionId: string) {
   try {
@@ -55,11 +56,23 @@ export async function approveSubmissionAction(submissionId: string) {
       };
     }
 
+    // Belt-and-suspenders: older submissions predating the slug backfill
+    // (or a submission created between the column landing and the backfill
+    // script running) may still have a null slug — generate one rather than
+    // publishing an event with slug: null.
+    const slug = submission.slug
+      ?? (await generateUniqueEventSlug(
+        supabase,
+        buildEventSlugBase(submission.title, submission.city ?? undefined, submission.location ?? undefined)
+      ));
+
     // Insert into events table
     const { data: newEvent, error: eventError } = await supabase
       .from("events")
       .insert({
         title: submission.title,
+        slug,
+        dedupe_hash: submission.dedupe_hash,
         start_date: submission.start_date,
         end_date: submission.end_date,
         location: submission.location,
@@ -78,7 +91,7 @@ export async function approveSubmissionAction(submissionId: string) {
         lng: submission.lng,
         created_by: admin.id,
       })
-      .select("id")
+      .select("id, slug")
       .single();
 
     if (eventError) {
@@ -121,18 +134,21 @@ export async function approveSubmissionAction(submissionId: string) {
       year: "numeric",
     });
 
-    sendOrganizerApprovedNotification({
-      organizerName: submission.organizer_name,
-      organizerEmail: submission.organizer_email,
-      eventTitle: submission.title,
-      eventDate,
-      eventLocation: submission.location,
-      trackingId: submission.tracking_id,
-      eventUrl: `${siteUrl}/events/${newEvent.id}`,
-    }).catch((error) => {
-      console.error("Failed to send organizer approval notification:", error);
-      // Don't fail the approval if email fails
-    });
+    // Scraped events (source_type: "scraped") have no real organizer to notify
+    if (submission.organizer_email) {
+      sendOrganizerApprovedNotification({
+        organizerName: submission.organizer_name,
+        organizerEmail: submission.organizer_email,
+        eventTitle: submission.title,
+        eventDate,
+        eventLocation: submission.location,
+        trackingId: submission.tracking_id,
+        eventUrl: `${siteUrl}/events/${newEvent.slug}`,
+      }).catch((error) => {
+        console.error("Failed to send organizer approval notification:", error);
+        // Don't fail the approval if email fails
+      });
+    }
 
     return {
       success: true,

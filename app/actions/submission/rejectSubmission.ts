@@ -81,17 +81,20 @@ export async function rejectSubmissionAction(submissionId: string, feedback?: st
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://techlinkup.xyz";
     const resubmitUrl = `${siteUrl}/submit-event`;
 
-    sendOrganizerRejectedNotification({
-      organizerName: submission.organizer_name,
-      organizerEmail: submission.organizer_email,
-      eventTitle: submission.title,
-      trackingId: submission.tracking_id,
-      feedback,
-      resubmitUrl,
-    }).catch((error) => {
-      console.error("Failed to send organizer rejection notification:", error);
-      // Don't fail the rejection if email fails
-    });
+    // Scraped events (source_type: "scraped") have no real organizer to notify
+    if (submission.organizer_email) {
+      sendOrganizerRejectedNotification({
+        organizerName: submission.organizer_name,
+        organizerEmail: submission.organizer_email,
+        eventTitle: submission.title,
+        trackingId: submission.tracking_id,
+        feedback,
+        resubmitUrl,
+      }).catch((error) => {
+        console.error("Failed to send organizer rejection notification:", error);
+        // Don't fail the rejection if email fails
+      });
+    }
 
     return {
       success: true,

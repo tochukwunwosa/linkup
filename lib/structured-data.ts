@@ -240,7 +240,7 @@ export function generateEventListSchema(events: EventType[]) {
     itemListElement: events.map((event, index) => ({
       "@type": "ListItem",
       position: index + 1,
-      url: `${siteUrl}/events/${event.id}`,
+      url: `${siteUrl}/events/${event.slug}`,
       name: event.title,
     })),
   };
