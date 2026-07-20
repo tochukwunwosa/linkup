@@ -303,3 +303,12 @@
 .filter-pill-active:hover {
   background: rgba(0,102,204,0.10);
 }
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}

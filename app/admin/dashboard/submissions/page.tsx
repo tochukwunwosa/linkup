@@ -5,13 +5,23 @@ import { DashboardHeader } from "@/components/dashboard/dashboard-header";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { getAllSubmissions } from "@/app/actions/submission/getAllSubmissions";
 import { approveSubmissionAction } from "@/app/actions/submission/approveSubmission";
 import { rejectSubmissionAction } from "@/app/actions/submission/rejectSubmission";
-import type { EventSubmission, SubmissionStatus } from "@/lib/validations/event";
+import type {
+  EventSubmission,
+  SubmissionStatus,
+} from "@/lib/validations/event";
 import { Loader } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { SubmissionsTable } from "@/components/submission/submissions-table";
@@ -23,12 +33,17 @@ export default function SubmissionsPage() {
 
   const [submissions, setSubmissions] = useState<EventSubmission[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<SubmissionStatus | "all">("pending");
-  const [selectedSubmission, setSelectedSubmission] = useState<EventSubmission | null>(null);
+  const [activeTab, setActiveTab] = useState<SubmissionStatus | "all">(
+    "pending",
+  );
+  const [selectedSubmission, setSelectedSubmission] =
+    useState<EventSubmission | null>(null);
   const [rejectDialogOpen, setRejectDialogOpen] = useState(false);
   const [feedback, setFeedback] = useState("");
   const [actionLoading, setActionLoading] = useState(false);
-  const [viewSubmission, setViewSubmission] = useState<EventSubmission | null>(null);
+  const [viewSubmission, setViewSubmission] = useState<EventSubmission | null>(
+    null,
+  );
   const [viewDialogOpen, setViewDialogOpen] = useState(false);
 
   const fetchSubmissions = async () => {
@@ -95,7 +110,10 @@ export default function SubmissionsPage() {
 
     setActionLoading(true);
     try {
-      const result = await rejectSubmissionAction(selectedSubmission.id, feedback.trim() || undefined);
+      const result = await rejectSubmissionAction(
+        selectedSubmission.id,
+        feedback.trim() || undefined,
+      );
       if (result.success) {
         toast.success(result.message || "Event rejected successfully");
         setRejectDialogOpen(false);
@@ -114,13 +132,16 @@ export default function SubmissionsPage() {
   };
 
   const filteredSubmissions = submissions.filter((sub) =>
-    activeTab === "all" ? true : sub.submission_status === activeTab
+    activeTab === "all" ? true : sub.submission_status === activeTab,
   );
 
   const stats = {
-    pending: submissions.filter((s) => s.submission_status === "pending").length,
-    approved: submissions.filter((s) => s.submission_status === "approved").length,
-    rejected: submissions.filter((s) => s.submission_status === "rejected").length,
+    pending: submissions.filter((s) => s.submission_status === "pending")
+      .length,
+    approved: submissions.filter((s) => s.submission_status === "approved")
+      .length,
+    rejected: submissions.filter((s) => s.submission_status === "rejected")
+      .length,
   };
 
   return (
@@ -140,32 +161,54 @@ export default function SubmissionsPage() {
         </Card>
         <Card className="border-yellow-200 bg-yellow-50/50">
           <CardContent className="p-6">
-            <div className="text-2xl font-bold text-yellow-700">{stats.pending}</div>
+            <div className="text-2xl font-bold text-yellow-700">
+              {stats.pending}
+            </div>
             <p className="text-xs text-muted-foreground">Pending Review</p>
           </CardContent>
         </Card>
         <Card className="border-green-200 bg-green-50/50">
           <CardContent className="p-6">
-            <div className="text-2xl font-bold text-green-700">{stats.approved}</div>
+            <div className="text-2xl font-bold text-green-700">
+              {stats.approved}
+            </div>
             <p className="text-xs text-muted-foreground">Approved</p>
           </CardContent>
         </Card>
         <Card className="border-red-200 bg-red-50/50">
           <CardContent className="p-6">
-            <div className="text-2xl font-bold text-red-700">{stats.rejected}</div>
+            <div className="text-2xl font-bold text-red-700">
+              {stats.rejected}
+            </div>
             <p className="text-xs text-muted-foreground">Rejected</p>
           </CardContent>
         </Card>
       </div>
 
       {/* Tabs and Submissions */}
-      <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as SubmissionStatus | "all")}>
-        <TabsList>
-          <TabsTrigger value="pending">Pending ({stats.pending})</TabsTrigger>
-          <TabsTrigger value="approved">Approved ({stats.approved})</TabsTrigger>
-          <TabsTrigger value="rejected">Rejected ({stats.rejected})</TabsTrigger>
-          <TabsTrigger value="all">All ({submissions.length})</TabsTrigger>
-        </TabsList>
+      <Tabs
+        value={activeTab}
+        onValueChange={(v) => setActiveTab(v as SubmissionStatus | "all")}
+      >
+        <div className="w-full overflow-x-auto scrollbar-hide">
+          <TabsList className="w-max min-w-full flex-nowrap">
+            <TabsTrigger value="pending" className="whitespace-nowrap">
+              Pending ({stats.pending})
+            </TabsTrigger>
+
+            <TabsTrigger value="approved" className="whitespace-nowrap">
+              Approved ({stats.approved})
+            </TabsTrigger>
+
+            <TabsTrigger value="rejected" className="whitespace-nowrap">
+              Rejected ({stats.rejected})
+            </TabsTrigger>
+
+            <TabsTrigger value="all" className="whitespace-nowrap">
+              All ({submissions.length})
+            </TabsTrigger>
+          </TabsList>
+        </div>
 
         <TabsContent value={activeTab} className="mt-6">
           {loading ? (
@@ -198,7 +241,8 @@ export default function SubmissionsPage() {
           <DialogHeader>
             <DialogTitle>Reject Event Submission</DialogTitle>
             <DialogDescription>
-              Provide feedback to the organizer about why their event was rejected (optional).
+              Provide feedback to the organizer about why their event was
+              rejected (optional).
             </DialogDescription>
           </DialogHeader>
           <Textarea
@@ -208,10 +252,18 @@ export default function SubmissionsPage() {
             className="min-h-[100px]"
           />
           <DialogFooter>
-            <Button variant="outline" onClick={() => setRejectDialogOpen(false)} disabled={actionLoading}>
+            <Button
+              variant="outline"
+              onClick={() => setRejectDialogOpen(false)}
+              disabled={actionLoading}
+            >
               Cancel
             </Button>
-            <Button variant="destructive" onClick={handleRejectSubmit} disabled={actionLoading}>
+            <Button
+              variant="destructive"
+              onClick={handleRejectSubmit}
+              disabled={actionLoading}
+            >
               {actionLoading ? (
                 <>
                   <Loader className="mr-2 h-4 w-4 animate-spin" />

@@ -58,7 +58,7 @@ export default function AdminDashboard() {
   return (
     <div className="flex flex-col gap-6">
       <DashboardHeader title={`Welcome ${adminFirstName}`} description="Overview of your events and activities" />
-      <div className="grid gap-4 grid-cols-[repeat(auto-fill,minmax(200px,1fr))]">
+      <div className="grid gap-4 grid-cols-2 md:grid-cols-[repeat(auto-fill,minmax(200px,1fr))]">
         {/* total events */}
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
@@ -126,7 +126,7 @@ export default function AdminDashboard() {
         <TabsContent value="overview" className="space-y-4">
           <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-7">
             {/* event trend */}
-            <Card className="lg:col-span-4">
+            <Card className="hidden md:block lg:col-span-4">
               <CardHeader>
                 <CardTitle>Event Registrations</CardTitle>
                 <CardDescription>Event registration trends over the past 30 days</CardDescription>
@@ -148,7 +148,7 @@ export default function AdminDashboard() {
           </div>
           <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-7">
             {/* events by category chart */}
-            <Card className=" lg:col-span-4 flex flex-col">
+            <Card className="hidden lg:col-span-4 md:flex flex-col">
               <CardHeader>
                 <CardTitle>Events by Category</CardTitle>
                 <CardDescription>Distribution of events across categories</CardDescription>
