@@ -15,12 +15,13 @@ interface EventsCardViewProps {
 
 export function EventsCardView({ events, onEdit, onDelete }: EventsCardViewProps) {
   return (
-    <div className="grid gap-4">
+    <div className="space-y-4">
       {events.length === 0 ? (
         <div className="text-center py-8 text-muted-foreground">No events found</div>
       ) : (
         events.map((event) => (
           <Card key={event.id}>
+
             <CardContent className="pt-6">
               <div className="flex flex-col md:flex-row justify-between items-start mb-2">
                 <h3 className="font-medium">{event.title}</h3>
@@ -47,12 +48,13 @@ export function EventsCardView({ events, onEdit, onDelete }: EventsCardViewProps
                 </div>
               </div>
             </CardContent>
-            <CardFooter className="flex justify-end gap-2 pt-0">
-              <Button variant="ghost" size="sm" onClick={() => onEdit(event)}>
+
+            <CardFooter className="flex md:justify-end gap-2 pt-0">
+              <Button variant="ghost" size="sm" onClick={() => onEdit(event)} className="bg-foreground text-background">
                 <Edit className="h-4 w-4 mr-1" />
                 Edit
               </Button>
-              <Button variant="ghost" size="sm" onClick={() => onDelete(event)}>
+              <Button variant="ghost" size="sm" onClick={() => onDelete(event)} className="bg-destructive text-background">
                 <Trash2 className="h-4 w-4 mr-1" />
                 Delete
               </Button>
