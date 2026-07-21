@@ -336,7 +336,7 @@ export function EventForm({ initialData, onSubmit, onCancel }: EventFormProps) {
                           value={field.value}
                           onValueChange={field.onChange}
                         >
-                          <SelectTrigger className="w-1/5">
+                          <SelectTrigger className="w-fit md:w-1/5">
                             <SelectValue placeholder="Currency" />
                           </SelectTrigger>
                           <SelectContent>

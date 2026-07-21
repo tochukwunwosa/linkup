@@ -22,7 +22,7 @@ export function EventsCardView({ events, onEdit, onDelete }: EventsCardViewProps
         events.map((event) => (
           <Card key={event.id}>
             <CardContent className="pt-6">
-              <div className="flex justify-between items-start mb-2">
+              <div className="flex flex-col md:flex-row justify-between items-start mb-2">
                 <h3 className="font-medium">{event.title}</h3>
                 <Badge
                   variant={event.publish_status === "Published" ? "default" : "outline"}
