@@ -20,10 +20,12 @@ const CONNECTORS: { name: SourceConnector; fetchCandidateUrls: () => Promise<str
   { name: "startupgrind", fetchCandidateUrls: startupgrind.fetchCandidateUrls },
 ];
 
-// Stays inside Vercel Hobby's ~60s function timeout: only this many
-// connectors run per invocation, rotating through the rest via the
-// scrape_cursor table on subsequent days. Each connector is also capped on
-// how many candidate URLs it processes, since fetch+parse per URL adds up.
+/**
+ * Stays inside Vercel Hobby's ~60s function timeout: only this many 
+ * connectors run per invocation, rotating through the rest via the
+ * scrape_cursor table on subsequent days. Each connector is also capped on
+ * how many candidate URLs it processes, since fetch+parse per URL adds up.
+ **/
 const CONNECTORS_PER_RUN = 1;
 const MAX_URLS_PER_CONNECTOR = 15;
 
