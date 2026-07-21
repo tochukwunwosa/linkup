@@ -32,6 +32,7 @@ export function EventsCardView({ events, onEdit, onDelete }: EventsCardViewProps
                   {event.publish_status}
                 </Badge>
               </div>
+              
               <div className="space-y-2 text-sm text-muted-foreground">
                 <div className="flex items-center">
                   <Calendar className="h-3.5 w-3.5 mr-2" />
