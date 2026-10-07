@@ -2,6 +2,13 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Twitter, Linkedin, Instagram } from 'lucide-react'
 
+// Paste a real profile URL to show an icon. Empty href = icon hidden.
+const socials = [
+  { label: 'Twitter / X', href: '', icon: Twitter },
+  { label: 'LinkedIn', href: '', icon: Linkedin },
+  { label: 'Instagram', href: '', icon: Instagram },
+].filter((s) => s.href)
+
 const topLocations = [
   { slug: 'lagos', label: 'Lagos' },
   { slug: 'abuja', label: 'Abuja' },
@@ -47,17 +54,22 @@ export default function Footer() {
             <p className="text-white/70 text-xs leading-relaxed max-w-[180px] mb-4">
               Community-driven tech event discovery across Nigeria.
             </p>
-            <div className="flex items-center gap-4">
-              <a href="#" aria-label="Twitter / X" className="text-white/60 hover:text-white/90 transition-colors duration-200">
-                <Twitter className="h-4 w-4" />
-              </a>
-              <a href="#" aria-label="LinkedIn" className="text-white/60 hover:text-white/90 transition-colors duration-200">
-                <Linkedin className="h-4 w-4" />
-              </a>
-              <a href="#" aria-label="Instagram" className="text-white/60 hover:text-white/90 transition-colors duration-200">
-                <Instagram className="h-4 w-4" />
-              </a>
-            </div>
+            {socials.length > 0 && (
+              <div className="flex items-center gap-4">
+                {socials.map(({ label, href, icon: Icon }) => (
+                  <a
+                    key={label}
+                    href={href}
+                    aria-label={label}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-white/60 hover:text-white/90 transition-colors duration-200"
+                  >
+                    <Icon className="h-4 w-4" />
+                  </a>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Platform links */}
