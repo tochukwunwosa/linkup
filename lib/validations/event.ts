@@ -5,17 +5,15 @@ export const eventFormSchema = z.object({
   id: z.string().optional(),
   title: z.string().min(1, "Event title is required").min(3, "Event title must be at least 3 characters"),
   start_date: z.date({
-    required_error: "Start date is required",
-    invalid_type_error: "Please select a valid start date"
+    error: (issue) => (issue.input === undefined ? "Start date is required" : "Please select a valid start date"),
   }),
   end_date: z.date({
-    required_error: "End date is required",
-    invalid_type_error: "Please select a valid end date"
+    error: (issue) => (issue.input === undefined ? "End date is required" : "Please select a valid end date"),
   }),
   location: z.string().min(1, "Location is required").min(3, "Location must be at least 3 characters"),
   time: z.string().min(1, "Event time is required"),
   type: z.enum(["Online", "In-person", "In-person & Online"], {
-    errorMap: () => ({ message: "Please select a valid event type" })
+    error: "Please select a valid event type"
   }),
   category: z.array(z.string()).min(1, "At least one category is required"),
   price: z.string().optional(),
@@ -25,12 +23,10 @@ export const eventFormSchema = z.object({
   publish_status: z.enum(["Published", "Draft"]),
   link: z.string().optional(),
   lat: z.number({
-    required_error: "Please select a valid location from the dropdown",
-    invalid_type_error: "Please select a valid location from the dropdown"
+    error: (issue) => (issue.input === undefined ? "Please select a valid location from the dropdown" : "Please select a valid location from the dropdown"),
   }),
   lng: z.number({
-    required_error: "Please select a valid location from the dropdown",
-    invalid_type_error: "Please select a valid location from the dropdown"
+    error: (issue) => (issue.input === undefined ? "Please select a valid location from the dropdown" : "Please select a valid location from the dropdown"),
   }),
   city: z.string().optional(),
   country: z.string().optional(),
@@ -39,7 +35,7 @@ export const eventFormSchema = z.object({
   // Skip for Online events where lat/lng are intentionally 0
   if (data.type !== "Online" && (data.lat === 0 || data.lng === 0)) {
     ctx.addIssue({
-      code: z.ZodIssueCode.custom,
+      code: "custom",
       message: "Please select a valid location from the dropdown suggestions",
       path: ["location"]
     });
@@ -48,7 +44,7 @@ export const eventFormSchema = z.object({
   // Validate that paid events have a price amount
   if (data.price === "Paid" && (!data.price_amount || data.price_amount.trim() === "")) {
     ctx.addIssue({
-      code: z.ZodIssueCode.custom,
+      code: "custom",
       message: "Price amount is required for paid events",
       path: ["price_amount"]
     });
@@ -57,7 +53,7 @@ export const eventFormSchema = z.object({
   // Validate that price amount is a valid number if provided
   if (data.price === "Paid" && data.price_amount && isNaN(Number(data.price_amount))) {
     ctx.addIssue({
-      code: z.ZodIssueCode.custom,
+      code: "custom",
       message: "Price amount must be a valid number",
       path: ["price_amount"]
     });
@@ -66,7 +62,7 @@ export const eventFormSchema = z.object({
   // Validate that price amount is positive
   if (data.price === "Paid" && data.price_amount && Number(data.price_amount) <= 0) {
     ctx.addIssue({
-      code: z.ZodIssueCode.custom,
+      code: "custom",
       message: "Price amount must be greater than 0",
       path: ["price_amount"]
     });
@@ -127,17 +123,15 @@ export const eventSubmissionFormSchema = z.object({
   // Event details
   title: z.string().min(1, "Event title is required").min(3, "Event title must be at least 3 characters"),
   start_date: z.date({
-    required_error: "Start date is required",
-    invalid_type_error: "Please select a valid start date"
+    error: (issue) => (issue.input === undefined ? "Start date is required" : "Please select a valid start date"),
   }),
   end_date: z.date({
-    required_error: "End date is required",
-    invalid_type_error: "Please select a valid end date"
+    error: (issue) => (issue.input === undefined ? "End date is required" : "Please select a valid end date"),
   }).optional(),
   location: z.string().min(1, "Location is required").min(3, "Location must be at least 3 characters"),
   time: z.string().min(1, "Event time is required"),
   type: z.enum(["Online", "In-person", "In-person & Online"], {
-    errorMap: () => ({ message: "Please select a valid event type" })
+    error: "Please select a valid event type"
   }),
   category: z.array(z.string()).min(1, "At least one category is required"),
   price: z.string().optional(),
@@ -146,12 +140,10 @@ export const eventSubmissionFormSchema = z.object({
   description: z.string().min(1, "Description is required").min(10, "Description must be at least 10 characters"),
   link: z.string().url("Please enter a valid URL").optional().or(z.literal("")),
   lat: z.number({
-    required_error: "Please select a valid location from the dropdown",
-    invalid_type_error: "Please select a valid location from the dropdown"
+    error: (issue) => (issue.input === undefined ? "Please select a valid location from the dropdown" : "Please select a valid location from the dropdown"),
   }),
   lng: z.number({
-    required_error: "Please select a valid location from the dropdown",
-    invalid_type_error: "Please select a valid location from the dropdown"
+    error: (issue) => (issue.input === undefined ? "Please select a valid location from the dropdown" : "Please select a valid location from the dropdown"),
   }),
   city: z.string().optional(),
   country: z.string().optional(),
@@ -166,7 +158,7 @@ export const eventSubmissionFormSchema = z.object({
   // Skip for Online events where lat/lng are intentionally 0
   if (data.type !== "Online" && (data.lat === 0 || data.lng === 0)) {
     ctx.addIssue({
-      code: z.ZodIssueCode.custom,
+      code: "custom",
       message: "Please select a valid location from the dropdown suggestions",
       path: ["location"]
     });
@@ -175,7 +167,7 @@ export const eventSubmissionFormSchema = z.object({
   // Validate that paid events have a price amount
   if (data.price === "Paid" && (!data.price_amount || data.price_amount.trim() === "")) {
     ctx.addIssue({
-      code: z.ZodIssueCode.custom,
+      code: "custom",
       message: "Price amount is required for paid events",
       path: ["price_amount"]
     });
@@ -184,7 +176,7 @@ export const eventSubmissionFormSchema = z.object({
   // Validate that price amount is a valid number if provided
   if (data.price === "Paid" && data.price_amount && isNaN(Number(data.price_amount))) {
     ctx.addIssue({
-      code: z.ZodIssueCode.custom,
+      code: "custom",
       message: "Price amount must be a valid number",
       path: ["price_amount"]
     });
@@ -193,7 +185,7 @@ export const eventSubmissionFormSchema = z.object({
   // Validate that price amount is positive
   if (data.price === "Paid" && data.price_amount && Number(data.price_amount) <= 0) {
     ctx.addIssue({
-      code: z.ZodIssueCode.custom,
+      code: "custom",
       message: "Price amount must be greater than 0",
       path: ["price_amount"]
     });
