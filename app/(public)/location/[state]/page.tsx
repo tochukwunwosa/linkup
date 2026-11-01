@@ -9,6 +9,7 @@ import EventCard from "@/components/event-card";
 import { locationMeta, getLocationMeta } from "@/constants/location-meta";
 import { Event } from "@/lib/validations/event";
 import { PageHero } from "@/components/page-hero";
+import { EmailAlertsSignup } from "@/components/email-alerts-signup";
 
 export const revalidate = 3600; // refresh every hour
 // Only the known states exist; anything else 404s without running the page.
@@ -119,6 +120,15 @@ export default async function LocationPage({
               </Link>
             </div>
           )}
+
+          {/* Weekly email for this state */}
+          <div className="mt-14 max-w-2xl">
+            <EmailAlertsSignup
+              states={locationMeta.map(({ slug, label }) => ({ slug, label }))}
+              defaultState={meta.slug}
+              heading={`Get ${meta.label} tech events every Monday`}
+            />
+          </div>
 
           {/* Browse other locations */}
           <div className="mt-14">

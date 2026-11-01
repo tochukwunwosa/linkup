@@ -3,8 +3,10 @@ import { formatCurrency } from "@/lib/format-currency";
 import { formatTo12Hour } from "@/lib/utils";
 import { locationMeta } from "@/constants/location-meta";
 
-// Weekly "this week in tech" digest, formatted for a WhatsApp Channel post.
+// Weekly "this week in tech" digest: the WhatsApp Channel post and the
+// weekly email alerts.
 
+// The WhatsApp builder offers these; email alerts use any location-meta slug.
 export type DigestArea = "all" | "online" | "lagos" | "abuja";
 
 export const DIGEST_AREAS: { value: DigestArea; label: string }[] = [
@@ -24,10 +26,13 @@ export function addDays(date: string, days: number): string {
   return d.toISOString().slice(0, 10);
 }
 
-/** Events running at any point in [from, to] (inclusive), for the chosen area. */
+/**
+ * Events running at any point in [from, to] (inclusive), for the chosen area:
+ * "all", "online", or a state slug from location-meta.
+ */
 export function filterDigestEvents(
   events: Event[],
-  area: DigestArea,
+  area: DigestArea | string,
   from: string,
   to: string
 ): Event[] {
@@ -52,7 +57,25 @@ export function filterDigestEvents(
     .sort((a, b) => a.start_date.localeCompare(b.start_date) || a.time.localeCompare(b.time));
 }
 
-function formatDay(date: string): string {
+/** Events for one email subscriber: their state, plus online events if chosen. */
+export function eventsForSubscriber(
+  events: Event[],
+  state: string,
+  includeOnline: boolean,
+  from: string,
+  to: string
+): Event[] {
+  const inState = filterDigestEvents(events, state, from, to);
+  if (!includeOnline) return inState;
+
+  const ids = new Set(inState.map((e) => e.id));
+  const online = filterDigestEvents(events, "online", from, to).filter((e) => !ids.has(e.id));
+  return [...inState, ...online].sort(
+    (a, b) => a.start_date.localeCompare(b.start_date) || a.time.localeCompare(b.time)
+  );
+}
+
+export function formatDay(date: string): string {
   return new Date(`${date.slice(0, 10)}T12:00:00Z`).toLocaleDateString("en-GB", {
     weekday: "short",
     day: "numeric",
@@ -61,7 +84,7 @@ function formatDay(date: string): string {
   });
 }
 
-function formatPrice(event: Event): string {
+export function formatPrice(event: Event): string {
   if (!event.price || event.price.toLowerCase() === "free") return "Free";
   const amount = Number(event.price_amount);
   return event.price_amount && !isNaN(amount)

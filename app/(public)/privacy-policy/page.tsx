@@ -38,7 +38,7 @@ export default function PrivacyPolicyPage() {
 
         <h1 className="text-3xl font-bold text-[#1a1b25] mb-3">Privacy Policy</h1>
         <p className="text-sm text-[#64748b] mb-10">
-          Effective: June 2025 · Last Updated: June 25, 2025
+          Effective: June 2025 · Last Updated: November 1, 2026
         </p>
 
         <div className="text-base leading-relaxed text-[#4a4a5a] space-y-6">
@@ -51,11 +51,23 @@ export default function PrivacyPolicyPage() {
           <p>We take your privacy seriously. Here&apos;s what you should know:</p>
 
           <h2 className="text-xl font-semibold text-[#1a1b25] mt-10 mb-3">What We Collect</h2>
-          <p>
-            Right now, the only personal information we store is your{" "}
-            <strong className="text-[#1a1b25]">location</strong> (if you allow it). This helps us surface
-            relevant events near you.
-          </p>
+          <p>What we handle depends on how you use TechLinkUp:</p>
+          <ul className="list-disc list-inside space-y-1 pl-2">
+            <li>
+              Your <strong className="text-[#1a1b25]">location</strong>, if you allow it, to surface
+              relevant events near you.
+            </li>
+            <li>
+              If you <strong className="text-[#1a1b25]">submit an event</strong>: your name, email
+              address and, if you give them, your phone number and organisation, so we can review your
+              event and keep you updated.
+            </li>
+            <li>
+              If you sign up for <strong className="text-[#1a1b25]">weekly event emails</strong>: your
+              email address, your state, whether you want online events, and a record of when you
+              agreed.
+            </li>
+          </ul>
           <p>When we launch user accounts, we may collect:</p>
           <ul className="list-disc list-inside space-y-1 pl-2">
             <li>Your name</li>
@@ -82,6 +94,20 @@ export default function PrivacyPolicyPage() {
             </li>
           </ul>
 
+          <h2 className="text-xl font-semibold text-[#1a1b25] mt-10 mb-3">Weekly Event Emails</h2>
+          <ul className="list-disc list-inside space-y-1 pl-2">
+            <li>We only start emailing you after you confirm your address using the link we send.</li>
+            <li>
+              We use your state to choose which events go in your email. We don&apos;t use your
+              email address for anything else.
+            </li>
+            <li>
+              Every email has an unsubscribe link. When you unsubscribe, we delete your email address
+              and preferences.
+            </li>
+            <li>If you don&apos;t confirm within 7 days, we delete your sign-up.</li>
+          </ul>
+
           <h2 className="text-xl font-semibold text-[#1a1b25] mt-10 mb-3">How Your Data Is Stored</h2>
           <p>
             We use <strong className="text-[#1a1b25]">Supabase</strong> to store any data you give us.
@@ -101,6 +127,7 @@ export default function PrivacyPolicyPage() {
           <ul className="list-disc list-inside space-y-1 pl-2">
             <li>You can ask us to delete your data anytime.</li>
             <li>You can choose not to share your location.</li>
+            <li>You can unsubscribe from weekly event emails at any time, in one click.</li>
             <li>
               When signup is available, you&apos;ll be able to update or remove your
               profile.
@@ -109,10 +136,18 @@ export default function PrivacyPolicyPage() {
           <p>We don&apos;t sell or trade your data. Ever.</p>
 
           <h2 className="text-xl font-semibold text-[#1a1b25] mt-10 mb-3">Third Parties</h2>
+          <ul className="list-disc list-inside space-y-1 pl-2">
+            <li>
+              <strong className="text-[#1a1b25]">Resend</strong> sends our emails (event submission
+              updates and weekly event emails). It receives your email address only to deliver them.
+            </li>
+            <li>
+              <strong className="text-[#1a1b25]">Google Maps</strong> turns your location, if you share
+              it, into a city name.
+            </li>
+          </ul>
           <p>
-            We may add services like Google Search Console or email reminders in
-            the future. If that happens, we&apos;ll update this policy and let you know
-            what data (if any) those services interact with.
+            If we add other services that handle your personal data, we&apos;ll update this policy.
           </p>
 
           <h2 className="text-xl font-semibold text-[#1a1b25] mt-10 mb-3">Questions?</h2>

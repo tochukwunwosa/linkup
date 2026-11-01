@@ -82,6 +82,7 @@ export default function Footer() {
             <ul className="space-y-2 text-sm">
               <li><Link href="/submit-event" className="text-white/70 hover:text-white transition-colors duration-200">Submit Event</Link></li>
               <li><Link href="/my-submissions" className="text-white/70 hover:text-white transition-colors duration-200">Track Submissions</Link></li>
+              <li><Link href="/email-alerts" className="text-white/70 hover:text-white transition-colors duration-200">Weekly events by email</Link></li>
               <li><a href={WHATSAPP_CHANNEL_URL} target="_blank" rel="noopener noreferrer" className="text-white/70 hover:text-white transition-colors duration-200">Weekly events on WhatsApp</a></li>
               <li><Link href="/about" className="text-white/70 hover:text-white transition-colors duration-200">About</Link></li>
               <li><Link href="/contact" className="text-white/70 hover:text-white transition-colors duration-200">Contact</Link></li>

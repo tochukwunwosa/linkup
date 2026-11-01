@@ -5,6 +5,8 @@ import AdminNotificationEmail from "./templates/AdminNotificationEmail";
 import OrganizerApprovedEmail from "./templates/OrganizerApprovedEmail";
 import OrganizerRejectedEmail from "./templates/OrganizerRejectedEmail";
 import OrganizerConfirmationEmail from "./templates/OrganizerConfirmationEmail";
+import DigestConfirmEmail from "./templates/DigestConfirmEmail";
+import WeeklyDigestEmail, { type DigestEmailEvent } from "./templates/WeeklyDigestEmail";
 
 /**
  * Resend Email Service with React Email Templates
@@ -249,4 +251,129 @@ export async function getAdminEmails(supabase: any): Promise<string[]> {
     console.error("Error in getAdminEmails:", error);
     return [];
   }
+}
+
+/**
+ * Send the double opt-in email for weekly event alerts
+ */
+export async function sendDigestConfirmation(params: {
+  email: string;
+  stateLabel: string;
+  includeOnline: boolean;
+  confirmUrl: string;
+}): Promise<boolean> {
+  try {
+    if (!process.env.RESEND_API_KEY) {
+      console.warn("Resend API key not configured. Skipping digest confirmation.");
+      return false;
+    }
+
+    const emailHtml = await render(
+      DigestConfirmEmail({
+        stateLabel: params.stateLabel,
+        includeOnline: params.includeOnline,
+        confirmUrl: params.confirmUrl,
+      })
+    );
+
+    const resend = getResendClient();
+    const { error: sendError } = await resend.emails.send({
+      from: FROM_EMAIL,
+      to: params.email,
+      replyTo: REPLY_TO,
+      subject: "Confirm your weekly tech events email",
+      html: emailHtml,
+    });
+
+    // Resend returns API errors instead of throwing them.
+    if (sendError) throw new Error(`Resend: ${sendError.name}: ${sendError.message}`);
+
+    return true;
+  } catch (error) {
+    console.error("Error sending digest confirmation:", error);
+    return false;
+  }
+}
+
+export interface WeeklyDigestRecipient {
+  id: string;
+  email: string;
+  unsubscribeToken: string;
+}
+
+export interface WeeklyDigestGroup {
+  stateLabel: string;
+  weekLabel: string;
+  events: DigestEmailEvent[];
+  moreCount: number;
+  browseUrl: string;
+  recipients: WeeklyDigestRecipient[];
+}
+
+// Placeholder swapped for each recipient's token, so each group renders once.
+const UNSUBSCRIBE_PLACEHOLDER = "__UNSUBSCRIBE_TOKEN__";
+const BATCH_SIZE = 100; // Resend batch API maximum
+
+/**
+ * Send the weekly digest. Each group (same state and online choice) is
+ * rendered once; only the unsubscribe link differs per recipient.
+ * Returns the ids of subscribers whose email was accepted by Resend.
+ */
+export async function sendWeeklyDigests(
+  groups: WeeklyDigestGroup[],
+  siteUrl: string
+): Promise<{ sentIds: string[]; failed: number }> {
+  if (!process.env.RESEND_API_KEY) {
+    console.warn("Resend API key not configured. Skipping weekly digest.");
+    return { sentIds: [], failed: 0 };
+  }
+
+  const resend = getResendClient();
+  const sentIds: string[] = [];
+  let failed = 0;
+
+  for (const group of groups) {
+    const html = await render(
+      WeeklyDigestEmail({
+        stateLabel: group.stateLabel,
+        weekLabel: group.weekLabel,
+        events: group.events,
+        moreCount: group.moreCount,
+        browseUrl: group.browseUrl,
+        unsubscribeUrl: `${siteUrl}/email-alerts/unsubscribe?token=${UNSUBSCRIBE_PLACEHOLDER}`,
+      })
+    );
+    const total = group.events.length + group.moreCount;
+    const subject = `${total} tech event${total === 1 ? "" : "s"} this week in ${group.stateLabel}`;
+
+    for (let i = 0; i < group.recipients.length; i += BATCH_SIZE) {
+      const batch = group.recipients.slice(i, i + BATCH_SIZE);
+      const { error } = await resend.batch.send(
+        batch.map((r) => {
+          const token = encodeURIComponent(r.unsubscribeToken);
+          return {
+            from: FROM_EMAIL,
+            to: r.email,
+            replyTo: REPLY_TO,
+            subject,
+            html: html.replaceAll(UNSUBSCRIBE_PLACEHOLDER, token),
+            headers: {
+              // One-click unsubscribe (RFC 8058), required by Gmail and Yahoo for bulk mail.
+              "List-Unsubscribe": `<${siteUrl}/api/digest/unsubscribe?token=${token}>`,
+              "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
+            },
+          };
+        })
+      );
+
+      if (error) {
+        console.error("Error sending weekly digest batch:", error);
+        failed += batch.length;
+      } else {
+        sentIds.push(...batch.map((r) => r.id));
+      }
+    }
+  }
+
+  return { sentIds, failed };
 }
