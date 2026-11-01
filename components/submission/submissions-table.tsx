@@ -41,6 +41,9 @@ export function SubmissionsTable({ submissions, onApprove, onReject, onView }: S
 
   const columns = useMemo(() => getSubmissionColumns(onApprove, onReject, onView), [onApprove, onReject, onView])
 
+  // TanStack Table returns functions React Compiler can't memoise, so the
+  // compiler skips this component. That's expected; nothing to change here.
+  // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
     data,
     columns,

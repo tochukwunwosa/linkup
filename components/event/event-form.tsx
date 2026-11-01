@@ -3,7 +3,7 @@
 import type React from "react"
 
 import { useTransition } from "react"
-import { useForm } from "react-hook-form"
+import { useForm, useWatch } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -60,6 +60,13 @@ export function EventForm({ initialData, onSubmit, onCancel }: EventFormProps) {
       link: initialData?.link || "",
       publish_status: initialData?.publish_status || "Draft",
     },
+  });
+
+  // useWatch rather than calling watch in render: same values, and it works
+  // with React Compiler (watch opts the whole component out).
+  const [watchedStartDate, watchedType, watchedPrice] = useWatch({
+    control: form.control,
+    name: ["start_date", "type", "price"],
   });
 
 
@@ -179,7 +186,7 @@ export function EventForm({ initialData, onSubmit, onCancel }: EventFormProps) {
                           field.onChange(date)
                         }
                       }}
-                      minDate={form.watch("start_date")}
+                      minDate={watchedStartDate}
                     />
                     <FormMessage />
                   </FormItem>
@@ -250,7 +257,7 @@ export function EventForm({ initialData, onSubmit, onCancel }: EventFormProps) {
             )}
           />
 
-          {form.watch('type') !== 'Online' &&
+          {watchedType !== 'Online' &&
             <FormField
               control={form.control}
               name="location"
@@ -322,7 +329,7 @@ export function EventForm({ initialData, onSubmit, onCancel }: EventFormProps) {
             )}
           />
 
-          {form.watch("price") === "Paid" && (
+          {watchedPrice === "Paid" && (
             <div className="space-y-4">
               <FormField
                 control={form.control}

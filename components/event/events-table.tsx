@@ -44,6 +44,9 @@ export function EventsTable({ events, onEdit, onDelete, onDuplicate }: EventsTab
     [onEdit, onDelete, onDuplicate]
   )
 
+  // TanStack Table returns functions React Compiler can't memoise, so the
+  // compiler skips this component. That's expected; nothing to change here.
+  // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
     data,
     columns,

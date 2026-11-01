@@ -1,7 +1,7 @@
 "use client";
 
 import { useTransition } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -56,6 +56,13 @@ export function EventSubmissionForm({ onSuccess }: EventSubmissionFormProps) {
       organizer_phone: "",
       organizer_organization: "",
     },
+  });
+
+  // useWatch rather than calling watch in render: same values, and it works
+  // with React Compiler (watch opts the whole component out).
+  const [watchedStartDate, watchedType, watchedPrice] = useWatch({
+    control: form.control,
+    name: ["start_date", "type", "price"],
   });
 
   const onFormSubmit = async (formData: EventSubmissionFormData) => {
@@ -160,7 +167,7 @@ export function EventSubmissionForm({ onSuccess }: EventSubmissionFormProps) {
                     onChange={(date) => {
                       field.onChange(date);
                     }}
-                    minDate={form.watch("start_date")}
+                    minDate={watchedStartDate}
                   />
                   <FormDescription className="text-xs">Leave blank for single-day events</FormDescription>
                   <FormMessage />
@@ -237,7 +244,7 @@ export function EventSubmissionForm({ onSuccess }: EventSubmissionFormProps) {
             )}
           />
 
-          {form.watch('type') !== 'Online' && (
+          {watchedType !== 'Online' && (
             <FormField
               control={form.control}
               name="location"
@@ -315,7 +322,7 @@ export function EventSubmissionForm({ onSuccess }: EventSubmissionFormProps) {
             )}
           />
 
-          {form.watch("price") === "Paid" && (
+          {watchedPrice === "Paid" && (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <FormField
                 control={form.control}
