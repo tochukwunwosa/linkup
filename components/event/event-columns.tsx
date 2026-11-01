@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
-import { ArrowUpDown, Edit, MoreHorizontal, Trash } from "lucide-react"
+import { ArrowUpDown, Copy, Edit, MoreHorizontal, Trash } from "lucide-react"
 import { Event } from "@/lib/validations/event"
 import { EventTypeCell } from "@/components/event/event-type-cell"
 import { EventStatusCell } from "@/components/event/event-status-cell"
@@ -17,7 +17,8 @@ import { formatDateRange } from "@/lib/utils"
 
 export function getEventColumns(
   onEdit: (event: Event) => void,
-  onDelete: (event: Event) => void
+  onDelete: (event: Event) => void,
+  onDuplicate: (event: Event) => void
 ): ColumnDef<Event>[] {
   return [
     {
@@ -104,6 +105,10 @@ export function getEventColumns(
               <DropdownMenuItem onClick={() => onEdit(event)}>
                 <Edit className="mr-2 h-4 w-4" />
                 Edit
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => onDuplicate(event)}>
+                <Copy className="mr-2 h-4 w-4" />
+                Duplicate
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={() => onDelete(event)} className="text-destructive">

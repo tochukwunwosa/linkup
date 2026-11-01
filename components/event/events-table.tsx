@@ -25,9 +25,10 @@ interface EventsTableProps {
   events: Event[]
   onEdit: (event: Event) => void
   onDelete: (event: Event) => void
+  onDuplicate: (event: Event) => void
 }
 
-export function EventsTable({ events, onEdit, onDelete }: EventsTableProps) {
+export function EventsTable({ events, onEdit, onDelete, onDuplicate }: EventsTableProps) {
   const data = events
   const [rowSelection, setRowSelection] = useState({})
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
@@ -38,7 +39,10 @@ export function EventsTable({ events, onEdit, onDelete }: EventsTableProps) {
     pageSize: 10,
   })
 
-  const columns = useMemo(() => getEventColumns(onEdit, onDelete), [onEdit, onDelete])
+  const columns = useMemo(
+    () => getEventColumns(onEdit, onDelete, onDuplicate),
+    [onEdit, onDelete, onDuplicate]
+  )
 
   const table = useReactTable({
     data,

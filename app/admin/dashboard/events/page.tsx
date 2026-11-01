@@ -34,7 +34,8 @@ export default function AdminEventsPage() {
 
   const [events, setEvents] = useState<Event[]>([]);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [editingEvent, setEditingEvent] = useState<Event | null>(null);
+  // A full event when editing; a copy without id/slug when duplicating.
+  const [editingEvent, setEditingEvent] = useState<Partial<Event> | null>(null);
   const [openDeleteEventDialog, setOpenDeleteEventDialog] = useState(false);
   const [eventToDelete, setEventToDelete] = useState<Event | null>(null);
 
@@ -63,6 +64,16 @@ export default function AdminEventsPage() {
 
   const handleEditEvent = (event: Event) => {
     setEditingEvent(event);
+    setIsDrawerOpen(true);
+  };
+
+  // Same form, prefilled, but without id/slug so saving creates a new event
+  // (with its own unique slug). Starts as Draft so a copy saved before its
+  // date is changed can't appear on the site twice.
+  const handleDuplicateEvent = (event: Event) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { id, slug, updated_at, ...copy } = event;
+    setEditingEvent({ ...copy, publish_status: "Draft" });
     setIsDrawerOpen(true);
   };
 
@@ -109,6 +120,7 @@ export default function AdminEventsPage() {
           events={events}
           onEdit={handleEditEvent}
           onDelete={handleOpenDeleteEventDialog}
+          onDuplicate={handleDuplicateEvent}
         />
 
       ) : (
@@ -116,13 +128,16 @@ export default function AdminEventsPage() {
           events={events}
           onEdit={handleEditEvent}
           onDelete={handleOpenDeleteEventDialog}
+          onDuplicate={handleDuplicateEvent}
         />
       )}
 
       <Dialog open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
         <DialogContent className="w-[99%] md:w-[85%] h-[90vh] md:max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>{editingEvent ? "Edit Event" : "Create New Event"}</DialogTitle>
+            <DialogTitle>
+              {editingEvent?.id ? "Edit Event" : editingEvent ? "Duplicate Event" : "Create New Event"}
+            </DialogTitle>
           </DialogHeader>
           <EventForm
             initialData={editingEvent}

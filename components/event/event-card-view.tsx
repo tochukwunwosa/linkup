@@ -3,7 +3,7 @@
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Edit, Trash2, Calendar, MapPin } from "lucide-react"
+import { Copy, Edit, Trash2, Calendar, MapPin } from "lucide-react"
 import { Event } from "@/lib/validations/event"
 import { formatDateRange } from "@/lib/utils"
 
@@ -11,9 +11,10 @@ interface EventsCardViewProps {
   events: Event[]
   onEdit: (event: Event) => void
   onDelete: (event: Event) => void
+  onDuplicate: (event: Event) => void
 }
 
-export function EventsCardView({ events, onEdit, onDelete }: EventsCardViewProps) {
+export function EventsCardView({ events, onEdit, onDelete, onDuplicate }: EventsCardViewProps) {
   return (
     <div className="space-y-4">
       {events.length === 0 ? (
@@ -54,6 +55,10 @@ export function EventsCardView({ events, onEdit, onDelete }: EventsCardViewProps
               <Button variant="ghost" size="sm" onClick={() => onEdit(event)} className="bg-foreground text-background">
                 <Edit className="h-4 w-4 mr-1" />
                 Edit
+              </Button>
+              <Button variant="ghost" size="sm" onClick={() => onDuplicate(event)} className="border">
+                <Copy className="h-4 w-4 mr-1" />
+                Duplicate
               </Button>
               <Button variant="ghost" size="sm" onClick={() => onDelete(event)} className="bg-destructive text-background">
                 <Trash2 className="h-4 w-4 mr-1" />

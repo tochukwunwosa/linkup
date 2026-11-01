@@ -480,12 +480,12 @@ export function EventForm({ initialData, onSubmit, onCancel }: EventFormProps) {
           >
             {isPending ?
               <div className="flex items-center gap-px">
-                {initialData ? "Updating..." : "Creating..."}
+                {initialData?.id ? "Updating..." : "Creating..."}
                 <Loader className="animate-spin" />
               </div>
               :
               <div className="flex items-center gap-px">
-                {initialData ? "Update Event" : "Create Event"}
+                {initialData?.id ? "Update Event" : "Create Event"}
               </div>
             }
           </Button>
