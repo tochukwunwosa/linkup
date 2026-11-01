@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { MapPin } from "lucide-react";
-import { createClient } from "@/lib/supabase/server";
+import { createPublicClient } from "@/lib/supabase/public";
 import { generateBreadcrumbSchema } from "@/lib/structured-data";
 import JsonLd from "@/components/JsonLd";
 import EventCard from "@/components/event-card";
@@ -11,7 +11,12 @@ import { Event } from "@/lib/validations/event";
 import { PageHero } from "@/components/page-hero";
 
 export const revalidate = 3600; // refresh every hour
-export const dynamic = "force-dynamic"; // always fetch fresh data
+// Only the known states exist; anything else 404s without running the page.
+export const dynamicParams = false;
+
+export function generateStaticParams() {
+  return locationMeta.map((l) => ({ state: l.slug }));
+}
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://techlinkup.xyz";
 
@@ -50,7 +55,7 @@ export default async function LocationPage({
   const meta = getLocationMeta(state);
   if (!meta) return notFound();
 
-  const supabase = await createClient();
+  const supabase = createPublicClient();
   const { data, error } = await supabase
     .from("public_events")
     .select("*")
