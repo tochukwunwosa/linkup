@@ -78,3 +78,22 @@ grant execute on function public.submit_event_submission(
   text, text, date, date, text, text, text, text[], text, text, text, text,
   text, text, text, numeric, numeric, text, text, text, text
 ) to anon, authenticated;
+
+-- get_admin_emails() was executable by anon and PUBLIC, so anyone with the
+-- public anon key could list admin email addresses. Its only caller is the
+-- submit action, which now uses the service role. Revoke every overload by
+-- name so this does not depend on the exact signature.
+do $$
+declare
+  f regprocedure;
+begin
+  for f in
+    select p.oid::regprocedure
+    from pg_proc p
+    where p.proname = 'get_admin_emails'
+      and p.pronamespace = 'public'::regnamespace
+  loop
+    execute format('revoke execute on function %s from public, anon, authenticated', f);
+  end loop;
+end;
+$$;
