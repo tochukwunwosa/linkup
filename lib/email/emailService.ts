@@ -89,13 +89,16 @@ export async function sendAdminNotification(params: AdminNotificationParams): Pr
     );
 
     const resend = getResendClient();
-    await resend.emails.send({
+    const { error: sendError } = await resend.emails.send({
       from: FROM_EMAIL,
       to: params.adminEmail,
       replyTo: REPLY_TO,
       subject: `New Event Submission: ${params.eventTitle}`,
       html: emailHtml,
     });
+
+    // Resend returns API errors instead of throwing them.
+    if (sendError) throw new Error(`Resend: ${sendError.name}: ${sendError.message}`);
 
     console.log(`Admin notification sent to ${params.adminEmail}`);
     return true;
@@ -127,13 +130,16 @@ export async function sendOrganizerConfirmation(params: OrganizerConfirmationPar
     );
 
     const resend = getResendClient();
-    await resend.emails.send({
+    const { error: sendError } = await resend.emails.send({
       from: FROM_EMAIL,
       to: params.organizerEmail,
       replyTo: REPLY_TO,
       subject: `We've Received Your Event Submission - "${params.eventTitle}"`,
       html: emailHtml,
     });
+
+    // Resend returns API errors instead of throwing them.
+    if (sendError) throw new Error(`Resend: ${sendError.name}: ${sendError.message}`);
 
     console.log(`Organizer confirmation sent to ${params.organizerEmail}`);
     return true;
@@ -165,13 +171,16 @@ export async function sendOrganizerApprovedNotification(params: OrganizerApprove
     );
 
     const resend = getResendClient();
-    await resend.emails.send({
+    const { error: sendError } = await resend.emails.send({
       from: FROM_EMAIL,
       to: params.organizerEmail,
       replyTo: REPLY_TO,
       subject: `Great News! Your Event "${params.eventTitle}" Has Been Approved`,
       html: emailHtml,
     });
+
+    // Resend returns API errors instead of throwing them.
+    if (sendError) throw new Error(`Resend: ${sendError.name}: ${sendError.message}`);
 
     console.log(`Organizer approval notification sent to ${params.organizerEmail}`);
     return true;
@@ -202,13 +211,16 @@ export async function sendOrganizerRejectedNotification(params: OrganizerRejecte
     );
 
     const resend = getResendClient();
-    await resend.emails.send({
+    const { error: sendError } = await resend.emails.send({
       from: FROM_EMAIL,
       to: params.organizerEmail,
       replyTo: REPLY_TO,
       subject: `Update on Your Event Submission - "${params.eventTitle}"`,
       html: emailHtml,
     });
+
+    // Resend returns API errors instead of throwing them.
+    if (sendError) throw new Error(`Resend: ${sendError.name}: ${sendError.message}`);
 
     console.log(`Organizer rejection notification sent to ${params.organizerEmail}`);
     return true;

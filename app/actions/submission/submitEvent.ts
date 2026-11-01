@@ -4,6 +4,7 @@ import { eventSubmissionFormSchema } from "@/lib/validations/event";
 import { createPublicClient } from "@/lib/supabase/public";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { revalidatePath } from "next/cache";
+import { after } from "next/server";
 import { serverGeocodeAddress } from "@/lib/geocode/geocode-server";
 import { headers } from "next/headers";
 import { rateLimit } from "@/lib/rate-limit";
@@ -86,7 +87,6 @@ export async function submitEventAction(formData: unknown) {
     // Revalidate admin submissions page
     revalidatePath("/admin/dashboard/submissions");
 
-    // Send email notifications (async, don't block the response)
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://techlinkup.xyz";
     const eventDate = new Date(data.start_date).toLocaleDateString("en-US", {
       month: "long",
@@ -94,27 +94,28 @@ export async function submitEventAction(formData: unknown) {
       year: "numeric",
     });
 
-    // Send confirmation email to organizer
-    sendOrganizerConfirmation({
-      organizerName: data.organizer_name,
-      organizerEmail: data.organizer_email,
-      eventTitle: data.title,
-      eventDate,
-      eventLocation: data.location,
-      trackingId: submission.tracking_id,
-      trackingUrl: `${siteUrl}/my-submissions`,
-    }).catch((error) => {
-      console.error("Failed to send organizer confirmation:", error);
-      // Don't fail the submission if email fails
-    });
+    // Send emails after the response. after() keeps the function alive until
+    // they finish; a bare un-awaited promise can be cut off on Vercel.
+    after(async () => {
+      try {
+        await sendOrganizerConfirmation({
+          organizerName: data.organizer_name,
+          organizerEmail: data.organizer_email,
+          eventTitle: data.title,
+          eventDate,
+          eventLocation: data.location,
+          trackingId: submission.tracking_id,
+          trackingUrl: `${siteUrl}/my-submissions`,
+        });
 
-    // Send notification to admins
-    // Server-only read with no user input; anon must not see admin emails.
-    getAdminEmails(createAdminClient()).then(async (adminEmails) => {
-      if (adminEmails.length > 0) {
+        // Server-only read with no user input; anon must not see admin emails.
+        const adminEmails = await getAdminEmails(createAdminClient());
+        if (adminEmails.length === 0) {
+          console.warn("No admin emails found; skipping admin notification.");
+          return;
+        }
+
         const submissionUrl = `${siteUrl}/admin/dashboard/submissions`;
-
-        // Send notification to all admins
         for (const adminEmail of adminEmails) {
           await sendAdminNotification({
             eventTitle: data.title,
@@ -128,10 +129,10 @@ export async function submitEventAction(formData: unknown) {
             adminEmail,
           });
         }
+      } catch (error) {
+        // Don't fail the submission if email fails
+        console.error("Failed to send submission emails:", error);
       }
-    }).catch((error) => {
-      console.error("Failed to send admin notifications:", error);
-      // Don't fail the submission if email fails
     });
 
     return {
