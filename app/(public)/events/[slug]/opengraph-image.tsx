@@ -4,7 +4,6 @@ import { getCategoryColors } from "@/lib/category-color";
 import { formatDateRange } from "@/lib/utils";
 import { Event } from "@/lib/validations/event";
 
-export const runtime = "edge";
 export const alt = "TechLinkUp Event";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
