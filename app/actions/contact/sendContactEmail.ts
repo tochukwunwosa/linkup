@@ -1,6 +1,7 @@
 "use server";
 
 import { Resend } from "resend";
+import { SUPPORT_EMAIL } from "@/constants/social";
 
 let resendClient: Resend | null = null;
 function getResendClient(): Resend {
@@ -11,7 +12,7 @@ function getResendClient(): Resend {
 }
 
 const FROM_EMAIL = "TechLinkUp Contact <admin@techlinkup.xyz>";
-const TO_EMAIL = "tochukwunwosa28@gmail.com";
+const TO_EMAIL = SUPPORT_EMAIL;
 
 export interface ContactFormData {
   name: string;

@@ -1,6 +1,7 @@
 import { Resend } from "resend";
 import { render } from "@react-email/components";
 import { config } from "@/lib/config";
+import { SUPPORT_EMAIL } from "@/constants/social";
 import AdminNotificationEmail from "./templates/AdminNotificationEmail";
 import OrganizerApprovedEmail from "./templates/OrganizerApprovedEmail";
 import OrganizerRejectedEmail from "./templates/OrganizerRejectedEmail";
@@ -24,6 +25,8 @@ function getResendClient(): Resend {
 
 const FROM_EMAIL = "TechLinkUp <admin@techlinkup.xyz>";
 const REPLY_TO = config.resend.replyToEmail;
+// Weekly event emails (marketing) come from the support address so replies reach a person.
+const MARKETING_FROM_EMAIL = `TechLinkUp <${SUPPORT_EMAIL}>`;
 
 export interface AdminNotificationParams {
   eventTitle: string;
@@ -278,9 +281,9 @@ export async function sendDigestConfirmation(params: {
 
     const resend = getResendClient();
     const { error: sendError } = await resend.emails.send({
-      from: FROM_EMAIL,
+      from: MARKETING_FROM_EMAIL,
       to: params.email,
-      replyTo: REPLY_TO,
+      replyTo: SUPPORT_EMAIL,
       subject: "Confirm your weekly tech events email",
       html: emailHtml,
     });
@@ -352,9 +355,9 @@ export async function sendWeeklyDigests(
         batch.map((r) => {
           const token = encodeURIComponent(r.unsubscribeToken);
           return {
-            from: FROM_EMAIL,
+            from: MARKETING_FROM_EMAIL,
             to: r.email,
-            replyTo: REPLY_TO,
+            replyTo: SUPPORT_EMAIL,
             subject,
             html: html.replaceAll(UNSUBSCRIBE_PLACEHOLDER, token),
             headers: {

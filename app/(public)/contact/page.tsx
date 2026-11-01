@@ -1,4 +1,5 @@
 import React from "react";
+import { SUPPORT_EMAIL } from "@/constants/social";
 import Link from "next/link";
 import { Mail, MessageSquare, Github } from "lucide-react";
 import { Metadata } from "next";
@@ -60,10 +61,10 @@ export default function ContactPage() {
                 Questions about the platform
               </p>
               <a
-                href="mailto:tochukwunwosa28@gmail.com"
+                href={`mailto:${SUPPORT_EMAIL}`}
                 className="text-sm font-medium text-[#0066cc] hover:underline break-all"
               >
-                tochukwunwosa28@gmail.com
+                {SUPPORT_EMAIL}
               </a>
             </div>
 

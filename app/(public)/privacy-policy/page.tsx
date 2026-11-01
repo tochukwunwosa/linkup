@@ -1,4 +1,5 @@
 import React from "react";
+import { SUPPORT_EMAIL } from "@/constants/social";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { Metadata } from "next";
@@ -152,8 +153,12 @@ export default function PrivacyPolicyPage() {
 
           <h2 className="text-xl font-semibold text-[#1a1b25] mt-10 mb-3">Questions?</h2>
           <p>
-            Feel free to reach out to us directly. We&apos;re here to build something
-            good — not sneak around with your information.
+            Feel free to reach out to us directly at{" "}
+            <a href={`mailto:${SUPPORT_EMAIL}`} className="text-[#0066cc] hover:underline">
+              {SUPPORT_EMAIL}
+            </a>
+            , including to ask what data we hold about you or to have it deleted. We&apos;re here
+            to build something good — not sneak around with your information.
           </p>
 
           <div className="mt-10 pt-8 border-t border-[rgba(0,0,0,0.07)] text-sm text-[#64748b] space-y-2">
