@@ -89,6 +89,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ feed: s
     description: feedInfo.description,
     events: feedInfo.pick((data ?? []) as Event[], from),
     siteUrl,
+    feed: feed.replace(/\.ics$/, ""),
   });
 
   return new Response(body, {

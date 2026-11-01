@@ -1,5 +1,6 @@
 "use server";
 
+import { UTM, withUtm } from "@/lib/utm";
 import { eventSubmissionFormSchema } from "@/lib/validations/event";
 import { createPublicClient } from "@/lib/supabase/public";
 import { createAdminClient } from "@/lib/supabase/admin";
@@ -105,7 +106,11 @@ export async function submitEventAction(formData: unknown) {
           eventDate,
           eventLocation: data.location,
           trackingId: submission.tracking_id,
-          trackingUrl: `${siteUrl}/my-submissions`,
+          // Straight to this submission's status page, no need to type the ID.
+          trackingUrl: withUtm(
+            `${siteUrl}/my-submissions/${encodeURIComponent(submission.tracking_id)}`,
+            UTM.organiserConfirmation
+          ),
         });
 
         // Server-only read with no user input; anon must not see admin emails.

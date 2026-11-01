@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Mail } from "lucide-react";
 import { PageHero } from "@/components/page-hero";
 import { EmailAlertsSignup } from "@/components/email-alerts-signup";
-import { locationMeta } from "@/constants/location-meta";
+import { locationMeta, getLocationMeta } from "@/constants/location-meta";
 
 export const metadata: Metadata = {
   title: "Weekly Tech Event Emails | TechLinkUp",
@@ -29,9 +29,11 @@ const STATUS_MESSAGES: Record<string, { title: string; body: string }> = {
 export default async function EmailAlertsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ status?: string }>;
+  searchParams: Promise<{ status?: string; state?: string }>;
 }) {
-  const { status } = await searchParams;
+  const { status, state } = await searchParams;
+  // ?state=lagos pre-selects the state, e.g. in links shared for one city.
+  const defaultState = state && getLocationMeta(state.toLowerCase()) ? state.toLowerCase() : "";
   const message = status ? STATUS_MESSAGES[status] : undefined;
   const states = locationMeta.map(({ slug, label }) => ({ slug, label }));
 
@@ -54,7 +56,7 @@ export default async function EmailAlertsPage({
             <p className="mt-1 text-sm text-[#4a4a5a]">{message.body}</p>
           </div>
         )}
-        {status !== "confirmed" && <EmailAlertsSignup states={states} />}
+        {status !== "confirmed" && <EmailAlertsSignup states={states} defaultState={defaultState} />}
       </div>
     </main>
   );

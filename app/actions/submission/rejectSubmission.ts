@@ -1,5 +1,6 @@
 "use server";
 
+import { UTM, withUtm } from "@/lib/utm";
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 import { sendOrganizerRejectedNotification } from "@/lib/email/emailService";
@@ -79,7 +80,7 @@ export async function rejectSubmissionAction(submissionId: string, feedback?: st
 
     // Send email notification to organizer (async, don't block the response)
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://techlinkup.xyz";
-    const resubmitUrl = `${siteUrl}/submit-event`;
+    const resubmitUrl = withUtm(`${siteUrl}/submit-event`, UTM.organiserRejected);
 
     // Scraped events (source_type: "scraped") have no real organizer to notify
     if (submission.organizer_email) {

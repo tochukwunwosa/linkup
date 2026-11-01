@@ -1,5 +1,6 @@
 import { Event } from "@/lib/validations/event";
 import { addDays } from "@/lib/date-utils";
+import { UTM, type Utm, withUtm } from "@/lib/utm";
 
 // iCalendar (RFC 5545) feeds people can subscribe to from Google, Apple or
 // Outlook calendars. Event dates and times are stored in WAT (Africa/Lagos).
@@ -107,8 +108,9 @@ function eventDescription(event: Event, url: string): string {
   return `${startsAt}${summary.length > 400 ? `${summary.slice(0, 400)}…` : summary}\n\nDetails: ${url}`;
 }
 
-function eventLines(event: Event, siteUrl: string, now: Date): string[] {
-  const url = `${siteUrl}/events/${event.slug}`;
+function eventLines(event: Event, siteUrl: string, now: Date, utm: Utm): string[] {
+  // The UID stays tag-free so subscribers' existing entries update in place.
+  const url = withUtm(`${siteUrl}/events/${event.slug}`, utm);
   const t = eventTiming(event);
   const timing = t.allDay
     ? [`DTSTART;VALUE=DATE:${t.start}`, `DTEND;VALUE=DATE:${t.end}`]
@@ -130,7 +132,7 @@ function eventLines(event: Event, siteUrl: string, now: Date): string[] {
   ];
 }
 
-function buildCalendar(headerLines: string[], events: Event[], siteUrl: string): string {
+function buildCalendar(headerLines: string[], events: Event[], siteUrl: string, utm: Utm): string {
   const now = new Date();
   const lines = [
     "BEGIN:VCALENDAR",
@@ -140,7 +142,7 @@ function buildCalendar(headerLines: string[], events: Event[], siteUrl: string):
     "METHOD:PUBLISH",
     ...headerLines,
     ...VTIMEZONE,
-    ...events.flatMap((e) => eventLines(e, siteUrl, now)),
+    ...events.flatMap((e) => eventLines(e, siteUrl, now, utm)),
     "END:VCALENDAR",
   ];
   return lines.map(foldIcsLine).join("\r\n") + "\r\n";
@@ -152,11 +154,14 @@ export function buildIcsFeed({
   description,
   events,
   siteUrl,
+  feed,
 }: {
   name: string;
   description: string;
   events: Event[];
   siteUrl: string;
+  /** Feed slug, recorded as utm_content. */
+  feed: string;
 }): string {
   return buildCalendar(
     [
@@ -168,7 +173,8 @@ export function buildIcsFeed({
       "X-PUBLISHED-TTL:PT12H",
     ],
     events,
-    siteUrl
+    siteUrl,
+    { ...UTM.calendarFeed, content: feed }
   );
 }
 
@@ -177,7 +183,7 @@ export function buildIcsFeed({
  * hints, so calendar apps add the event rather than offer a new calendar.
  */
 export function buildIcsFile(event: Event, siteUrl: string): string {
-  return buildCalendar([], [event], siteUrl);
+  return buildCalendar([], [event], siteUrl, UTM.addToCalendar);
 }
 
 /** Google Calendar "add event" link, with times pinned to WAT. */
@@ -187,7 +193,7 @@ export function googleCalendarUrl(event: Event, siteUrl: string): string {
     action: "TEMPLATE",
     text: event.title,
     dates: `${t.start}/${t.end}`,
-    details: eventDescription(event, `${siteUrl}/events/${event.slug}`),
+    details: eventDescription(event, withUtm(`${siteUrl}/events/${event.slug}`, UTM.addToCalendar)),
     location: event.type === "Online" ? "Online" : event.location,
   });
   // Timed events are local WAT times; tell Google so visitors abroad see them correctly.

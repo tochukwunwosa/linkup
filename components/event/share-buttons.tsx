@@ -4,6 +4,7 @@ import { useState, useSyncExternalStore } from "react";
 import { toast } from "sonner";
 import { Link2, Share2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { shareUtm, withUtm } from "@/lib/utm";
 
 interface ShareButtonsProps {
   title: string;
@@ -23,12 +24,13 @@ export function ShareButtons({ title, url, city }: ShareButtonsProps) {
   );
 
   const shareText = city ? `${title} · ${city}` : title;
-  const waUrl = `https://wa.me/?text=${encodeURIComponent(`${shareText}\n${url}`)}`;
-  const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(url)}`;
+  // Tag each share so Umami shows where visitors from shared links came from.
+  const waUrl = `https://wa.me/?text=${encodeURIComponent(`${shareText}\n${withUtm(url, shareUtm("whatsapp"))}`)}`;
+  const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(withUtm(url, shareUtm("x")))}`;
 
   const handleCopy = async () => {
     try {
-      await navigator.clipboard.writeText(url);
+      await navigator.clipboard.writeText(withUtm(url, shareUtm("copy")));
       setCopied(true);
       toast.success("Link copied!");
       setTimeout(() => setCopied(false), 2000);
@@ -39,7 +41,7 @@ export function ShareButtons({ title, url, city }: ShareButtonsProps) {
 
   const handleNativeShare = async () => {
     try {
-      await navigator.share({ title, text: shareText, url });
+      await navigator.share({ title, text: shareText, url: withUtm(url, shareUtm("native")) });
     } catch {
       // User cancelled — no-op
     }

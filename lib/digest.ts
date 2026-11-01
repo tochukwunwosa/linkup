@@ -2,6 +2,7 @@ import { Event } from "@/lib/validations/event";
 import { formatCurrency } from "@/lib/format-currency";
 import { formatTo12Hour } from "@/lib/utils";
 import { locationMeta } from "@/constants/location-meta";
+import { UTM, withUtm } from "@/lib/utm";
 
 // Weekly "this week in tech" digest: the WhatsApp Channel post and the
 // weekly email alerts.
@@ -103,13 +104,14 @@ export function buildWhatsAppDigest({
 }): string {
   const label = DIGEST_AREAS.find((a) => a.value === area)?.label ?? "Nigeria";
   const where = area === "online" ? "online" : area === "all" ? "in Nigeria" : `in ${label}`;
-  const moreUrl =
-    area === "lagos" || area === "abuja" ? `${siteUrl}/location/${area}` : siteUrl;
+  const link = (path: string) => withUtm(`${siteUrl}${path}`, UTM.whatsappChannel);
+  const moreUrl = link(area === "lagos" || area === "abuja" ? `/location/${area}` : "/");
+  const submitUrl = link("/submit-event");
 
   const header = `*Tech events this week ${where}* 🗓️\n${formatDay(from)} – ${formatDay(to)} · times in WAT`;
 
   if (events.length === 0) {
-    return `${header}\n\nNo events listed yet this week. Know one? Add it here:\n${siteUrl}/submit-event`;
+    return `${header}\n\nNo events listed yet this week. Know one? Add it here:\n${submitUrl}`;
   }
 
   const shown = events.slice(0, DIGEST_MAX_EVENTS);
@@ -127,7 +129,7 @@ export function buildWhatsAppDigest({
       `📅 ${day}${time}`,
       `📍 ${place}`,
       `💰 ${formatPrice(e)}`,
-      `🔗 ${siteUrl}/events/${e.slug}`,
+      `🔗 ${link(`/events/${e.slug}`)}`,
     ].join("\n");
   });
 
@@ -137,5 +139,5 @@ export function buildWhatsAppDigest({
       ? `Plus ${remaining} more event${remaining === 1 ? "" : "s"}: ${moreUrl}`
       : `See all events: ${moreUrl}`;
 
-  return [header, ...items, footer, `Running a tech event? Submit it here: ${siteUrl}/submit-event`].join("\n\n");
+  return [header, ...items, footer, `Running a tech event? Submit it here: ${submitUrl}`].join("\n\n");
 }

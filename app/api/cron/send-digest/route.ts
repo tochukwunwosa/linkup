@@ -13,6 +13,7 @@ import {
 import { sendWeeklyDigests, type WeeklyDigestGroup } from "@/lib/email/emailService";
 import type { DigestEmailEvent } from "@/lib/email/templates/WeeklyDigestEmail";
 import { Event } from "@/lib/validations/event";
+import { UTM, withUtm } from "@/lib/utm";
 
 // Runs Mondays at 06:00 UTC (07:00 WAT); see vercel.json.
 export const maxDuration = 60;
@@ -27,7 +28,7 @@ function toEmailEvent(event: Event, siteUrl: string): DigestEmailEvent {
       : formatDay(event.start_date);
   return {
     title: event.title,
-    url: `${siteUrl}/events/${event.slug}`,
+    url: withUtm(`${siteUrl}/events/${event.slug}`, UTM.weeklyEmail),
     when: event.time ? `${days} · ${formatTo12Hour(event.time)}` : days,
     where: event.type === "Online" ? "Online" : event.city || event.location,
     price: formatPrice(event),
@@ -83,7 +84,7 @@ export async function GET(req: Request) {
         weekLabel: `${formatDay(from)} – ${formatDay(to)}`,
         events: matching.slice(0, MAX_EVENTS_PER_EMAIL).map((e) => toEmailEvent(e, siteUrl)),
         moreCount: Math.max(0, matching.length - MAX_EVENTS_PER_EMAIL),
-        browseUrl: meta ? `${siteUrl}/location/${meta.slug}` : siteUrl,
+        browseUrl: withUtm(meta ? `${siteUrl}/location/${meta.slug}` : siteUrl, UTM.weeklyEmail),
         recipients: [],
       };
       groups.set(key, group);

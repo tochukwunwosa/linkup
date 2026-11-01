@@ -1,5 +1,6 @@
 "use server";
 
+import { UTM, withUtm } from "@/lib/utm";
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 import { sendOrganizerApprovedNotification } from "@/lib/email/emailService";
@@ -143,7 +144,7 @@ export async function approveSubmissionAction(submissionId: string) {
         eventDate,
         eventLocation: submission.location,
         trackingId: submission.tracking_id,
-        eventUrl: `${siteUrl}/events/${newEvent.slug}`,
+        eventUrl: withUtm(`${siteUrl}/events/${newEvent.slug}`, UTM.organiserApproved),
       }).catch((error) => {
         console.error("Failed to send organizer approval notification:", error);
         // Don't fail the approval if email fails
