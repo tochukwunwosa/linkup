@@ -1,7 +1,8 @@
-import { Button, Heading, Section, Text } from "@react-email/components";
+import { Button, Heading, Link, Section, Text } from "@react-email/components";
 import * as React from "react";
 import { EmailLayout } from "../components/EmailLayout";
 import { colors } from "../emailTheme";
+import { WHATSAPP_CHANNEL_URL } from "@/constants/social";
 
 interface OrganizerConfirmationEmailProps {
   organizerName: string;
@@ -114,6 +115,13 @@ export const OrganizerConfirmationEmail = ({
           View My Submissions
         </Button>
       </Section>
+
+      <Text className="m-0 mt-6 text-brand-muted text-[14px] leading-[22px] text-center">
+        Get a weekly round-up of tech events in Nigeria:{" "}
+        <Link href={WHATSAPP_CHANNEL_URL} style={{ color: colors.blue, fontWeight: 600 }}>
+          follow TechLinkUp on WhatsApp
+        </Link>
+      </Text>
     </EmailLayout>
   );
 };

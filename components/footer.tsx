@@ -1,9 +1,11 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { Twitter, Linkedin, Instagram } from 'lucide-react'
+import { Twitter, Linkedin, Instagram, MessageCircle } from 'lucide-react'
+import { WHATSAPP_CHANNEL_URL } from '@/constants/social'
 
 // Paste a real profile URL to show an icon. Empty href = icon hidden.
 const socials = [
+  { label: 'WhatsApp Channel', href: WHATSAPP_CHANNEL_URL, icon: MessageCircle },
   { label: 'Twitter / X', href: '', icon: Twitter },
   { label: 'LinkedIn', href: '', icon: Linkedin },
   { label: 'Instagram', href: '', icon: Instagram },
@@ -80,6 +82,7 @@ export default function Footer() {
             <ul className="space-y-2 text-sm">
               <li><Link href="/submit-event" className="text-white/70 hover:text-white transition-colors duration-200">Submit Event</Link></li>
               <li><Link href="/my-submissions" className="text-white/70 hover:text-white transition-colors duration-200">Track Submissions</Link></li>
+              <li><a href={WHATSAPP_CHANNEL_URL} target="_blank" rel="noopener noreferrer" className="text-white/70 hover:text-white transition-colors duration-200">Weekly events on WhatsApp</a></li>
               <li><Link href="/about" className="text-white/70 hover:text-white transition-colors duration-200">About</Link></li>
               <li><Link href="/contact" className="text-white/70 hover:text-white transition-colors duration-200">Contact</Link></li>
               <li><Link href="/privacy-policy" className="text-white/70 hover:text-white transition-colors duration-200">Privacy Policy</Link></li>
