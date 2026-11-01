@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { CalendarSubscribe } from "@/components/calendar-subscribe";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Tag } from "lucide-react";
@@ -112,6 +113,11 @@ export default async function CategoryPage({
               </Link>
             </div>
           )}
+
+          {/* Calendar feed for this category */}
+          <div className="mt-14 max-w-2xl">
+            <CalendarSubscribe feed={meta.slug} label={meta.label} />
+          </div>
 
           {/* Browse other categories */}
           <div className="mt-14">
