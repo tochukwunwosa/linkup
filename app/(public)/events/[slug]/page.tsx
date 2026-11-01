@@ -13,6 +13,7 @@ import { isLiveEvent, formatTo12Hour } from "@/lib/utils";
 import { hasEventEnded } from "@/lib/date-utils";
 import { AddToCalendar } from "@/components/event/add-to-calendar";
 import { ShareButtons } from "@/components/event/share-buttons";
+import { SaveEventButton } from "@/components/event/save-event-button";
 import { RelatedEvents } from "@/components/event/related-events";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://techlinkup.xyz";
@@ -314,6 +315,9 @@ export default async function EventPage({
 
                   {/* Add to Calendar */}
                   {!ended && <AddToCalendar event={event} solidColor={colors.solid} />}
+
+                  {/* Save on this device */}
+                  {!ended && <SaveEventButton event={event} variant="full" />}
 
                   {/* CTA button */}
                   {event.link && (

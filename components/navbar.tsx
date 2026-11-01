@@ -39,6 +39,7 @@ export default function Navbar() {
     { href: "/about", label: "About" },
     { href: "/contact", label: "Contact", prefetch: false as const },
     { href: "/#events", label: "Events" },
+    { href: "/saved", label: "Saved" },
     { href: "/my-submissions", label: "Track Submissions" },
   ];
 

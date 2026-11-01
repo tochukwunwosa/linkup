@@ -6,6 +6,7 @@ import { Calendar, MapPin } from 'lucide-react'
 import { formatDateRange, isLiveEvent, formatTo12Hour } from '@/lib/utils'
 import { getCurrencySymbol } from '@/lib/format-currency'
 import { getCategoryColors } from '@/lib/category-color'
+import { SaveEventButton } from '@/components/event/save-event-button'
 
 function EventCard({ event }: { event: Event }) {
   const colors = getCategoryColors(event.category)
@@ -13,6 +14,7 @@ function EventCard({ event }: { event: Event }) {
   const typeLabel = event.type === 'In-person & Online' ? 'Hybrid' : event.type
 
   return (
+    <div className="relative h-full">
     <Link
       href={`/events/${event.slug}`}
       className="card-lime-bar group relative flex flex-col h-full rounded-xl border border-[rgba(0,0,0,0.07)] bg-white transition-all duration-200 overflow-hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0066cc] focus-visible:ring-offset-2 hover:border-[#0066cc]/20 hover:shadow-[0_8px_24px_rgba(0,0,0,0.10),0_2px_8px_rgba(0,102,204,0.08)] hover:-translate-y-0.5"
@@ -96,6 +98,9 @@ function EventCard({ event }: { event: Event }) {
         </div>
       </article>
     </Link>
+    {/* Beside the link rather than inside it: a button can't be nested in a link */}
+    <SaveEventButton event={event} className="absolute right-3 top-12" />
+    </div>
   )
 }
 

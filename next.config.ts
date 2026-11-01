@@ -7,6 +7,8 @@ const withSerwist = withSerwistInit({
   // Precache the offline page; it is the fallback when a page can't load.
   additionalPrecacheEntries: [
     { url: "/offline", revision: process.env.VERCEL_GIT_COMMIT_SHA ?? crypto.randomUUID() },
+    // Saved events are stored on the device, so this page can work offline too.
+    { url: "/saved", revision: process.env.VERCEL_GIT_COMMIT_SHA ?? crypto.randomUUID() },
   ],
   reloadOnOnline: true,
   // A service worker in dev caches stale code and gets in the way.
