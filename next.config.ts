@@ -1,33 +1,16 @@
 import type { NextConfig } from "next";
-import withPWAInit from "@ducanh2912/next-pwa";
+import withSerwistInit from "@serwist/next";
 
-const withPWA = withPWAInit({
-  dest: "public",
-  cacheOnFrontEndNav: true,
-  aggressiveFrontEndNavCaching: true,
+const withSerwist = withSerwistInit({
+  swSrc: "app/sw.ts",
+  swDest: "public/sw.js",
+  // Precache the offline page; it is the fallback when a page can't load.
+  additionalPrecacheEntries: [
+    { url: "/offline", revision: process.env.VERCEL_GIT_COMMIT_SHA ?? crypto.randomUUID() },
+  ],
   reloadOnOnline: true,
-  workboxOptions: {
-    disableDevLogs: true,
-    navigateFallbackDenylist: [
-      /^\/sitemap\.xml$/,
-      /^\/robots\.txt$/,
-    ],
-    // Exclude sitemap.xml and robots.txt from all service worker caching
-    runtimeCaching: [
-      {
-        urlPattern: /^(?!.*(?:sitemap\.xml|robots\.txt)).*\.(?:json|xml|csv)$/i,
-        handler: "NetworkFirst",
-        options: {
-          cacheName: "static-data-assets",
-          expiration: {
-            maxEntries: 32,
-            maxAgeSeconds: 86400,
-          },
-        },
-      },
-    ],
-  },
-  publicExcludes: ["!sitemap.xml", "!robots.txt"],
+  // A service worker in dev caches stale code and gets in the way.
+  disable: process.env.NODE_ENV === "development",
 });
 
 
@@ -198,4 +181,4 @@ requiredEnvVars.forEach((key) => {
   }
 });
 
-export default withPWA(nextConfig);
+export default withSerwist(nextConfig);
