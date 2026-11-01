@@ -10,6 +10,7 @@ import { Calendar, MapPin, Clock, Tag, ArrowLeft, ArrowRight } from "lucide-reac
 import { formatCurrency } from "@/lib/format-currency";
 import { getCategoryColors } from "@/lib/category-color";
 import { isLiveEvent, formatTo12Hour } from "@/lib/utils";
+import { hasEventEnded } from "@/lib/date-utils";
 import { AddToCalendar } from "@/components/event/add-to-calendar";
 import { ShareButtons } from "@/components/event/share-buttons";
 import { RelatedEvents } from "@/components/event/related-events";
@@ -23,7 +24,7 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://techlinkup.xyz";
 // the real slug URL rather than 404ing.
 async function resolveEventBySlug(supabase: SupabaseClient, slug: string): Promise<Event> {
   const { data: event } = await supabase
-    .from("public_events")
+    .from("published_events")
     .select("*")
     .eq("slug", slug)
     .single<Event>();
@@ -32,7 +33,7 @@ async function resolveEventBySlug(supabase: SupabaseClient, slug: string): Promi
 
   if (/^\d+$/.test(slug)) {
     const { data: legacyEvent } = await supabase
-      .from("public_events")
+      .from("published_events")
       .select("slug")
       .eq("id", slug)
       .maybeSingle();
@@ -54,7 +55,7 @@ export async function generateMetadata({
   const supabase = await createClient();
 
   const { data: event } = await supabase
-    .from("public_events")
+    .from("published_events")
     .select("*")
     .eq("slug", slug)
     .single<Event>();
@@ -113,7 +114,8 @@ export default async function EventPage({
   ]);
 
   const colors = getCategoryColors(event.category);
-  const live = isLiveEvent({ event });
+  const ended = hasEventEnded(event);
+  const live = !ended && isLiveEvent({ event });
   const typeLabel = event.type === "In-person & Online" ? "Hybrid" : event.type;
 
   const formattedStartDate = new Date(event.start_date).toLocaleDateString(
@@ -181,6 +183,11 @@ export default async function EventPage({
                       <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-white" />
                     </span>
                     LIVE NOW
+                  </span>
+                )}
+                {ended && (
+                  <span className="inline-flex items-center rounded-md bg-black/30 px-2.5 py-1 text-xs font-semibold text-white leading-none">
+                    EVENT ENDED
                   </span>
                 )}
                 <span className="inline-flex items-center rounded-full bg-white/20 px-3 py-1 text-xs font-semibold text-white leading-none">
@@ -306,7 +313,7 @@ export default async function EventPage({
                   </div>
 
                   {/* Add to Calendar */}
-                  <AddToCalendar event={event} solidColor={colors.solid} />
+                  {!ended && <AddToCalendar event={event} solidColor={colors.solid} />}
 
                   {/* CTA button */}
                   {event.link && (
@@ -330,6 +337,18 @@ export default async function EventPage({
 
             {/* Main description */}
             <div className="lg:col-start-1 lg:row-start-1">
+              {ended && (
+                <div className="mb-4 rounded-2xl border border-[rgba(0,0,0,0.07)] bg-white px-5 py-4 text-sm text-[#4a4a5a] shadow-[0_1px_3px_rgba(0,0,0,0.06)]">
+                  <p className="font-semibold text-[#1a1b25]">This event has ended.</p>
+                  <p className="mt-1">
+                    Looking for something similar?{" "}
+                    <Link href="/" className="font-medium text-[#0066cc] hover:underline">
+                      Browse upcoming tech events
+                    </Link>
+                    .
+                  </p>
+                </div>
+              )}
               {event.description && (
                 <div className="bg-white rounded-2xl border border-[rgba(0,0,0,0.07)] shadow-[0_1px_3px_rgba(0,0,0,0.06)] p-6 sm:p-8">
                   <h2 className="font-display text-lg font-bold text-[#1a1b25] mb-4">

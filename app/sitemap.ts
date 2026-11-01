@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 export const dynamic = "force-dynamic";
 import { locationMeta } from "@/constants/location-meta";
 import { categoryMeta } from "@/constants/category-meta";
+import { hasEventEnded } from "@/lib/date-utils";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const siteUrl =
@@ -66,16 +67,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   try {
     const supabase = await createClient();
+    // Ended events keep their pages, so keep them in the sitemap too,
+    // at a lower priority than upcoming ones.
     const { data: events } = await supabase
-      .from("public_events")
-      .select("slug, updated_at");
+      .from("published_events")
+      .select("slug, updated_at, start_date, end_date");
 
-    const eventPages: MetadataRoute.Sitemap = (events ?? []).map((event) => ({
-      url: `${siteUrl}/events/${event.slug}`,
-      lastModified: event.updated_at ? new Date(event.updated_at) : new Date(),
-      changeFrequency: "weekly" as const,
-      priority: 0.8,
-    }));
+    const eventPages: MetadataRoute.Sitemap = (events ?? []).map((event) => {
+      const ended = hasEventEnded(event);
+      return {
+        url: `${siteUrl}/events/${event.slug}`,
+        lastModified: event.updated_at ? new Date(event.updated_at) : new Date(),
+        changeFrequency: ended ? ("monthly" as const) : ("weekly" as const),
+        priority: ended ? 0.5 : 0.8,
+      };
+    });
 
     return [...staticPages, ...locationPages, ...categoryPages, ...eventPages];
   } catch {

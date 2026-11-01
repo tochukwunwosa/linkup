@@ -17,7 +17,7 @@ export default async function OgImage({
   const supabase = await createClient();
 
   const { data: event } = await supabase
-    .from("public_events")
+    .from("published_events")
     .select("*")
     .eq("slug", slug)
     .single<Event>();

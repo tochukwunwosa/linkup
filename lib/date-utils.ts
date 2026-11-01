@@ -42,3 +42,21 @@ export function parseDateSafe(date: Date | string | null | undefined): string | 
     return null;
   }
 }
+
+/**
+ * Today's date as YYYY-MM-DD in Nigeria (WAT, UTC+1), regardless of the
+ * server's timezone (Vercel runs in UTC).
+ */
+export function todayInLagos(): string {
+  // en-CA formats dates as YYYY-MM-DD
+  return new Intl.DateTimeFormat("en-CA", { timeZone: "Africa/Lagos" }).format(new Date());
+}
+
+/**
+ * Whether an event has finished: its end date (or start date, for one-day
+ * events) is before today in WAT. Dates are YYYY-MM-DD strings.
+ */
+export function hasEventEnded(event: { start_date: string; end_date?: string | null }): boolean {
+  const lastDay = (event.end_date || event.start_date).slice(0, 10);
+  return lastDay < todayInLagos();
+}

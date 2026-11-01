@@ -27,11 +27,11 @@ export default async function SubmissionPreviewPage({
 
   if (!submission) return notFound();
 
-  // Check if the event is still publicly listed (future events only)
+  // Check the event still has a public page (ended events keep theirs)
   let isPubliclyListed = false;
   if (submission.published_event_id) {
     const { data } = await supabase
-      .from("public_events")
+      .from("published_events")
       .select("id")
       .eq("id", submission.published_event_id)
       .maybeSingle();
