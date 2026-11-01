@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useSyncExternalStore } from "react";
 import { toast } from "sonner";
 import { Link2, Share2 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -11,13 +11,16 @@ interface ShareButtonsProps {
   city?: string;
 }
 
+// Native share support never changes, so there is nothing to subscribe to.
+const subscribeNoop = () => () => {};
+
 export function ShareButtons({ title, url, city }: ShareButtonsProps) {
   const [copied, setCopied] = useState(false);
-  const [hasNativeShare, setHasNativeShare] = useState(false);
-
-  useEffect(() => {
-    setHasNativeShare(typeof navigator !== "undefined" && "share" in navigator);
-  }, []);
+  const hasNativeShare = useSyncExternalStore(
+    subscribeNoop,
+    () => "share" in navigator,
+    () => false
+  );
 
   const shareText = city ? `${title} · ${city}` : title;
   const waUrl = `https://wa.me/?text=${encodeURIComponent(`${shareText}\n${url}`)}`;

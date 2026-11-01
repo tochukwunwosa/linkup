@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useDebounce } from "@/hooks/use-debounce";
 import { buildUrlParams } from "@/lib/filter-helper";
@@ -13,8 +13,6 @@ export function EventUrlSync() {
   const debouncedFilters = useDebounce(filters, 500);
   const isInitialMount = useRef(true);
   const hasLoadedFromUrl = useRef(false);
-
-  const setFiltersSafe = useCallback(setFilters, [setFilters]);
 
   // Read URL params and set filters on mount
   useEffect(() => {
@@ -33,9 +31,9 @@ export function EventUrlSync() {
       search: searchParams.get("search") || "",
     };
 
-    setFiltersSafe(newFilters);
+    setFilters(newFilters);
     hasLoadedFromUrl.current = true;
-  }, [searchParams, setFiltersSafe]);
+  }, [searchParams, setFilters]);
 
   // Write filters to URL (but skip on initial mount)
   useEffect(() => {

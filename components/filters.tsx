@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { X, Search, Loader2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
@@ -47,12 +47,18 @@ export default function Filters() {
     }
   };
 
-  useEffect(() => {
-    if (filters.search === "" && searchValue !== "") {
+  // When the search filter is cleared elsewhere (e.g. "clear all"), clear the
+  // box too. Adjusting state during render on a prop change, instead of an
+  // effect, also stops the first keystroke being wiped before the debounced
+  // search has applied.
+  const [prevSearch, setPrevSearch] = useState(filters.search);
+  if (filters.search !== prevSearch) {
+    setPrevSearch(filters.search);
+    if (filters.search === "") {
       setSearchValue("");
       setIsSearching(false);
     }
-  }, [filters.search, searchValue]);
+  }
 
   const handleClearSearch = () => {
     setSearchValue("");
@@ -95,7 +101,9 @@ export default function Filters() {
   const pillClass = (active: boolean) =>
     cn("filter-pill", active && "filter-pill-active");
 
-  const FilterChips = () => (
+  // A JSX value, not a component: a component defined in render is a new
+  // type each render, so React would remount the selects every time.
+  const filterChips = (
     <>
       <Select value={filters.format} onValueChange={(value) => setFilters({ format: value })}>
         <SelectTrigger
@@ -192,13 +200,13 @@ export default function Filters() {
 
           {/* Desktop-only filter chips */}
           <div className="hidden md:flex items-center gap-2">
-            <FilterChips />
+            {filterChips}
           </div>
         </div>
 
         {/* Row 2: Mobile-only horizontal scroll chips */}
         <div className="md:hidden overflow-x-auto scrollbar-hide flex gap-2 mt-2 pb-0.5">
-          <FilterChips />
+          {filterChips}
         </div>
 
         {/* Row 3: Category chips — always visible */}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { DashboardHeader } from "@/components/dashboard/dashboard-header";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -46,26 +46,35 @@ export default function SubmissionsPage() {
   );
   const [viewDialogOpen, setViewDialogOpen] = useState(false);
 
-  const fetchSubmissions = async () => {
+  // Loads without touching state until the request resolves, so it is safe
+  // to call from an effect. `loading` starts as true for the first load.
+  const loadSubmissions = useCallback(
+    () =>
+      getAllSubmissions()
+        .then((result) => {
+          if (result.success) {
+            setSubmissions(result.submissions || []);
+          } else {
+            toast.error(result.error || "Failed to fetch submissions");
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching submissions:", error);
+          toast.error("An error occurred while fetching submissions");
+        })
+        .finally(() => setLoading(false)),
+    []
+  );
+
+  // Reload after an approve/reject, showing the loading state again.
+  const fetchSubmissions = () => {
     setLoading(true);
-    try {
-      const result = await getAllSubmissions();
-      if (result.success) {
-        setSubmissions(result.submissions || []);
-      } else {
-        toast.error(result.error || "Failed to fetch submissions");
-      }
-    } catch (error) {
-      console.error("Error fetching submissions:", error);
-      toast.error("An error occurred while fetching submissions");
-    } finally {
-      setLoading(false);
-    }
+    loadSubmissions();
   };
 
   useEffect(() => {
-    fetchSubmissions();
-  }, []);
+    loadSubmissions();
+  }, [loadSubmissions]);
 
   const handleApprove = async (submission: EventSubmission) => {
     setActionLoading(true);

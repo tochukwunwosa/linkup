@@ -16,9 +16,9 @@ export function PWAInstallPrompt() {
   const [isInstalled, setIsInstalled] = useState(false);
 
   useEffect(() => {
-    // Check if app is already installed
+    // Already installed: the browser won't fire beforeinstallprompt, so the
+    // prompt never shows. No listeners needed.
     if (window.matchMedia("(display-mode: standalone)").matches) {
-      setIsInstalled(true);
       return;
     }
 

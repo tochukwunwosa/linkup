@@ -2,14 +2,19 @@ import { useEffect, useRef, useState } from "react";
 import { Event } from "@/lib/validations/event";
 import { useInView } from "react-intersection-observer";
 import { useEventContext } from "@/context/EventContext";
+import type { Filters } from "@/lib/filter-helper";
 
+// Note: pagination here is a chain of effects driven by external signals (the
+// intersection observer, filters and user location from context). React's
+// set-state-in-effect rule is disabled on those lines deliberately; moving the
+// feed to useInfiniteQuery would remove the need, but is a larger change.
 export default function useInfiniteScrollEvents({
   filters,
   initialEvents = [],
   initialTotal = 0,
   initialHasMore = true
 }: {
-  filters: any;
+  filters: Filters;
   initialEvents?: Event[];
   initialTotal?: number;
   initialHasMore?: boolean;
@@ -23,7 +28,7 @@ export default function useInfiniteScrollEvents({
   const filtersStringRef = useRef<string>("");
   const userLocationStringRef = useRef<string>("");
   const prevPageRef = useRef<number>(initialEvents.length > 0 ? 1 : 0); // Set to 1 if we have initial data
-  const [isInitialized, setIsInitialized] = useState(initialEvents.length > 0);
+  const [isInitialized] = useState(initialEvents.length > 0);
 
   // Prefetch when user scrolls near the bottom - balanced for performance
   const { ref: observerRef, inView } = useInView({
@@ -42,6 +47,7 @@ export default function useInfiniteScrollEvents({
   // Load more when triggered
   useEffect(() => {
     if (inView && hasMore && !loading) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- pagination reacts to the scroll observer and location context; see note at top of hook
       setShouldFetchNext(true);
     }
   }, [inView, hasMore, loading]);
@@ -66,7 +72,6 @@ export default function useInfiniteScrollEvents({
     const hasLocationChanged = userLocationString !== userLocationStringRef.current;
 
     if (hasLocationChanged) {
-      const wasNull = userLocationStringRef.current === "" || userLocationStringRef.current === "null";
       const isNowAvailable = userLocation !== null;
 
       // Update the ref
@@ -74,6 +79,7 @@ export default function useInfiniteScrollEvents({
 
       // Refetch if location became available or changed
       if (isNowAvailable) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- pagination reacts to the scroll observer and location context; see note at top of hook
         setLoading(true); // Set loading immediately
         setPage(1);
         setEvents([]);
@@ -87,6 +93,7 @@ export default function useInfiniteScrollEvents({
   // Trigger page increment when shouldFetchNext is true
   useEffect(() => {
     if (shouldFetchNext && hasMore && !loading) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- pagination reacts to the scroll observer and location context; see note at top of hook
       setShouldFetchNext(false);
       setPage((prev) => prev + 1);
     }

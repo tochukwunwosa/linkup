@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { CalendarDays, Clock, MapPin, Users } from "lucide-react"
 import { DashboardHeader } from "@/components/dashboard/dashboard-header"
-import { useCallback, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { getAllEvents } from "@/app/actions/event/getAllEvents"
 import { toast } from "sonner"
 import { Event } from "@/lib/validations/event"
@@ -34,20 +34,15 @@ export default function AdminDashboard() {
   const adminFirstName = getFirstName(admin.name)
   const [events, setEvents] = useState<Event[]>([]);
   
-  const fetchEvents = useCallback(async () => {
-    try {
-      const data = await getAllEvents();
-      setEvents(data);
-    } catch (error) {
-      toast.error(
-        error instanceof Error ? error.message : "An unexpected error occurred"
-      );
-    }
-  }, []);
-
   useEffect(() => {
-    fetchEvents();
-  }, [fetchEvents]);
+    getAllEvents()
+      .then(setEvents)
+      .catch((error) => {
+        toast.error(
+          error instanceof Error ? error.message : "An unexpected error occurred"
+        );
+      });
+  }, []);
 
   const totalEvents = events.length;
   const publishedEvents = events.filter((event) => event.publish_status === "Published").length;

@@ -39,16 +39,18 @@ export default function AdminEventsPage() {
   const [eventToDelete, setEventToDelete] = useState<Event | null>(null);
 
 
-  const fetchEvents = useCallback(async () => {
-    try {
-      const data = await getAllEvents();
-      setEvents(data);
-    } catch (error) {
-      toast.error(
-        error instanceof Error ? error.message : "An unexpected error occurred"
-      );
-    }
-  }, []);
+  // State is only set once the request resolves, never synchronously in the effect.
+  const fetchEvents = useCallback(
+    () =>
+      getAllEvents()
+        .then(setEvents)
+        .catch((error) => {
+          toast.error(
+            error instanceof Error ? error.message : "An unexpected error occurred"
+          );
+        }),
+    []
+  );
 
   useEffect(() => {
     fetchEvents();

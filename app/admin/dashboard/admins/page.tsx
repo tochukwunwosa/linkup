@@ -30,16 +30,18 @@ export default function AdminsPage() {
   const [admins, setAdmins] = useState<Admin[]>([])
   const router = useRouter()
 
-  const fetchAdmins = useCallback(async () => {
-    try {
-      const data = await getAllActiveAdmin();
-      setAdmins(data)
-    } catch (error) {
-      toast.error(
-        error instanceof Error ? error.message : "An unexpected error occurred"
-      );
-    }
-  }, [])
+  // State is only set once the request resolves, never synchronously in the effect.
+  const fetchAdmins = useCallback(
+    () =>
+      getAllActiveAdmin()
+        .then(setAdmins)
+        .catch((error) => {
+          toast.error(
+            error instanceof Error ? error.message : "An unexpected error occurred"
+          );
+        }),
+    []
+  )
 
   useEffect(() => {
     if (!isSuperAdmin) return;

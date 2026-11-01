@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { useMemo, useRef, useState } from "react"
 import { X } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
@@ -22,22 +22,17 @@ export default function MultiTagInput({
   className = ""
 }: MultiTagInputProps) {
   const [inputValue, setInputValue] = useState("")
-  const [filteredSuggestions, setFilteredSuggestions] = useState<string[]>([])
   const inputRef = useRef<HTMLInputElement>(null)
   const debouncedInput = useDebounce(inputValue, 300)
 
-  useEffect(() => {
-    if (debouncedInput.trim() === "") {
-      setFilteredSuggestions([])
-      return
-    }
+  const filteredSuggestions = useMemo(() => {
+    if (debouncedInput.trim() === "") return []
 
-    const filtered = suggestions.filter(
+    return suggestions.filter(
       (item) =>
         item.toLowerCase().includes(debouncedInput.toLowerCase()) &&
         !value.includes(item)
     )
-    setFilteredSuggestions(filtered)
   }, [debouncedInput, suggestions, value])
 
   const addTag = (tag: string) => {
