@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { LayoutDashboard, CalendarDays, Users, Settings, FileCheck } from "lucide-react"
+import { LayoutDashboard, CalendarDays, Users, Settings, FileCheck, Megaphone } from "lucide-react"
 import {
   SidebarHeader,
   SidebarMenu,
@@ -28,6 +28,11 @@ const navItems = [
     title: "Submissions",
     href: "/admin/dashboard/submissions",
     icon: FileCheck,
+  },
+  {
+    title: "Weekly digest",
+    href: "/admin/dashboard/digest",
+    icon: Megaphone,
   },
   {
     title: "Admins",
