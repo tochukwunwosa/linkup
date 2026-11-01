@@ -1,5 +1,5 @@
 import { Event } from "@/lib/validations/event";
-import { addDays } from "@/lib/digest";
+import { addDays } from "@/lib/date-utils";
 
 // iCalendar (RFC 5545) feeds people can subscribe to from Google, Apple or
 // Outlook calendars. Event dates and times are stored in WAT (Africa/Lagos).
@@ -72,25 +72,48 @@ function localDateTime(date: string, hours: number, minutes: number): string {
   return `${day}T${hh}${mm}00`;
 }
 
-function eventLines(event: Event, siteUrl: string, now: Date): string[] {
-  const url = `${siteUrl}/events/${event.slug}`;
+export interface EventTiming {
+  allDay: boolean;
+  /** WAT "YYYYMMDDTHHMMSS" when timed, "YYYYMMDD" when all-day. */
+  start: string;
+  /** Exclusive end, same format as start. */
+  end: string;
+}
+
+/**
+ * Single-day events with a usable time get a 2-hour slot in WAT; multi-day
+ * events, or ones without a time, are all-day (end date exclusive).
+ */
+export function eventTiming(event: Pick<Event, "start_date" | "end_date" | "time">): EventTiming {
   const start = event.start_date.slice(0, 10);
   const end = (event.end_date || event.start_date).slice(0, 10);
   const time = parseTime(event.time);
-  const multiDay = end !== start;
 
-  // Single-day events with a time get a timed slot; anything else is all-day.
-  const timing =
-    time && !multiDay
-      ? [
-          `DTSTART;TZID=${TZID}:${localDateTime(start, time[0], time[1])}`,
-          `DTEND;TZID=${TZID}:${localDateTime(start, time[0] + ASSUMED_DURATION_HOURS, time[1])}`,
-        ]
-      : [`DTSTART;VALUE=DATE:${compactDate(start)}`, `DTEND;VALUE=DATE:${compactDate(addDays(end, 1))}`];
+  if (time && end === start) {
+    return {
+      allDay: false,
+      start: localDateTime(start, time[0], time[1]),
+      end: localDateTime(start, time[0] + ASSUMED_DURATION_HOURS, time[1]),
+    };
+  }
+  return { allDay: true, start: compactDate(start), end: compactDate(addDays(end, 1)) };
+}
 
-  const startsAt = time && multiDay ? `Starts ${event.time} WAT.\n\n` : "";
+/** Plain-text description: the summary (trimmed) and a link back to the event. */
+function eventDescription(event: Event, url: string): string {
+  const multiDay = (event.end_date || event.start_date).slice(0, 10) !== event.start_date.slice(0, 10);
+  const startsAt = parseTime(event.time) && multiDay ? `Starts ${event.time} WAT.\n\n` : "";
   const summary = (event.description ?? "").trim();
-  const description = `${startsAt}${summary.length > 400 ? `${summary.slice(0, 400)}…` : summary}\n\nDetails: ${url}`;
+  return `${startsAt}${summary.length > 400 ? `${summary.slice(0, 400)}…` : summary}\n\nDetails: ${url}`;
+}
+
+function eventLines(event: Event, siteUrl: string, now: Date): string[] {
+  const url = `${siteUrl}/events/${event.slug}`;
+  const t = eventTiming(event);
+  const timing = t.allDay
+    ? [`DTSTART;VALUE=DATE:${t.start}`, `DTEND;VALUE=DATE:${t.end}`]
+    : [`DTSTART;TZID=${TZID}:${t.start}`, `DTEND;TZID=${TZID}:${t.end}`];
+  const description = eventDescription(event, url);
   const updated = event.updated_at ? new Date(event.updated_at) : now;
 
   return [
@@ -107,7 +130,23 @@ function eventLines(event: Event, siteUrl: string, now: Date): string[] {
   ];
 }
 
-/** Builds a complete calendar feed. */
+function buildCalendar(headerLines: string[], events: Event[], siteUrl: string): string {
+  const now = new Date();
+  const lines = [
+    "BEGIN:VCALENDAR",
+    "VERSION:2.0",
+    "PRODID:-//TechLinkUp//Tech Events//EN",
+    "CALSCALE:GREGORIAN",
+    "METHOD:PUBLISH",
+    ...headerLines,
+    ...VTIMEZONE,
+    ...events.flatMap((e) => eventLines(e, siteUrl, now)),
+    "END:VCALENDAR",
+  ];
+  return lines.map(foldIcsLine).join("\r\n") + "\r\n";
+}
+
+/** Builds a complete calendar feed for subscribing. */
 export function buildIcsFeed({
   name,
   description,
@@ -119,22 +158,39 @@ export function buildIcsFeed({
   events: Event[];
   siteUrl: string;
 }): string {
-  const now = new Date();
-  const lines = [
-    "BEGIN:VCALENDAR",
-    "VERSION:2.0",
-    "PRODID:-//TechLinkUp//Tech Events//EN",
-    "CALSCALE:GREGORIAN",
-    "METHOD:PUBLISH",
-    `X-WR-CALNAME:${escapeIcsText(name)}`,
-    `X-WR-CALDESC:${escapeIcsText(description)}`,
-    `X-WR-TIMEZONE:${TZID}`,
-    // Ask calendar apps to check for new events twice a day.
-    "REFRESH-INTERVAL;VALUE=DURATION:PT12H",
-    "X-PUBLISHED-TTL:PT12H",
-    ...VTIMEZONE,
-    ...events.flatMap((e) => eventLines(e, siteUrl, now)),
-    "END:VCALENDAR",
-  ];
-  return lines.map(foldIcsLine).join("\r\n") + "\r\n";
+  return buildCalendar(
+    [
+      `X-WR-CALNAME:${escapeIcsText(name)}`,
+      `X-WR-CALDESC:${escapeIcsText(description)}`,
+      `X-WR-TIMEZONE:${TZID}`,
+      // Ask calendar apps to check for new events twice a day.
+      "REFRESH-INTERVAL;VALUE=DURATION:PT12H",
+      "X-PUBLISHED-TTL:PT12H",
+    ],
+    events,
+    siteUrl
+  );
+}
+
+/**
+ * A one-off .ics file for "Add to calendar". No calendar name or refresh
+ * hints, so calendar apps add the event rather than offer a new calendar.
+ */
+export function buildIcsFile(event: Event, siteUrl: string): string {
+  return buildCalendar([], [event], siteUrl);
+}
+
+/** Google Calendar "add event" link, with times pinned to WAT. */
+export function googleCalendarUrl(event: Event, siteUrl: string): string {
+  const t = eventTiming(event);
+  const params = new URLSearchParams({
+    action: "TEMPLATE",
+    text: event.title,
+    dates: `${t.start}/${t.end}`,
+    details: eventDescription(event, `${siteUrl}/events/${event.slug}`),
+    location: event.type === "Online" ? "Online" : event.location,
+  });
+  // Timed events are local WAT times; tell Google so visitors abroad see them correctly.
+  if (!t.allDay) params.set("ctz", TZID);
+  return `https://calendar.google.com/calendar/render?${params.toString()}`;
 }

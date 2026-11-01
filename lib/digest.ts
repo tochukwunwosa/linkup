@@ -19,12 +19,7 @@ export const DIGEST_AREAS: { value: DigestArea; label: string }[] = [
 // Keep posts short enough to read on a phone; the rest go behind a link.
 export const DIGEST_MAX_EVENTS = 8;
 
-/** Adds days to a YYYY-MM-DD date, returning YYYY-MM-DD. */
-export function addDays(date: string, days: number): string {
-  const d = new Date(`${date}T12:00:00Z`);
-  d.setUTCDate(d.getUTCDate() + days);
-  return d.toISOString().slice(0, 10);
-}
+export { addDays } from "@/lib/date-utils";
 
 /**
  * Events running at any point in [from, to] (inclusive), for the chosen area:
