@@ -1,14 +1,15 @@
 "use server";
 
 import { eventSubmissionFormSchema } from "@/lib/validations/event";
-import { createClient } from "@/lib/supabase/client";
+import { createPublicClient } from "@/lib/supabase/public";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { revalidatePath } from "next/cache";
 import { serverGeocodeAddress } from "@/lib/geocode/geocode-server";
 import { headers } from "next/headers";
 import { rateLimit } from "@/lib/rate-limit";
 import { sendAdminNotification, getAdminEmails, sendOrganizerConfirmation } from "@/lib/email/emailService";
 import { formatDateToYYYYMMDD } from "@/lib/date-utils";
-import { buildEventSlugBase, generateUniqueEventSlug } from "@/lib/slug";
+import { buildEventSlugBase } from "@/lib/slug";
 
 export async function submitEventAction(formData: unknown) {
   try {
@@ -40,48 +41,41 @@ export async function submitEventAction(formData: unknown) {
     // Geocode the address
     const geo = await serverGeocodeAddress(data.location);
 
-    // Create Supabase client (no auth required for public submissions)
-    const supabase = await createClient();
+    // Public submissions use the anon key. The RPC only inserts a pending
+    // row and picks a unique slug; anon has no direct table access.
+    const supabase = createPublicClient();
 
-    // Generate a unique, SEO-friendly slug up front so it can be carried
-    // straight into `events` on approval without regenerating.
     const slugBase = buildEventSlugBase(data.title, geo?.city ?? undefined, data.location);
-    const slug = await generateUniqueEventSlug(supabase, slugBase);
 
-    // Insert into event_submissions table
     const { data: submission, error: insertError } = await supabase
-      .from("event_submissions")
-      .insert({
+      .rpc("submit_event_submission", {
+        p_slug_base: slugBase,
         // Event details
-        title: data.title,
-        slug,
-        start_date: formatDateToYYYYMMDD(data.start_date), // Format as YYYY-MM-DD
-        end_date: data.end_date ? formatDateToYYYYMMDD(data.end_date) : null,
-        location: data.location,
-        time: data.time,
-        type: data.type,
-        category: data.category,
-        price: data.price,
-        currency: data.currency || "NGN",
-        price_amount: data.price_amount,
-        description: data.description,
-        link: data.link || null,
-        city: geo?.city ?? null,
-        country: geo?.country ?? null,
-        lat: geo?.lat ?? data.lat ?? null,
-        lng: geo?.lng ?? data.lng ?? null,
+        p_title: data.title,
+        p_start_date: formatDateToYYYYMMDD(data.start_date), // Format as YYYY-MM-DD
+        p_end_date: data.end_date ? formatDateToYYYYMMDD(data.end_date) : null,
+        p_location: data.location,
+        p_time: data.time,
+        p_type: data.type,
+        p_category: data.category,
+        p_price: data.price,
+        p_currency: data.currency || "NGN",
+        p_price_amount: data.price_amount,
+        p_description: data.description,
+        p_link: data.link || null,
+        p_city: geo?.city ?? null,
+        p_country: geo?.country ?? null,
+        p_lat: geo?.lat ?? data.lat ?? null,
+        p_lng: geo?.lng ?? data.lng ?? null,
         // Organizer information
-        organizer_name: data.organizer_name,
-        organizer_email: data.organizer_email,
-        organizer_phone: data.organizer_phone || null,
-        organizer_organization: data.organizer_organization || null,
-        // Submission status
-        submission_status: "pending",
+        p_organizer_name: data.organizer_name,
+        p_organizer_email: data.organizer_email,
+        p_organizer_phone: data.organizer_phone || null,
+        p_organizer_organization: data.organizer_organization || null,
       })
-      .select("id, tracking_id")
-      .single();
+      .single<{ id: string; tracking_id: string }>();
 
-    if (insertError) {
+    if (insertError || !submission) {
       console.error("Error inserting event submission:", insertError);
       return {
         success: false,
@@ -115,7 +109,8 @@ export async function submitEventAction(formData: unknown) {
     });
 
     // Send notification to admins
-    getAdminEmails(supabase).then(async (adminEmails) => {
+    // Server-only read with no user input; anon must not see admin emails.
+    getAdminEmails(createAdminClient()).then(async (adminEmails) => {
       if (adminEmails.length > 0) {
         const submissionUrl = `${siteUrl}/admin/dashboard/submissions`;
 
