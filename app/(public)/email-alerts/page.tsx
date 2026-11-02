@@ -9,6 +9,11 @@ export const metadata: Metadata = {
   description:
     "Get a free email every Monday with the week's tech events in your state: meetups, conferences, hackathons and workshops across Nigeria.",
   alternates: { canonical: "/email-alerts" },
+  openGraph: {
+    title: "Weekly Tech Event Emails",
+    description: "One free email every Monday with the week's tech events in your state.",
+    url: "/email-alerts",
+  },
 };
 
 const STATUS_MESSAGES: Record<string, { title: string; body: string }> = {
