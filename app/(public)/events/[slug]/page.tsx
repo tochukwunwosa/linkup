@@ -63,7 +63,7 @@ export async function generateMetadata({
 
   if (!event) return {};
 
-  const title = `${event.title} – ${event.city || event.location} | TechLinkUp`;
+  const title = `${event.title} – ${event.city || event.location}`;
   const description = event.description
     ? event.description.slice(0, 155)
     : `${event.title} is a tech event happening in ${event.city || event.location}, Nigeria.`;

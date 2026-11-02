@@ -7,14 +7,14 @@ import { PageHero } from "@/components/page-hero";
 import { ContactForm } from "./contact-form";
 
 export const metadata: Metadata = {
-  title: "Contact Us - TechLinkUp",
+  title: "Contact Us",
   description:
     "Get in touch with the TechLinkUp team. Have questions, feedback, or want to collaborate? We'd love to hear from you.",
   alternates: {
     canonical: "https://techlinkup.xyz/contact",
   },
   openGraph: {
-    title: "Contact Us - TechLinkUp",
+    title: "Contact Us",
     description:
       "Get in touch with the TechLinkUp team. Have questions, feedback, or want to collaborate? We'd love to hear from you.",
     url: "https://techlinkup.xyz/contact",

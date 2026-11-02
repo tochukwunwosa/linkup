@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
-  title: "Unsubscribe | TechLinkUp",
+  title: "Unsubscribe",
   robots: { index: false, follow: false },
 };
 

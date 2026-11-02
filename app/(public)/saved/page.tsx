@@ -4,7 +4,7 @@ import { PageHero } from "@/components/page-hero";
 import { SavedEventsList } from "@/components/event/saved-events-list";
 
 export const metadata: Metadata = {
-  title: "Saved Events | TechLinkUp",
+  title: "Saved Events",
   robots: { index: false, follow: false },
 };
 

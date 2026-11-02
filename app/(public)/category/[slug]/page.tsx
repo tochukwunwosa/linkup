@@ -25,7 +25,7 @@ export async function generateMetadata({
   const meta = getCategoryMeta(slug);
   if (!meta) return {};
 
-  const title = `${meta.label} Events in Nigeria | TechLinkUp`;
+  const title = `${meta.label} Events in Nigeria`;
   const description = `Find upcoming ${meta.label} events, conferences, workshops, and meetups in Nigeria. Connect with the Nigerian ${meta.label} community on TechLinkUp.`;
 
   return {

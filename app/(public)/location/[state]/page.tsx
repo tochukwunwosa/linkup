@@ -31,7 +31,7 @@ export async function generateMetadata({
   const meta = getLocationMeta(state);
   if (!meta) return {};
 
-  const title = `Tech Events in ${meta.label}, Nigeria | TechLinkUp`;
+  const title = `Tech Events in ${meta.label}, Nigeria`;
   const description = `Discover upcoming tech events, conferences, meetups, hackathons, and workshops in ${meta.label}, Nigeria. Find and attend the best tech events near you.`;
 
   return {

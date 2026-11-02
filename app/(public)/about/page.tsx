@@ -6,14 +6,14 @@ import { Users2, Map, Zap, Layers } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
-  title: "About Us - TechLinkUp",
+  title: "About Us",
   description:
     "Learn about TechLinkUp, Nigeria's community-driven platform for discovering tech events, conferences, meetups, and workshops across all 36 states.",
   alternates: {
     canonical: "https://techlinkup.xyz/about",
   },
   openGraph: {
-    title: "About Us - TechLinkUp",
+    title: "About Us",
     description:
       "Learn about TechLinkUp, Nigeria's community-driven platform for discovering tech events, conferences, meetups, and workshops across all 36 states.",
     url: "https://techlinkup.xyz/about",

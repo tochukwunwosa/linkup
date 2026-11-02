@@ -5,7 +5,7 @@ import { EmailAlertsSignup } from "@/components/email-alerts-signup";
 import { locationMeta, getLocationMeta } from "@/constants/location-meta";
 
 export const metadata: Metadata = {
-  title: "Weekly Tech Event Emails | TechLinkUp",
+  title: "Weekly Tech Event Emails",
   description:
     "Get a free email every Monday with the week's tech events in your state: meetups, conferences, hackathons and workshops across Nigeria.",
   alternates: { canonical: "/email-alerts" },

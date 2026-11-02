@@ -4,13 +4,13 @@ import { ArrowLeft } from "lucide-react";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Terms of Use - TechLinkUp",
+  title: "Terms of Use",
   description: "Read TechLinkUp's terms of use to understand the guidelines for using our tech event discovery platform.",
   alternates: {
     canonical: "https://techlinkup.xyz/terms-of-use",
   },
   openGraph: {
-    title: "Terms of Use - TechLinkUp",
+    title: "Terms of Use",
     description: "Read TechLinkUp's terms of use to understand the guidelines for using our platform.",
     url: "https://techlinkup.xyz/terms-of-use",
     images: [

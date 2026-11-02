@@ -9,7 +9,7 @@ import { getCategoryColors } from "@/lib/category-color";
 import { formatTo12Hour } from "@/lib/utils";
 
 export const metadata: Metadata = {
-  title: "Event Preview | TechLinkUp",
+  title: "Event Preview",
   robots: { index: false, follow: false },
 };
 

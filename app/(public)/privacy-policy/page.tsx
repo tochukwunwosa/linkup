@@ -5,13 +5,13 @@ import { ArrowLeft } from "lucide-react";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy - TechLinkUp",
+  title: "Privacy Policy",
   description: "Read TechLinkUp's privacy policy to understand how we collect, use, and protect your data on our tech event discovery platform.",
   alternates: {
     canonical: "https://techlinkup.xyz/privacy-policy",
   },
   openGraph: {
-    title: "Privacy Policy - TechLinkUp",
+    title: "Privacy Policy",
     description: "Read TechLinkUp's privacy policy to understand how we collect, use, and protect your data.",
     url: "https://techlinkup.xyz/privacy-policy",
     images: [

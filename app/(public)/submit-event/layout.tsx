@@ -1,13 +1,13 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Submit Your Event - TechLinkUp",
+  title: "Submit Your Event",
   description: "Share your tech event with the Nigerian tech community. Submit conferences, meetups, workshops, and hackathons to Tech Linkup.",
   alternates: {
     canonical: "https://techlinkup.xyz/submit-event",
   },
   openGraph: {
-    title: "Submit Your Event - TechLinkUp",
+    title: "Submit Your Event",
     description: "Share your tech event with the Nigerian tech community. Submit conferences, meetups, workshops, and hackathons to Tech Linkup.",
     url: "https://techlinkup.xyz/submit-event",
     images: [
