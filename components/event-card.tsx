@@ -1,5 +1,5 @@
 'use client'
-import { memo } from 'react'
+import { memo, useSyncExternalStore } from 'react'
 import { Event } from '@/lib/validations/event'
 import Link from 'next/link'
 import { Calendar, MapPin } from 'lucide-react'
@@ -8,9 +8,14 @@ import { getCurrencySymbol } from '@/lib/format-currency'
 import { getCategoryColors } from '@/lib/category-color'
 import { SaveEventButton } from '@/components/event/save-event-button'
 
+// "Live" depends on the clock, which differs between the server (UTC) and the
+// visitor (WAT); decide it in the browser only so server-rendered cards
+// hydrate without a mismatch.
+const subscribeNoop = () => () => {}
+
 function EventCard({ event }: { event: Event }) {
   const colors = getCategoryColors(event.category)
-  const live = isLiveEvent({ event })
+  const live = useSyncExternalStore(subscribeNoop, () => isLiveEvent({ event }), () => false)
   const typeLabel = event.type === 'In-person & Online' ? 'Hybrid' : event.type
 
   return (

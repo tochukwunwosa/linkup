@@ -46,15 +46,20 @@ export function generateWebSiteSchema() {
     url: siteUrl,
     description:
       "Discover and connect with tech events across Nigeria through our community-driven platform",
-    potentialAction: {
-      "@type": "SearchAction",
-      target: {
-        "@type": "EntryPoint",
-        urlTemplate: `${siteUrl}/?search={search_term_string}`,
-      },
-      "query-input": "required name=search_term_string",
-    },
+    // No SearchAction: Google retired the sitelinks search box, and its
+    // template made Google crawl /?search={search_term_string} as a page.
   };
+}
+
+/**
+ * ISO 8601 date-time for an event date and "HH:MM" time in WAT (UTC+1).
+ * Falls back to the date alone when the time isn't usable (e.g. "TBA").
+ */
+function toWatDateTime(date: string, time?: string | null, fallbackTime?: string): string {
+  const day = date.slice(0, 10);
+  const match = /^(\d{1,2}):(\d{2})/.exec((time || fallbackTime || "").trim());
+  if (!match || Number(match[1]) > 23 || Number(match[2]) > 59) return day;
+  return `${day}T${match[1].padStart(2, "0")}:${match[2]}:00+01:00`;
 }
 
 /**
@@ -129,7 +134,7 @@ export function generateEventSchema(event: EventType) {
     validFrom?: string;
   } = {
     "@type": "Offer",
-    url: event.link || `${siteUrl}/#event-${event.id}`,
+    url: event.link || `${siteUrl}/events/${event.slug}`,
     availability: "https://schema.org/InStock",
     validFrom: event.start_date || new Date().toISOString(),
   };
@@ -186,14 +191,17 @@ export function generateEventSchema(event: EventType) {
     };
     url?: string;
     category?: string[];
+    image: string[];
   } = {
     "@context": "https://schema.org",
     "@type": "Event",
     name: event.title,
     description: event.description,
-    startDate: new Date(
-      `${event.start_date}T${event.time || "00:00"}`
-    ).toISOString(),
+    // Stored times are WAT. new Date() here would read them as server time
+    // (UTC on Vercel) and shift every event by an hour, and throw on "TBA".
+    startDate: toWatDateTime(event.start_date, event.time),
+    // Same image as the share preview, at a stable URL (see events/[slug]/og.png).
+    image: [`${siteUrl}/events/${event.slug}/og.png`],
     eventAttendanceMode,
     eventStatus: "https://schema.org/EventScheduled",
     location,
@@ -207,9 +215,8 @@ export function generateEventSchema(event: EventType) {
 
   // Add end date if available
   if (event.end_date) {
-    schema.endDate = new Date(
-      `${event.end_date}T${event.time || "23:59"}`
-    ).toISOString();
+    // End time isn't stored; end of the last day keeps endDate after startDate.
+    schema.endDate = toWatDateTime(event.end_date, "23:59");
   }
 
   // Add event URL if available

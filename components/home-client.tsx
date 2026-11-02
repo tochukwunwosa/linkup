@@ -1,16 +1,13 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import Hero from "@/components/hero";
 import Filters from "@/components/filters";
 import { CategoryBrowseStrip } from "@/components/category-browse-strip";
-import { SkeletonGrid } from "@/components/event-card-skeleton-grid";
+import UpcomingEvents from "@/components/upcoming-events";
 import { Event } from "@/lib/validations/event";
 
-const UpcomingEvents = dynamic(() => import("@/components/upcoming-events"), {
-  loading: () => <SkeletonGrid count={6} />,
-  ssr: false,
-});
+// Rendered on the server too, so the first events (fetched in page.tsx) are
+// in the HTML for search engines and slow phones, not just skeletons.
 
 interface HomeClientProps {
   initialEvents: Event[];

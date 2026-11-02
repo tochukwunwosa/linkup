@@ -25,7 +25,10 @@ export default function useInfiniteScrollEvents({
   const [loading, setLoading] = useState(false);
   const [shouldFetchNext, setShouldFetchNext] = useState(false);
   const { setTotalEventsFound, userLocation } = useEventContext();
-  const filtersStringRef = useRef<string>("");
+  // With server-rendered events, start from the current filters so the first
+  // run of the filters effect doesn't treat them as changed, wipe the
+  // server-rendered events and fetch page 1 again.
+  const filtersStringRef = useRef<string>(initialEvents.length > 0 ? JSON.stringify(filters) : "");
   const userLocationStringRef = useRef<string>("");
   const prevPageRef = useRef<number>(initialEvents.length > 0 ? 1 : 0); // Set to 1 if we have initial data
   const [isInitialized] = useState(initialEvents.length > 0);
