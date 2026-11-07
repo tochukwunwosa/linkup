@@ -80,6 +80,7 @@ export default function Footer() {
               Platform
             </h3>
             <ul className="space-y-2 text-sm">
+              <li><Link href="/events" className="text-white/70 hover:text-white transition-colors duration-200">All Events</Link></li>
               <li><Link href="/submit-event" className="text-white/70 hover:text-white transition-colors duration-200">Submit Event</Link></li>
               <li><Link href="/my-submissions" className="text-white/70 hover:text-white transition-colors duration-200">Track Submissions</Link></li>
               <li><Link href="/email-alerts" className="text-white/70 hover:text-white transition-colors duration-200">Weekly events by email</Link></li>
@@ -105,7 +106,7 @@ export default function Footer() {
                 </li>
               ))}
               <li>
-                <Link href="/" className="text-white/60 hover:text-white transition-colors duration-200 text-xs">
+                <Link href="/events" className="text-white/60 hover:text-white transition-colors duration-200 text-xs">
                   All states →
                 </Link>
               </li>
