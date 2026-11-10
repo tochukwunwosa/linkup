@@ -3,7 +3,7 @@ import { CalendarSubscribe } from "@/components/calendar-subscribe";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Tag } from "lucide-react";
-import { createClient } from "@/lib/supabase/server";
+import { createPublicClient } from "@/lib/supabase/public";
 import { generateBreadcrumbSchema } from "@/lib/structured-data";
 import JsonLd from "@/components/JsonLd";
 import EventCard from "@/components/event-card";
@@ -12,7 +12,12 @@ import { Event } from "@/lib/validations/event";
 import { PageHero } from "@/components/page-hero";
 
 export const revalidate = 3600; // refresh every hour
-export const dynamic = "force-dynamic"; // always fetch fresh data
+// Only the known categories exist; anything else 404s without running the page.
+export const dynamicParams = false;
+
+export function generateStaticParams() {
+  return categoryMeta.map((c) => ({ slug: c.slug }));
+}
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://techlinkup.xyz";
 
@@ -51,7 +56,7 @@ export default async function CategoryPage({
   const meta = getCategoryMeta(slug);
   if (!meta) return notFound();
 
-  const supabase = await createClient();
+  const supabase = createPublicClient();
 
   const { data: rawEvents, error } = await supabase
     .rpc("search_events_by_categories", { keywords: meta.dbKeywords });

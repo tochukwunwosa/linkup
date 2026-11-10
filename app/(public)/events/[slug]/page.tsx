@@ -1,4 +1,5 @@
-import { createClient } from "@/lib/supabase/server";
+import { cache } from "react";
+import { createPublicClient } from "@/lib/supabase/public";
 import { notFound, permanentRedirect } from "next/navigation";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Metadata } from "next";
@@ -18,18 +19,31 @@ import { RelatedEvents } from "@/components/event/related-events";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://techlinkup.xyz";
 
+// Cached (ISR) and refreshed hourly. Event edits revalidate it sooner. Pages
+// are built on first visit rather than at deploy time.
+export const revalidate = 3600;
+
+export function generateStaticParams() {
+  return [];
+}
+
+// generateMetadata and the page both need the event; fetch it once per render.
+const getEventBySlug = cache(async (slug: string) => {
+  const { data } = await createPublicClient()
+    .from("published_events")
+    .select("*")
+    .eq("slug", slug)
+    .maybeSingle<Event>();
+  return data;
+});
+
 // Next.js requires a single dynamic-segment name per route level, so the
 // old numeric-id URLs (likely already indexed/backlinked) are handled here
 // instead of a separate [id] route: if `slug` doesn't match any event but
 // looks numeric, treat it as a legacy id and permanently redirect (308) to
 // the real slug URL rather than 404ing.
 async function resolveEventBySlug(supabase: SupabaseClient, slug: string): Promise<Event> {
-  const { data: event } = await supabase
-    .from("published_events")
-    .select("*")
-    .eq("slug", slug)
-    .single<Event>();
-
+  const event = await getEventBySlug(slug);
   if (event) return event;
 
   if (/^\d+$/.test(slug)) {
@@ -53,13 +67,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const supabase = await createClient();
-
-  const { data: event } = await supabase
-    .from("published_events")
-    .select("*")
-    .eq("slug", slug)
-    .single<Event>();
+  const event = await getEventBySlug(slug);
 
   if (!event) return {};
 
@@ -95,7 +103,7 @@ export default async function EventPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const supabase = await createClient();
+  const supabase = createPublicClient();
 
   const event = await resolveEventBySlug(supabase, slug);
 

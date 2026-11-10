@@ -1,7 +1,8 @@
 import type { MetadataRoute } from "next";
-import { createClient } from "@/lib/supabase/server";
+import { createPublicClient } from "@/lib/supabase/public";
 
-export const dynamic = "force-dynamic";
+// Cached and refreshed hourly; crawlers do not need it fresher than that.
+export const revalidate = 3600;
 import { locationMeta } from "@/constants/location-meta";
 import { categoryMeta } from "@/constants/category-meta";
 import { hasEventEnded } from "@/lib/date-utils";
@@ -78,7 +79,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }));
 
   try {
-    const supabase = await createClient();
+    const supabase = createPublicClient();
     // Ended events keep their pages, so keep them in the sitemap too,
     // at a lower priority than upcoming ones.
     const { data: events } = await supabase

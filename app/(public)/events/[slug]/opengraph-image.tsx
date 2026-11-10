@@ -1,5 +1,5 @@
 import { ImageResponse } from "next/og";
-import { createClient } from "@/lib/supabase/server";
+import { createPublicClient } from "@/lib/supabase/public";
 import { getCategoryColors } from "@/lib/category-color";
 import { formatDateRange } from "@/lib/utils";
 import { Event } from "@/lib/validations/event";
@@ -8,13 +8,20 @@ export const alt = "TechLinkUp Event";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
+// Rendering the PNG is CPU-heavy, so cache it. Built on first request.
+export const revalidate = 86400;
+
+export function generateStaticParams() {
+  return [];
+}
+
 export default async function OgImage({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const supabase = await createClient();
+  const supabase = createPublicClient();
 
   const { data: event } = await supabase
     .from("published_events")
