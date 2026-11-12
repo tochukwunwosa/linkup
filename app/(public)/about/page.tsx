@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Metadata } from "next";
 import { PageHero } from "@/components/page-hero";
 import { Users2, Map, Zap, Layers } from "lucide-react";
-import { createClient } from "@/lib/supabase/server";
+import { createPublicClient } from "@/lib/supabase/public";
 
 export const metadata: Metadata = {
   title: "About Us",
@@ -70,8 +70,11 @@ const steps = [
   },
 ];
 
+// Cached for a day: the stats are rough counts and change slowly.
+export const revalidate = 86400;
+
 export default async function AboutPage() {
-  const supabase = await createClient();
+  const supabase = createPublicClient();
   const { data: statsData } = await supabase
     .from("public_stats")
     .select("*")

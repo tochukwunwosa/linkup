@@ -19,9 +19,12 @@ import { RelatedEvents } from "@/components/event/related-events";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://techlinkup.xyz";
 
-// Cached (ISR) and refreshed hourly. Event edits revalidate it sooner. Pages
-// are built on first visit rather than at deploy time.
-export const revalidate = 3600;
+// Cached (ISR) and refreshed daily. Hourly refreshes meant almost every
+// crawler visit to one of ~280 event pages rebuilt it, the main use of
+// Fluid Active CPU. Edits, deletes and approvals revalidate it straight away;
+// the "ended" badge can appear up to a day late. Pages are built on first
+// visit rather than at deploy time.
+export const revalidate = 86400;
 
 export function generateStaticParams() {
   return [];

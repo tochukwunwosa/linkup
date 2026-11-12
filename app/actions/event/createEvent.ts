@@ -63,6 +63,7 @@ export async function createEventAction(formData: z.infer<typeof eventSchema>) {
   }
 
   revalidatePath("/admin/dashboard/events");
+  revalidatePath("/");
 
   return { success: true };
 }

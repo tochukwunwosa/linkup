@@ -6,7 +6,7 @@ import {
   getStartOfMonth,
   getStartOfWeek,
 } from "@/lib/filter-helper";
-import { createClient } from "@/lib/supabase/server";
+import { createPublicClient } from "@/lib/supabase/public";
 import { haversineDistance } from "@/lib/utils";
 import { Event } from "@/lib/validations/event";
 
@@ -38,7 +38,9 @@ export async function getPaginatedFilteredEvents({
   filters: Filters;
   userLocation?: UserLocation | null;
 }) {
-  const supabase = await createClient();
+  // Public data only (public_events view). The cookie client would make the
+  // home page dynamic, so every visit ran a function instead of using ISR.
+  const supabase = createPublicClient();
   const offset = (page - 1) * limit;
 
   let results: Event[] = [];

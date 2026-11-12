@@ -71,6 +71,7 @@ export async function softDeleteEvent(eventId: string, reason?: string) {
   }
 
   revalidatePath("/admin/dashboard/events");
+  revalidatePath("/");
   revalidatePath("/events/[slug]", "layout");
   return { success: true, type: "soft" } as const;
 }
@@ -109,6 +110,7 @@ export async function hardDeleteEvent(eventId: string, reason?: string) {
   }
 
   revalidatePath("/admin/dashboard/events");
+  revalidatePath("/");
   revalidatePath("/events/[slug]", "layout");
   return { success: true, type: "hard" } as const;
 }
@@ -160,6 +162,7 @@ export async function restoreEvent(eventId: string) {
     .eq("deletion_type", "soft");
 
   revalidatePath("/admin/dashboard/events");
+  revalidatePath("/");
   revalidatePath("/events/[slug]", "layout");
   return { success: true } as const;
 }

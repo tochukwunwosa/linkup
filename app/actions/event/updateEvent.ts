@@ -60,6 +60,7 @@ export async function updateEventAction(
   }
 
   revalidatePath("/admin/dashboard/events");
+  revalidatePath("/");
   // Public event pages are cached; show the edit now.
   revalidatePath("/events/[slug]", "layout");
 

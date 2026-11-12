@@ -3,6 +3,9 @@ import { generateBreadcrumbSchema, generateEventListSchema } from "@/lib/structu
 import { getPaginatedFilteredEvents } from "@/app/actions/event/getPaginatedFilteredEvents";
 import HomeClient from "@/components/home-client";
 
+// Cached (ISR), refreshed hourly. Approving an event revalidates "/" sooner.
+export const revalidate = 3600;
+
 export default async function LinkUpLanding() {
   const siteUrl =
     process.env.NEXT_PUBLIC_SITE_URL || "https://techlinkup.xyz";
